@@ -404,23 +404,23 @@
             <div class="flex items-center justify-between mb-4"><h4 class="text-xl font-bold">Day-by-day plan</h4><span class="text-xs text-night-500">Drag stops ⇅ to reorder</span></div>
             <ol class="space-y-4" id="timeline">
               <template x-for="(stop,idx) in itinerary" :key="stop.uid">
-                <li draggable="true" @dragstart="dragStart(idx,$event)" @dragend="dragEnd($event)" @dragover.prevent="dragOver(idx,$event)" @drop="drop(idx)" class="relative rounded-2xl border border-black/10 dark:border-white/10 bg-sand-50 dark:bg-night-700 p-4 sm:p-5 cursor-grab active:cursor-grabbing transition">
+                <li :draggable="!stop.depart" @dragstart="dragStart(idx,$event)" @dragend="dragEnd($event)" @dragover.prevent="dragOver(idx,$event)" @drop="drop(idx)" class="relative rounded-2xl border border-black/10 dark:border-white/10 bg-sand-50 dark:bg-night-700 p-4 sm:p-5 cursor-grab active:cursor-grabbing transition">
                   <div class="flex gap-4">
                     <img :src="stop.img" :alt="stop.alt" class="w-24 h-24 rounded-xl object-cover flex-none hidden sm:block" loading="lazy" />
                     <div class="flex-1 min-w-0">
                       <div class="flex items-start justify-between gap-2">
                         <div>
-                          <span class="text-xs font-bold uppercase tracking-wide text-teal-600 dark:text-teal-300" x-text="`Days ${stop.dayStart}–${stop.dayEnd} · ${stop.nights} night${stop.nights>1?'s':''}`"></span>
+                          <span class="text-xs font-bold uppercase tracking-wide" :class="stop.depart?'text-gold-500':'text-teal-600 dark:text-teal-300'" x-text="stop.depart?`Day ${stop.dayStart} · Departure day`:`Days ${stop.dayStart}–${stop.dayEnd} · ${stop.nights} night${stop.nights>1?'s':''}`"></span>
                           <h5 class="text-lg font-bold" x-text="`${idx+1}. ${stop.name}`"></h5>
                           <p class="text-xs text-night-500 dark:text-sand-100/50" x-text="stop.region"></p>
                         </div>
-                        <button @click="removeStop(idx)" class="text-night-400 hover:text-red-500 p-1 focus-ring rounded" :aria-label="`Remove ${stop.name}`" title="Remove stop">✕</button>
+                        <button x-show="!stop.depart" @click="removeStop(idx)" class="text-night-400 hover:text-red-500 p-1 focus-ring rounded" :aria-label="`Remove ${stop.name}`" title="Remove stop">✕</button>
                       </div>
                       <p class="text-sm mt-2 text-night-700/80 dark:text-sand-100/70" x-text="stop.travel"></p>
                       <ul class="mt-2 space-y-1">
                         <template x-for="(act,ai) in stop.activities" :key="ai"><li class="text-sm flex items-start gap-2"><span class="text-teal-500 mt-0.5">◆</span><span x-text="act"></span></li></template>
                       </ul>
-                      <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                      <div x-show="!stop.depart" class="mt-3 flex flex-wrap items-center gap-2 text-xs">
                         <span class="bg-teal-500/10 text-teal-700 dark:text-teal-300 px-2.5 py-1 rounded-full">🏨 <span x-text="stop.hotel"></span></span>
                         <span class="bg-gold-400/15 text-night-700 dark:text-gold-400 px-2.5 py-1 rounded-full">💸 <span x-text="stop.cost"></span></span>
                         <a href="#" @click.prevent="" class="ml-auto text-teal-600 dark:text-teal-300 font-semibold hover:underline">Book experiences →</a>
@@ -449,7 +449,7 @@
               <h4 class="font-bold mb-2">Trip summary</h4>
               <dl class="text-sm space-y-1.5">
                 <div class="flex justify-between"><dt class="text-night-500">Total days</dt><dd class="font-semibold" x-text="a.days"></dd></div>
-                <div class="flex justify-between"><dt class="text-night-500">Stops</dt><dd class="font-semibold" x-text="itinerary.length"></dd></div>
+                <div class="flex justify-between"><dt class="text-night-500">Stops</dt><dd class="font-semibold" x-text="itinerary.filter(s=>!s.depart).length"></dd></div>
                 <div class="flex justify-between"><dt class="text-night-500">Regions</dt><dd class="font-semibold" x-text="regionCount"></dd></div>
                 <div class="flex justify-between"><dt class="text-night-500">Est. total cost</dt><dd class="font-semibold text-teal-600 dark:text-teal-300" x-text="costRange"></dd></div>
                 <div class="flex justify-between"><dt class="text-night-500">Budget style</dt><dd class="font-semibold capitalize" x-text="a.budget"></dd></div>
@@ -672,7 +672,7 @@ function tripPlanner(){
     a:{ name:'', companions:'partner', kids:'none', days:14, startDate:'', hub:'bangkok', selected:[],
         vibe:'balanced', pace:'moderate', budget:'mid', stay:'mix', beachMountain:40, cityNature:50,
         mustsee:['temples','beaches','food'], food:'mix', nightlife:'some', fitness:'moderate',
-        water:['snorkel'], culture2:'some', wellness:'no', special:['cooking'], flights:'happy', experience:'first' },
+        water:['snorkel'], culture2:'some', wellness:'no', special:['cooking'], flights:'happy', exit:'same', experience:'first' },
 
     hubs:[
       {id:'bangkok',name:'Bangkok (BKK)',info:'Best for north & central',img:'images/bangkok-grand-palace.jpg',alt:'Grand Palace at dusk, Bangkok'},
@@ -703,6 +703,7 @@ function tripPlanner(){
       wellness:{cat:'Preferences',type:'single',auto:true,q:'Want wellness time (spa / yoga)?',opts:[{v:'yes',l:'Yes please',i:'🧘'},{v:'no',l:'Not a priority',i:'🙅'}]},
       special:{cat:'Bucket list',type:'multi',q:'Any bucket-list experiences?',opts:[{v:'cooking',l:'Thai cooking class',i:'👩‍🍳'},{v:'elephant',l:'Ethical elephant sanctuary',i:'🐘'},{v:'muaythai',l:'Muay Thai match',i:'🥊'},{v:'festival',l:'Festivals & events',i:'🎆'},{v:'photography',l:'Photography spots',i:'📷'},{v:'diving',l:'Learn to dive',i:'🐡'}]},
       flights:{cat:'Logistics',type:'single',auto:true,q:'How do you feel about domestic flights?',opts:[{v:'happy',l:'Happy to fly',i:'✈️',desc:'Save time between regions'},{v:'overland',l:'Prefer overland',i:'🚌',desc:'Trains, buses, ferries'}]},
+      exit:{cat:'Logistics',type:'single',auto:true,q:'Where will you fly out of Thailand from?',help:'We route your trip as a loop that ends at your departure airport.',opts:[{v:'same',l:'Same airport I arrived at',i:'↩️',desc:'Classic round-trip loop'},{v:'bangkok',l:'Bangkok (BKK)',i:'🛫',desc:'Depart from the capital'},{v:'phuket',l:'Phuket (HKT)',i:'🌴',desc:'Depart from the Andaman gateway'},{v:'onward',l:'Onward to another country',i:'🌏',desc:'We route you to the best international hub'}]},
       experience:{cat:'Logistics',type:'single',auto:true,q:'Been to Thailand before?',opts:[{v:'first',l:'First time',i:'🆕'},{v:'repeat',l:"I've been before",i:'🔁'}]}
     },
 
@@ -710,33 +711,33 @@ function tripPlanner(){
       {t:'intro'},
       {t:'q',id:'name'},{t:'q',id:'companions'},{t:'q',id:'kids'},{t:'q',id:'days'},{t:'q',id:'startDate'},{t:'q',id:'hub'},
       {t:'dest'},
-      {t:'q',id:'vibe'},{t:'q',id:'pace'},{t:'q',id:'budget'},{t:'q',id:'stay'},{t:'q',id:'beachMountain'},{t:'q',id:'cityNature'},{t:'q',id:'mustsee'},{t:'q',id:'food'},{t:'q',id:'nightlife'},{t:'q',id:'fitness'},{t:'q',id:'water'},{t:'q',id:'culture2'},{t:'q',id:'wellness'},{t:'q',id:'special'},{t:'q',id:'flights'},{t:'q',id:'experience'},
+      {t:'q',id:'vibe'},{t:'q',id:'pace'},{t:'q',id:'budget'},{t:'q',id:'stay'},{t:'q',id:'beachMountain'},{t:'q',id:'cityNature'},{t:'q',id:'mustsee'},{t:'q',id:'food'},{t:'q',id:'nightlife'},{t:'q',id:'fitness'},{t:'q',id:'water'},{t:'q',id:'culture2'},{t:'q',id:'wellness'},{t:'q',id:'special'},{t:'q',id:'flights'},{t:'q',id:'exit'},{t:'q',id:'experience'},
       {t:'results'}
     ],
 
     /* ---------- destination dataset ---------- */
     destinations:[
-      {id:'chiangmai',name:'Chiang Mai',region:'Northern',blurb:'Cultural heart — temples, night bazaars & misty mountains.',overnight:true,lat:18.7883,lng:98.9853,img:'images/chiang-mai-doi-suthep.jpg',alt:'Golden chedi of Wat Phra That Doi Suthep, Chiang Mai',s:{temples:3,cities:2,mountains:3,wildlife:2,food:3,wellness:2,shopping:2,culture:3,adventure:2}},
-      {id:'chiangrai',name:'Chiang Rai',region:'Northern',blurb:'Home of the dazzling White Temple & hillside tea plantations.',overnight:true,lat:19.9105,lng:99.8406,img:'images/chiang-rai.svg',alt:'Chiang Rai stylized temple artwork',ph:true,s:{temples:3,mountains:2,wildlife:1,food:2,culture:3,adventure:2}},
-      {id:'pai',name:'Pai',region:'Northern',blurb:'Laid-back mountain town — hot springs & hippie cafés.',overnight:true,lat:19.3583,lng:98.4419,img:'images/pai.svg',alt:'Pai mountain valley artwork',ph:true,s:{mountains:3,wellness:3,adventure:2,food:1,culture:1}},
-      {id:'sukhothai',name:'Sukhothai',region:'Northern',blurb:'Serene UNESCO ruins of Thailand’s first kingdom.',overnight:true,lat:17.0078,lng:99.7038,img:'images/sukhothai.svg',alt:'Sukhothai ancient ruins artwork',ph:true,s:{temples:3,culture:3,food:1,adventure:1}},
-      {id:'bangkok',name:'Bangkok',region:'Central',blurb:'Vibrant capital — grand temples, rooftop bars & street food.',overnight:true,lat:13.7563,lng:100.5018,img:'images/bangkok-grand-palace.jpg',alt:'The Grand Palace and Wat Phra Kaew glowing at dusk, Bangkok',s:{temples:3,cities:3,nightlife:3,shopping:3,food:3,wellness:2,culture:2}},
-      {id:'ayutthaya',name:'Ayutthaya',region:'Central',blurb:'Atmospheric UNESCO ruins of a former royal capital.',overnight:false,lat:14.3532,lng:100.5689,img:'images/ayutthaya.svg',alt:'Ayutthaya royal ruins artwork',ph:true,s:{temples:3,culture:3,cities:1,food:1}},
-      {id:'kanchanaburi',name:'Kanchanaburi',region:'Central',blurb:'River Kwai, waterfalls & poignant WWII history.',overnight:true,lat:14.0227,lng:99.5328,img:'images/kanchanaburi.svg',alt:'Kanchanaburi river valley artwork',ph:true,s:{wildlife:3,mountains:2,adventure:2,culture:2,wellness:1}},
-      {id:'khaoyai',name:'Khao Yai',region:'Central',blurb:'Thailand’s great national park — waterfalls & wildlife.',overnight:true,lat:14.4396,lng:101.3729,img:'images/khao-yai.svg',alt:'Khao Yai national park artwork',ph:true,s:{wildlife:3,mountains:3,adventure:3,wellness:1}},
-      {id:'nongkhai',name:'Udon Thani / Nong Khai',region:'Isan',blurb:'Mekong riverside culture, food & sacred Naga lore.',overnight:true,lat:17.8782,lng:102.7412,img:'images/nong-khai.svg',alt:'Nong Khai Mekong riverside artwork',ph:true,s:{culture:3,food:3,temples:2,wildlife:1}},
-      {id:'khonkaen',name:'Khon Kaen',region:'Isan',blurb:'Modern Isan hub — lakeside temples & lively student vibe.',overnight:true,lat:16.4419,lng:102.8360,img:'images/khon-kaen-city.jpg',alt:'City boulevard and golden gate of Khon Kaen',s:{cities:2,culture:2,food:3,temples:2}},
-      {id:'ubon',name:'Ubon Ratchathani',region:'Isan',blurb:'Dramatic temples, cliffs & the Emerald Triangle.',overnight:true,lat:15.2287,lng:104.8564,img:'images/ubon.svg',alt:'Ubon Ratchathani temple artwork',ph:true,s:{temples:3,wildlife:2,culture:3,adventure:2,mountains:1}},
-      {id:'phuket',name:'Phuket',region:'Southern',blurb:'Thailand’s biggest island — beaches, nightlife & luxury.',overnight:true,lat:7.8804,lng:98.3923,img:'images/phuket-phang-nga.jpg',alt:'Infinity pool overlooking the limestone karsts of Phang Nga Bay, Phuket',s:{beaches:3,nightlife:3,islands:2,shopping:2,wellness:2,food:2}},
-      {id:'krabi',name:'Krabi',region:'Southern',blurb:'Iconic limestone cliffs, Railay Beach & island tours.',overnight:true,lat:8.0863,lng:98.9063,img:'images/krabi-lagoon.jpg',alt:'Turquoise lagoon framed by limestone cliffs, Krabi',s:{beaches:3,islands:3,adventure:2,wellness:1,food:1}},
-      {id:'kohsamui',name:'Koh Samui',region:'Southern',blurb:'Relaxed luxury island with palm-fringed coves.',overnight:true,lat:9.5120,lng:100.0136,img:'images/koh-samui-beach.jpg',alt:'Palm-fringed cove with longtail boats, Koh Samui',s:{beaches:3,islands:2,wellness:3,nightlife:1,food:2}},
-      {id:'kohphiphi',name:'Koh Phi Phi',region:'Southern',blurb:'Postcard beaches, Maya Bay & buzzing island nightlife.',overnight:true,lat:7.7407,lng:98.7784,img:'images/koh-phi-phi.svg',alt:'Koh Phi Phi bay artwork',ph:true,s:{beaches:3,islands:3,nightlife:2,adventure:2}},
-      {id:'kohtao',name:'Koh Tao',region:'Southern',blurb:'World-class, affordable diving & snorkeling paradise.',overnight:true,lat:10.0956,lng:99.8403,img:'images/koh-tao.svg',alt:'Koh Tao island artwork',ph:true,s:{beaches:3,islands:3,adventure:3,wellness:1}},
-      {id:'kohlanta',name:'Koh Lanta',region:'Southern',blurb:'Quiet, family-friendly beaches & mellow sunsets.',overnight:true,lat:7.6247,lng:99.0400,img:'images/koh-lanta.svg',alt:'Koh Lanta sunset beach artwork',ph:true,s:{beaches:3,wellness:3,islands:1,food:1}},
-      {id:'kohchang',name:'Koh Chang',region:'Southern',blurb:'Jungle-clad island with waterfalls & tranquil bays.',overnight:true,lat:12.0490,lng:102.3210,img:'images/koh-chang-coast.jpg',alt:'Jungle-backed coastline and empty beach, Koh Chang',s:{beaches:2,wildlife:2,adventure:2,islands:2,wellness:2}},
-      {id:'similan',name:'Similan Islands',region:'Southern',blurb:'Pristine marine park — some of Asia’s best dive sites.',overnight:false,lat:8.6500,lng:97.6450,img:'images/similan.svg',alt:'Similan Islands marine park artwork',ph:true,s:{beaches:3,islands:3,adventure:3}},
-      {id:'huahin',name:'Hua Hin',region:'Southern',blurb:'Royal beach town near Bangkok — golf, markets & calm sea.',overnight:true,lat:12.5684,lng:99.9577,img:'images/hua-hin-market.jpg',alt:'The lively Market Village and night market area of Hua Hin',s:{beaches:2,shopping:2,wellness:2,food:2,nightlife:1}},
-      {id:'pattaya',name:'Pattaya / Jomtien',region:'Southern',blurb:'Lively resort city — nightlife, water sports & family parks.',overnight:true,lat:12.9236,lng:100.8825,img:'images/pattaya-bay.jpg',alt:'Sweeping bay and beachfront of Pattaya',s:{nightlife:3,beaches:2,shopping:2,cities:2,food:1}}
+      {id:'chiangmai',name:'Chiang Mai',region:'Northern',blurb:'Cultural heart — temples, night bazaars & misty mountains.',overnight:true,apt:'CNX',lat:18.7883,lng:98.9853,img:'images/chiang-mai-doi-suthep.jpg',alt:'Golden chedi of Wat Phra That Doi Suthep, Chiang Mai',s:{temples:3,cities:2,mountains:3,wildlife:2,food:3,wellness:2,shopping:2,culture:3,adventure:2}},
+      {id:'chiangrai',name:'Chiang Rai',region:'Northern',blurb:'Home of the dazzling White Temple & hillside tea plantations.',overnight:true,apt:'CEI',lat:19.9105,lng:99.8406,img:'images/chiang-rai.svg',alt:'Chiang Rai stylized temple artwork',ph:true,s:{temples:3,mountains:2,wildlife:1,food:2,culture:3,adventure:2}},
+      {id:'pai',name:'Pai',region:'Northern',blurb:'Laid-back mountain town — hot springs & hippie cafés.',overnight:true,nearApt:{name:'Chiang Mai (CNX)',code:'CNX',hrs:3.5,mode:'🚐 mountain minivan'},lat:19.3583,lng:98.4419,img:'images/pai.svg',alt:'Pai mountain valley artwork',ph:true,s:{mountains:3,wellness:3,adventure:2,food:1,culture:1}},
+      {id:'sukhothai',name:'Sukhothai',region:'Northern',blurb:'Serene UNESCO ruins of Thailand’s first kingdom.',overnight:true,apt:'THS',lat:17.0078,lng:99.7038,img:'images/sukhothai.svg',alt:'Sukhothai ancient ruins artwork',ph:true,s:{temples:3,culture:3,food:1,adventure:1}},
+      {id:'bangkok',name:'Bangkok',region:'Central',blurb:'Vibrant capital — grand temples, rooftop bars & street food.',overnight:true,apt:'BKK',intl:true,lat:13.7563,lng:100.5018,img:'images/bangkok-grand-palace.jpg',alt:'The Grand Palace and Wat Phra Kaew glowing at dusk, Bangkok',s:{temples:3,cities:3,nightlife:3,shopping:3,food:3,wellness:2,culture:2}},
+      {id:'ayutthaya',name:'Ayutthaya',region:'Central',blurb:'Atmospheric UNESCO ruins of a former royal capital.',overnight:false,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:1.5,mode:'🚐 drive'},lat:14.3532,lng:100.5689,img:'images/ayutthaya.svg',alt:'Ayutthaya royal ruins artwork',ph:true,s:{temples:3,culture:3,cities:1,food:1}},
+      {id:'kanchanaburi',name:'Kanchanaburi',region:'Central',blurb:'River Kwai, waterfalls & poignant WWII history.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:2.5,mode:'🚐 drive'},lat:14.0227,lng:99.5328,img:'images/kanchanaburi.svg',alt:'Kanchanaburi river valley artwork',ph:true,s:{wildlife:3,mountains:2,adventure:2,culture:2,wellness:1}},
+      {id:'khaoyai',name:'Khao Yai',region:'Central',blurb:'Thailand’s great national park — waterfalls & wildlife.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:2.5,mode:'🚐 drive'},lat:14.4396,lng:101.3729,img:'images/khao-yai.svg',alt:'Khao Yai national park artwork',ph:true,s:{wildlife:3,mountains:3,adventure:3,wellness:1}},
+      {id:'nongkhai',name:'Udon Thani / Nong Khai',region:'Isan',blurb:'Mekong riverside culture, food & sacred Naga lore.',overnight:true,apt:'UTH',lat:17.8782,lng:102.7412,img:'images/nong-khai.svg',alt:'Nong Khai Mekong riverside artwork',ph:true,s:{culture:3,food:3,temples:2,wildlife:1}},
+      {id:'khonkaen',name:'Khon Kaen',region:'Isan',blurb:'Modern Isan hub — lakeside temples & lively student vibe.',overnight:true,apt:'KKC',lat:16.4419,lng:102.8360,img:'images/khon-kaen-city.jpg',alt:'City boulevard and golden gate of Khon Kaen',s:{cities:2,culture:2,food:3,temples:2}},
+      {id:'ubon',name:'Ubon Ratchathani',region:'Isan',blurb:'Dramatic temples, cliffs & the Emerald Triangle.',overnight:true,apt:'UBP',lat:15.2287,lng:104.8564,img:'images/ubon.svg',alt:'Ubon Ratchathani temple artwork',ph:true,s:{temples:3,wildlife:2,culture:3,adventure:2,mountains:1}},
+      {id:'phuket',name:'Phuket',region:'Southern',blurb:'Thailand’s biggest island — beaches, nightlife & luxury.',overnight:true,apt:'HKT',intl:true,lat:7.8804,lng:98.3923,img:'images/phuket-phang-nga.jpg',alt:'Infinity pool overlooking the limestone karsts of Phang Nga Bay, Phuket',s:{beaches:3,nightlife:3,islands:2,shopping:2,wellness:2,food:2}},
+      {id:'krabi',name:'Krabi',region:'Southern',blurb:'Iconic limestone cliffs, Railay Beach & island tours.',overnight:true,apt:'KBV',lat:8.0863,lng:98.9063,img:'images/krabi-lagoon.jpg',alt:'Turquoise lagoon framed by limestone cliffs, Krabi',s:{beaches:3,islands:3,adventure:2,wellness:1,food:1}},
+      {id:'kohsamui',name:'Koh Samui',region:'Southern',blurb:'Relaxed luxury island with palm-fringed coves.',overnight:true,apt:'USM',lat:9.5120,lng:100.0136,img:'images/koh-samui-beach.jpg',alt:'Palm-fringed cove with longtail boats, Koh Samui',s:{beaches:3,islands:2,wellness:3,nightlife:1,food:2}},
+      {id:'kohphiphi',name:'Koh Phi Phi',region:'Southern',blurb:'Postcard beaches, Maya Bay & buzzing island nightlife.',overnight:true,nearApt:{name:'Phuket (HKT)',code:'HKT',hrs:2,mode:'⛴️ ferry'},lat:7.7407,lng:98.7784,img:'images/koh-phi-phi.svg',alt:'Koh Phi Phi bay artwork',ph:true,s:{beaches:3,islands:3,nightlife:2,adventure:2}},
+      {id:'kohtao',name:'Koh Tao',region:'Southern',blurb:'World-class, affordable diving & snorkeling paradise.',overnight:true,nearApt:{name:'Koh Samui (USM)',code:'USM',hrs:2,mode:'⛴️ ferry'},lat:10.0956,lng:99.8403,img:'images/koh-tao.svg',alt:'Koh Tao island artwork',ph:true,s:{beaches:3,islands:3,adventure:3,wellness:1}},
+      {id:'kohlanta',name:'Koh Lanta',region:'Southern',blurb:'Quiet, family-friendly beaches & mellow sunsets.',overnight:true,nearApt:{name:'Krabi (KBV)',code:'KBV',hrs:1.5,mode:'🚐+⛴️ van & ferry'},lat:7.6247,lng:99.0400,img:'images/koh-lanta.svg',alt:'Koh Lanta sunset beach artwork',ph:true,s:{beaches:3,wellness:3,islands:1,food:1}},
+      {id:'kohchang',name:'Koh Chang',region:'Southern',blurb:'Jungle-clad island with waterfalls & tranquil bays.',overnight:true,nearApt:{name:'Trat (TDX)',code:'TDX',hrs:1.5,mode:'⛴️+🚐 ferry & drive'},lat:12.0490,lng:102.3210,img:'images/koh-chang-coast.jpg',alt:'Jungle-backed coastline and empty beach, Koh Chang',s:{beaches:2,wildlife:2,adventure:2,islands:2,wellness:2}},
+      {id:'similan',name:'Similan Islands',region:'Southern',blurb:'Pristine marine park — some of Asia’s best dive sites.',overnight:false,nearApt:{name:'Phuket (HKT)',code:'HKT',hrs:2.5,mode:'🚤 boat & drive'},lat:8.6500,lng:97.6450,img:'images/similan.svg',alt:'Similan Islands marine park artwork',ph:true,s:{beaches:3,islands:3,adventure:3}},
+      {id:'huahin',name:'Hua Hin',region:'Southern',blurb:'Royal beach town near Bangkok — golf, markets & calm sea.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:3,mode:'🚐 drive'},lat:12.5684,lng:99.9577,img:'images/hua-hin-market.jpg',alt:'The lively Market Village and night market area of Hua Hin',s:{beaches:2,shopping:2,wellness:2,food:2,nightlife:1}},
+      {id:'pattaya',name:'Pattaya / Jomtien',region:'Southern',blurb:'Lively resort city — nightlife, water sports & family parks.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:2,mode:'🚗 drive'},lat:12.9236,lng:100.8825,img:'images/pattaya-bay.jpg',alt:'Sweeping bay and beachfront of Pattaya',s:{nightlife:3,beaches:2,shopping:2,cities:2,food:1}}
     ],
     regionOrder:{ bangkok:['Central','Northern','Isan','Southern'], phuket:['Southern','Central','Northern','Isan'] },
 
@@ -832,11 +833,60 @@ function tripPlanner(){
       return w;
     },
     scoreDestination(d){ const w=this._weights||this.computeWeights(); let s=0; for(const k in w){ s+=(d.s[k]||0)*w[k]; } if((this.a.selected||[]).includes(d.id)) s+=40; return s; },
-    orderByFlow(list){ const order=this.regionOrder[this.a.hub]||this.regionOrder.bangkok; return [...list].sort((x,y)=>{ const rx=order.indexOf(x.region),ry=order.indexOf(y.region); if(rx!==ry) return rx-ry; return this.a.hub==='bangkok'?y.lat-x.lat:x.lat-y.lat; }); },
+    /* Nearest-neighbor routing: start at the arrival hub, always travel to the closest
+       remaining stop — no zig-zagging across the country. */
+    orderByFlow(list){
+      const rest=[...list], route=[];
+      let cur=this.destById(this.a.hub)||{lat:13.7563,lng:100.5018};
+      const hi=rest.findIndex(d=>d.id===this.a.hub);
+      if(hi>-1){ cur=rest.splice(hi,1)[0]; route.push(cur); }
+      while(rest.length){
+        let bi=0,bd=Infinity;
+        rest.forEach((d,i)=>{ const dd=this._haversine(cur.lat,cur.lng,d.lat,d.lng); if(dd<bd){bd=dd;bi=i;} });
+        cur=rest.splice(bi,1)[0]; route.push(cur);
+      }
+      return route;
+    },
+
+    /* ---------- AIRPORTS & RETURN LOGIC ---------- */
+    hubApt:{bangkok:'BKK',phuket:'HKT'},
+    flightRoutes:['BKK-CNX','BKK-CEI','BKK-HKT','BKK-KBV','BKK-USM','BKK-UTH','BKK-KKC','BKK-UBP','BKK-TDX','BKK-THS','CNX-HKT','CNX-KBV','CNX-USM','HKT-USM'],
+    _direct(a,b){ return !!a&&!!b&&(a===b||this.flightRoutes.includes(a+'-'+b)||this.flightRoutes.includes(b+'-'+a)); },
+    _aptOf(d){ return d.apt?{code:d.apt,hrs:0,mode:'',name:d.name}:(d.nearApt?{code:d.nearApt.code,hrs:d.nearApt.hrs,mode:d.nearApt.mode,name:d.nearApt.name}:{code:null,hrs:0}); },
+    exitHubId(ordered){
+      const e=this.a.exit||'same';
+      if(e==='bangkok'||e==='phuket') return e;
+      if(e==='same') return this.a.hub;
+      const last=(ordered&&ordered[ordered.length-1])||this.destById(this.a.hub);
+      const b=this.destById('bangkok'),p=this.destById('phuket');
+      return this._haversine(last.lat,last.lng,b.lat,b.lng)<=this._haversine(last.lat,last.lng,p.lat,p.lng)?'bangkok':'phuket';
+    },
+    _departStop(last,exitId){
+      const hd=this.destById(exitId);
+      return { uid:'depart_'+exitId, id:exitId, depart:true, name:'Departure · '+this.hubName(exitId), region:hd.region||'', img:hd.img, alt:hd.alt, lat:hd.lat, lng:hd.lng,
+        nights:0, dayStart:this.a.days, dayEnd:this.a.days, travel:this._returnText(last,exitId), travelShort:'🛫 Fly home', activities:[], hotel:'', cost:'' };
+    },
+    _returnText(last,exitId){
+      if(!last) return '';
+      const exitApt=this.hubApt[exitId], hubN=this.hubName(exitId), hd=this.destById(exitId);
+      const outro=this.a.exit==='onward'?'connect straight onto your onward international flight':'catch your international flight home from '+hubN;
+      const distHub=this._haversine(last.lat,last.lng,hd.lat,hd.lng);
+      if(last.apt){
+        if(last.apt===exitApt) return `🛫 You're already at your departure hub — head to the airport and ${outro}.`;
+        if(this.a.flights!=='overland' && this._direct(last.apt,exitApt)) return `✈️ Quick domestic flight from ${last.name} (${last.apt}) to ${hubN} (~${(distHub/650+0.6).toFixed(1)}h) — you can ${outro} the same day.`;
+        if(this.a.flights!=='overland') return `✈️ Fly from ${last.name} (${last.apt}) to ${hubN} via Bangkok (~${(distHub/650+2.2).toFixed(1)}h) — allow a generous connection before you ${outro}.`;
+        const oh=Math.round(distHub/55); return `🚌 Overland from ${last.name} back to ${hubN} (~${oh}h${oh>=8?' — consider an overnight bus or train':''}), then ${outro}.`;
+      }
+      const a=this._aptOf(last);
+      const step1=`${a.mode} from ${last.name} to ${a.name} (~${a.hrs}h)`;
+      if(a.code===exitApt) return `${step1}, arriving in time to ${outro}.`;
+      if(this.a.flights!=='overland' && this._direct(a.code,exitApt)) return `${step1}, then a domestic flight to ${hubN} (~1.3h) — you can ${outro} the same day.`;
+      const th=Math.max(2,Math.round(distHub/55)+Math.round(a.hrs)); return `${step1}, then continue overland to ${hubN} (~${th}h total${th>=8?' — consider an overnight bus':''}), and ${outro}.`;
+    },
 
     generate(){
       this._loading=true; this.loadPct=0; this.cur=this.flow.findIndex(f=>f.t==='results');
-      const msgs=['Analyzing your 20 answers…','Scoring 21 destinations…','Optimizing your travel route…','Estimating costs & travel times…','Polishing your itinerary…'];
+      const msgs=['Analyzing your answers…','Scoring 21 destinations…','Sequencing the shortest route…','Planning your return to the airport…','Polishing your itinerary…'];
       let i=0; this.loadingMsg=msgs[0];
       const iv=setInterval(()=>{ this.loadPct=Math.min(100,this.loadPct+Math.random()*22); i=Math.min(msgs.length-1,i+1); this.loadingMsg=msgs[i]; if(this.loadPct>=100){ clearInterval(iv); this._build(); } },380);
       this._scroll();
@@ -857,7 +907,11 @@ function tripPlanner(){
       }
       if(picked.length>target){ picked=picked.map(d=>({d,sc:this.scoreDestination(d)})).sort((a,b)=>b.sc-a.sc).slice(0,target).map(x=>x.d); }
       let ordered=this.orderByFlow(picked);
-      const per=Math.floor(this.a.days/ordered.length); let remainder=this.a.days-per*ordered.length;
+      const exitId=this.exitHubId(ordered);
+      const lastStop=ordered[ordered.length-1];
+      const needsReturn=!!lastStop && lastStop.id!==exitId;
+      const stayDays=Math.max(ordered.length, this.a.days-(needsReturn?1:0));
+      const per=Math.floor(stayDays/ordered.length); let remainder=stayDays-per*ordered.length;
       let day=1;
       const hotels={budget:'Hostel / guesthouse',mid:'Boutique 3–4★ hotel',luxury:'5★ resort / villa'};
       const nightly={budget:[18,35],mid:[45,90],luxury:[140,350]}[this.a.budget];
@@ -868,6 +922,7 @@ function tripPlanner(){
           nights, dayStart, dayEnd, travel:this._travelText(idx,ordered,d), travelShort:this._travelShort(idx,ordered,d),
           activities:this._activitiesFor(d), hotel:hotels[this.a.budget], cost:'~$'+(nightly[0]*nights)+'–'+(nightly[1]*nights)+' stay' };
       });
+      if(needsReturn) this.itinerary.push(this._departStop(lastStop,exitId));
       this._costRange();
       this._loading=false;
       this.$nextTick(()=>this._renderMap());
@@ -878,7 +933,13 @@ function tripPlanner(){
       if(idx===0) return {mode:'🛬 Arrive',time:''};
       const prev=ordered[idx-1]; const dist=this._haversine(prev.lat,prev.lng,d.lat,d.lng);
       const island=(d.id.startsWith('koh')||d.id==='similan'||d.id==='kohphiphi');
-      if(dist>500 && this.a.flights!=='overland') return {mode:'✈️ Flight',time:`~${(dist/650+0.6).toFixed(1)}h`,prev:prev.name};
+      if(dist>450){
+        if(this.a.flights==='overland') return {mode:'🚌 Long-haul bus/train',time:`~${Math.round(dist/55)}h (overnight option)`,prev:prev.name};
+        const pa=this._aptOf(prev), da=this._aptOf(d);
+        const xfer=(pa.hrs||0)+(da.hrs||0);
+        if(this._direct(pa.code,da.code)) return {mode:'✈️ Flight'+(xfer?' + transfers':''),time:`~${(dist/650+0.6+xfer).toFixed(1)}h`,prev:prev.name};
+        return {mode:'✈️ Fly via Bangkok'+(xfer?' + transfers':''),time:`~${(dist/650+2.2+xfer).toFixed(1)}h`,prev:prev.name};
+      }
       if(island && dist<300) return {mode:'⛴️ Ferry',time:`~${Math.max(1,dist/40).toFixed(1)}h`,prev:prev.name};
       if(dist>180) return {mode:'🚐 Bus/minivan',time:`~${(dist/60).toFixed(1)}h`,prev:prev.name};
       return {mode:'🚐 Minivan',time:`~${Math.max(1,dist/60).toFixed(1)}h`,prev:prev.name};
@@ -922,8 +983,8 @@ function tripPlanner(){
       // hub marker
       const hub=this.hubs.find(h=>h.id===this.a.hub); const hd=this.destById(this.a.hub);
       this.itinerary.forEach((s,i)=>{
-        const icon=L.divIcon({className:'tt-pin',html:`<div style="background:#0f8378;color:#fff;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #fff"><span style="transform:rotate(45deg);font-weight:700;font-size:12px">${i+1}</span></div>`,iconSize:[26,26],iconAnchor:[13,26]});
-        L.marker([s.lat,s.lng],{icon}).addTo(this._map).bindPopup(`<b>${i+1}. ${s.name}</b><br><span style="font-size:11px">Days ${s.dayStart}–${s.dayEnd} · ${s.nights}n</span><br><span style="color:#0f8378;font-size:11px">${s.travelShort}</span>`);
+        const icon=L.divIcon({className:'tt-pin',html:`<div style="background:${s.depart?'#e89a1c':'#0f8378'};color:#fff;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #fff"><span style="transform:rotate(45deg);font-weight:700;font-size:12px">${s.depart?'✈':i+1}</span></div>`,iconSize:[26,26],iconAnchor:[13,26]});
+        L.marker([s.lat,s.lng],{icon}).addTo(this._map).bindPopup(s.depart?`<b>${s.name}</b><br><span style="font-size:11px">Day ${s.dayStart} · fly home</span>`:`<b>${i+1}. ${s.name}</b><br><span style="font-size:11px">Days ${s.dayStart}–${s.dayEnd} · ${s.nights}n</span><br><span style="color:#0f8378;font-size:11px">${s.travelShort}</span>`);
         pts.push([s.lat,s.lng]);
       });
       if(pts.length>1) L.polyline(pts,{color:'#0f8378',weight:3,dashArray:'6 8',opacity:.85}).addTo(this._map);
@@ -932,12 +993,12 @@ function tripPlanner(){
     },
 
     /* ---------- drag reorder ---------- */
-    dragStart(i,e){ this.dragIndex=i; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; },
+    dragStart(i,e){ if(this.itinerary[i]&&this.itinerary[i].depart){ e.preventDefault(); return; } this.dragIndex=i; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; },
     dragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('#timeline li').forEach(li=>li.classList.remove('drag-over')); },
     dragOver(i,e){ e.currentTarget.classList.add('drag-over'); },
-    drop(i){ if(this.dragIndex===null||this.dragIndex===i) return; const arr=this.itinerary; const [m]=arr.splice(this.dragIndex,1); arr.splice(i,0,m); this._renumber(); this.dragIndex=null; this._renderMap(); },
+    drop(i){ if(this.dragIndex===null||this.dragIndex===i) return; const arr=this.itinerary; const [m]=arr.splice(this.dragIndex,1); const di=arr.findIndex(s=>s.depart); let t=i; if(di>-1&&t>=di) t=di; arr.splice(t,0,m); this._renumber(); this.dragIndex=null; this._renderMap(); },
     removeStop(i){ this.itinerary.splice(i,1); if(!this.itinerary.length) this.showToast('No stops left — add some!'); this._renumber(); this._renderMap(); },
-    _renumber(){ let day=1; this.itinerary.forEach((s,idx)=>{ s.dayStart=day; s.dayEnd=day+s.nights-1; day+=s.nights; s.travel=this._travelText(idx,this.itinerary,this.destById(s.id)); s.travelShort=this._travelShort(idx,this.itinerary,this.destById(s.id)); }); this._costRange(); },
+    _renumber(){ let day=1; this.itinerary.forEach((s,idx)=>{ if(s.depart){ s.dayStart=s.dayEnd=day; const pv=this.itinerary[idx-1]; if(pv) s.travel=this._returnText(this.destById(pv.id),s.id); return; } s.dayStart=day; s.dayEnd=day+s.nights-1; day+=s.nights; s.travel=this._travelText(idx,this.itinerary,this.destById(s.id)); s.travelShort=this._travelShort(idx,this.itinerary,this.destById(s.id)); }); this._costRange(); },
 
     /* ---------- persistence & sharing ---------- */
     savePlan(){ this._set('tt_plan',JSON.stringify({a:this.a,itinerary:this.itinerary})); this.savedPlanExists=true; this.showToast('💾 Plan saved to this browser.'); },
