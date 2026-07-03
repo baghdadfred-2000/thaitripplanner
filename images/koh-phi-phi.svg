@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Koh Phi Phi — photo coming soon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#063a4f"/><stop offset="0.55" stop-color="#0d7a80"/><stop offset="1" stop-color="#5fd6c3"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.28" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.5" fill="#ffffff" opacity="0.10"/></pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect width="800" height="600" fill="url(#glow)"/>
+  <rect width="800" height="600" fill="url(#dots)"/>
+  
+      <circle cx="180" cy="160" r="60" fill="#ffd98a" opacity="0.95"/>
+      <rect x="0" y="360" width="800" height="240" fill="#0a4f52" opacity="0.55"/>
+      <g fill="#0f3b40" opacity="0.9">
+        <path d="M480 360 Q500 220 560 210 Q640 200 660 300 Q700 300 700 360 Z"/>
+        <path d="M90 360 Q110 280 160 275 Q220 268 235 330 Q260 330 258 360 Z"/>
+      </g>
+      <g fill="#082e33"><path d="M0 430 Q200 400 400 428 T800 424 L800 600 L0 600 Z"/></g>
+      <g fill="#0b3a37"><path d="M600 430 q-10 -90 30 -120 q-4 60 10 70 q10 -50 44 -60 q-18 40 -10 58 q26 -18 50 -12 q-30 20 -34 40 q-2 14 -10 24 Z"/><rect x="632" y="398" width="10" height="46" rx="4"/></g>
+      <g fill="#ffffff" opacity="0.18"><path d="M0 428 Q200 412 400 430 T800 426 L800 438 Q600 448 400 440 T0 442 Z"/></g>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="40" y="540" font-size="52" font-weight="700" fill="#ffffff" opacity="0.96">Koh Phi Phi</text>
+    <text x="40" y="572" font-size="19" fill="#ffffff" opacity="0.75" font-family="Verdana, sans-serif">Andaman icon</text>
+  </g>
+</svg>

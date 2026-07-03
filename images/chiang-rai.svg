@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Chiang Rai — photo coming soon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a1d4f"/><stop offset="0.55" stop-color="#a13b63"/><stop offset="1" stop-color="#e8833a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.28" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.5" fill="#ffffff" opacity="0.10"/></pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect width="800" height="600" fill="url(#glow)"/>
+  <rect width="800" height="600" fill="url(#dots)"/>
+  
+      <g opacity="0.55" fill="#000">
+        <path d="M0 470 L120 470 L140 430 L160 470 L800 470 L800 600 L0 600 Z" opacity="0"/>
+      </g>
+      <circle cx="620" cy="180" r="70" fill="#ffd98a" opacity="0.9"/>
+      <g fill="#2b1a33" opacity="0.35"><path d="M0 400 Q200 340 400 395 T800 385 L800 600 L0 600 Z"/></g>
+      <g fill="#1d1128" opacity="0.85">
+        <path d="M330 470 L470 470 L455 430 L345 430 Z"/>
+        <path d="M355 430 L445 430 L430 385 L370 385 Z"/>
+        <path d="M378 385 L422 385 L412 340 L388 340 Z"/>
+        <path d="M394 340 L406 340 L402 300 L398 300 Z"/>
+        <path d="M398 300 L402 300 L400 265 Z"/>
+        <path d="M180 470 L260 470 L250 440 L190 440 Z"/><path d="M205 440 L235 440 L228 405 L212 405 Z"/><path d="M218 405 L222 405 L220 375 Z"/>
+        <path d="M540 470 L620 470 L610 440 L550 440 Z"/><path d="M565 440 L595 440 L588 405 L572 405 Z"/><path d="M578 405 L582 405 L580 375 Z"/>
+        <rect x="0" y="468" width="800" height="132"/>
+      </g>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="40" y="540" font-size="52" font-weight="700" fill="#ffffff" opacity="0.96">Chiang Rai</text>
+    <text x="40" y="572" font-size="19" fill="#ffffff" opacity="0.75" font-family="Verdana, sans-serif">Northern Thailand</text>
+  </g>
+</svg>

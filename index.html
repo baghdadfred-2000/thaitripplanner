@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en" x-data="tripPlanner()" x-init="init()" :class="{ 'dark': darkMode }" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f766e" />
+  <title>ThaiTripPlanner — The #1 Thailand Trip Planner on the Internet</title>
+  <meta name="description" content="Plan your dream Thailand trip in minutes. ThaiTripPlanner is the #1 Thailand trip planner — a free concierge-style tool that builds a personalized 3–60 day itinerary from 21+ destinations based on a detailed 20-question travel-style quiz." />
+  <meta name="keywords" content="Thailand trip planner, Thailand itinerary, Bangkok, Phuket, Chiang Mai, Krabi, Thailand travel, island hopping, trip planner" />
+  <meta name="author" content="ThaiTripPlanner" />
+  <link rel="canonical" href="https://thaitripplanner.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ThaiTripPlanner — The #1 Thailand Trip Planner" />
+  <meta property="og:description" content="Build a personalized 3–60 day Thailand itinerary in minutes." />
+  <meta property="og:url" content="https://thaitripplanner.com/" />
+  <meta property="og:image" content="images/hero-islands.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🪷%3C/text%3E%3C/svg%3E" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: {
+          teal:{50:'#effcf9',100:'#c8f4ea',200:'#96e8d9',300:'#5fd6c3',400:'#33bdac',500:'#17a394',600:'#0f8378',700:'#116961',800:'#12544f',900:'#134642'},
+          saffron:{50:'#fff8eb',100:'#fdeecb',400:'#f4b53c',500:'#e89a1c',600:'#c97c12'},
+          gold:{400:'#e2b857',500:'#d4a52e',600:'#b8891f'},
+          sand:{50:'#faf6ef',100:'#f3ebdd',200:'#e6d7bf'},
+          night:{900:'#0b1120',800:'#111a2e',700:'#1a2540'}
+        },
+        fontFamily:{ display:['"Playfair Display"','Georgia','serif'], sans:['"Plus Jakarta Sans"','ui-sans-serif','system-ui','sans-serif'] },
+        boxShadow:{ 'soft':'0 10px 40px -12px rgba(15,131,120,0.25)', 'card':'0 6px 24px -8px rgba(0,0,0,0.15)' }
+      }}
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <style>
+    body{font-family:'Plus Jakarta Sans',sans-serif}
+    h1,h2,h3,.font-display{font-family:'Playfair Display',serif}
+    ::selection{background:#33bdac;color:#fff}
+    html{scrollbar-color:#0f8378 transparent}
+    .hero-overlay{background:linear-gradient(180deg,rgba(6,20,26,.28) 0%,rgba(6,20,26,.18) 40%,rgba(7,20,26,.88) 100%)}
+    .hero-vignette{background:radial-gradient(120% 90% at 30% 20%,transparent 40%,rgba(4,16,22,.55) 100%)}
+    .thai-pattern{background-image:radial-gradient(circle at 1px 1px,rgba(212,165,46,.18) 1px,transparent 0);background-size:22px 22px}
+    .glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.72)}
+    .dark .glass{background:rgba(17,26,46,.72)}
+    .step-enter{animation:fadeUp .45s ease both}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .floaty{animation:floaty 5s ease-in-out infinite}
+    @keyframes kenburns{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.12) translate(-1.5%,1.5%)}}
+    .kenburns{animation:kenburns 26s ease-in-out infinite alternate;will-change:transform}
+    .card-img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+    .group:hover .card-img{transform:scale(1.08)}
+    .dest-selected{outline:3px solid #17a394;outline-offset:2px}
+    .marquee{animation:scrollx 32s linear infinite}
+    @keyframes scrollx{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    [x-cloak]{display:none!important}
+    .prog-bar{transition:width .5s cubic-bezier(.4,0,.2,1)}
+    .drag-over{border-color:#17a394!important;background:rgba(23,163,148,.06)}
+    .dragging{opacity:.4}
+    .focus-ring:focus-visible{outline:3px solid #33bdac;outline-offset:2px}
+    input[type=range]{accent-color:#0f8378}
+    .grad-text{background:linear-gradient(100deg,#e2b857 0%,#f4b53c 45%,#e89a1c 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .grad-text-teal{background:linear-gradient(100deg,#0f8378,#33bdac);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .grain::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E")}
+    .polaroid{box-shadow:0 18px 50px -18px rgba(0,0,0,.55);border:6px solid #fff;border-radius:14px}
+    .dark .polaroid{border-color:#1a2540}
+    .tilt-l{transform:rotate(-5deg)} .tilt-r{transform:rotate(4deg)}
+    .tilt-l,.tilt-r{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+    .tilt-l:hover,.tilt-r:hover{transform:rotate(0) scale(1.04);z-index:10}
+    .ph-chip{position:absolute;top:.6rem;left:.6rem;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.85);color:#134642;padding:.2rem .55rem;border-radius:999px;backdrop-filter:blur(4px)}
+    .wave-sep{display:block;width:100%;height:56px}
+    .ring-photo{box-shadow:0 0 0 4px rgba(226,184,87,.9),0 14px 34px -12px rgba(0,0,0,.4)}
+    .mosaic-caption{background:linear-gradient(180deg,transparent 0%,rgba(4,14,18,.28) 45%,rgba(4,14,18,.88) 100%)}
+    .btn-shine{position:relative;overflow:hidden}
+    .btn-shine::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .6s ease}
+    .btn-shine:hover::after{left:130%}
+    .num-badge{font-family:'Playfair Display',serif;background:linear-gradient(135deg,#e2b857,#e89a1c);color:#0b1120}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  </style>
+</head>
+
+<body class="bg-sand-50 dark:bg-night-900 text-night-800 dark:text-sand-100 antialiased">
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-teal-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">Skip to content</a>
+
+<!-- TOP BAR -->
+<div class="hidden sm:block bg-night-900 dark:bg-black text-sand-100 text-xs">
+  <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-9">
+    <p class="flex items-center gap-2"><span class="text-gold-400">★</span> Thailand's #1 Trip Planner — <span class="text-teal-300">free concierge-grade itineraries</span></p>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-1.5" x-show="planning" x-cloak>
+        <span class="text-sand-200/80">Planning progress</span>
+        <div class="w-24 h-1.5 rounded-full bg-white/20 overflow-hidden"><div class="h-full bg-gold-400 prog-bar" :style="`width:${progressPct}%`"></div></div>
+      </div>
+      <label class="flex items-center gap-1"><span class="sr-only">Language</span>
+        <select class="bg-transparent text-sand-100 focus-ring rounded cursor-pointer" aria-label="Language"><option class="text-black">EN</option><option class="text-black">TH</option><option class="text-black">DE</option><option class="text-black">FR</option></select>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<header class="sticky top-0 z-50 glass border-b border-black/5 dark:border-white/10 shadow-sm">
+  <nav class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16" aria-label="Primary">
+    <a href="#top" class="flex items-center gap-2"><span class="text-2xl floaty">🪷</span><span class="font-display text-xl font-bold tracking-tight">Thai<span class="text-teal-600 dark:text-teal-300">TripPlanner</span></span></a>
+    <ul class="hidden lg:flex items-center gap-1 text-sm font-medium">
+      <li><a href="#top" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Home</a></li>
+      <li><a href="#planner" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Plan Your Trip</a></li>
+      <li><a href="#destinations" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Destinations</a></li>
+      <li><a href="#itineraries" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Itineraries</a></li>
+      <li><a href="about.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">About</a></li>
+      <li><a href="contact.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Contact</a></li>
+    </ul>
+    <div class="flex items-center gap-2">
+      <button @click="toggleDark()" class="p-2 rounded-lg hover:bg-teal-500/10 focus-ring" :aria-label="darkMode?'Switch to light mode':'Switch to dark mode'"><span x-show="!darkMode">🌅</span><span x-show="darkMode" x-cloak>🌙</span></button>
+      <a href="#planner" @click="startWizard()" class="hidden sm:inline-flex items-center gap-1.5 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-soft transition focus-ring">Start Planning</a>
+      <button @click="mobileNav=!mobileNav" class="lg:hidden p-2 rounded-lg hover:bg-teal-500/10 focus-ring" aria-label="Menu" :aria-expanded="mobileNav">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path x-show="!mobileNav" d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/><path x-show="mobileNav" x-cloak d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div x-show="mobileNav" x-cloak x-transition class="lg:hidden border-t border-black/5 dark:border-white/10 glass px-4 py-3 space-y-1 text-sm font-medium">
+    <template x-for="l in [['Home','#top'],['Plan Your Trip','#planner'],['Destinations','#destinations'],['Itineraries','#itineraries'],['About','about.html'],['Contact','contact.html']]">
+      <a :href="l[1]" @click="mobileNav=false" class="block px-3 py-2.5 rounded-lg hover:bg-teal-500/10" x-text="l[0]"></a>
+    </template>
+  </div>
+</header>
+
+<main id="main"><span id="top"></span>
+
+<!-- HERO -->
+<section class="relative min-h-[94vh] flex items-center overflow-hidden grain">
+  <img src="images/hero-islands.jpg" alt="Aerial view of the emerald islands and turquoise lagoons of Ang Thong Marine Park, Thailand" class="kenburns absolute inset-0 w-full h-full object-cover" fetchpriority="high" />
+  <div class="absolute inset-0 hero-overlay"></div>
+  <div class="absolute inset-0 hero-vignette"></div>
+  <div class="relative max-w-7xl mx-auto px-4 w-full pt-14 pb-28">
+    <div class="grid lg:grid-cols-12 gap-10 items-center">
+      <div class="lg:col-span-7 max-w-2xl text-white">
+        <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium border border-white/25 tracking-wide">🇹🇭 The #1 Thailand Trip Planner on the Internet</span>
+        <h1 class="mt-6 text-5xl sm:text-7xl font-bold leading-[1.02] drop-shadow-xl">Your dream <span class="grad-text italic">Thailand</span> trip, planned in minutes</h1>
+        <p class="mt-5 text-lg sm:text-2xl text-sand-100/95 font-light leading-relaxed">Up to <span class="text-gold-400 font-semibold">60 days</span> of temples, islands and street-food nights — a concierge-grade itinerary shaped around <em>your</em> travel style.</p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <button @click="startWizard()" class="btn-shine inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-saffron-500 hover:brightness-110 text-night-900 font-bold text-lg px-8 py-4 rounded-full shadow-soft transition focus-ring">Start Planning My Trip <span aria-hidden="true">→</span></button>
+          <a href="#itineraries" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-lg px-8 py-4 rounded-full backdrop-blur transition focus-ring">See Sample Trips</a>
+        </div>
+        <dl class="mt-11 flex flex-wrap gap-x-10 gap-y-4 text-white/95">
+          <div><dd class="text-3xl font-bold text-gold-400 font-display">10,000+</dd><dt class="text-sm text-sand-100/75 mt-0.5">trips planned</dt></div>
+          <div class="border-l border-white/20 pl-10"><dd class="text-3xl font-bold text-gold-400 font-display">4.9/5 ★</dd><dt class="text-sm text-sand-100/75 mt-0.5">traveler rating</dt></div>
+          <div class="border-l border-white/20 pl-10"><dd class="text-3xl font-bold text-gold-400 font-display">21+</dd><dt class="text-sm text-sand-100/75 mt-0.5">destinations scored</dt></div>
+        </dl>
+      </div>
+      <div class="hidden lg:block lg:col-span-5 relative h-[460px]" aria-hidden="true">
+        <figure class="polaroid tilt-l absolute top-2 left-6 w-64 overflow-hidden floaty">
+          <img src="images/chiang-mai-doi-suthep.jpg" alt="" class="h-44 w-full object-cover rounded-lg" loading="lazy" />
+          <figcaption class="text-center text-xs font-semibold text-night-800 py-2 bg-white dark:bg-night-700 dark:text-sand-100">Wat Doi Suthep, Chiang Mai</figcaption>
+        </figure>
+        <figure class="polaroid tilt-r absolute top-40 right-0 w-64 overflow-hidden">
+          <img src="images/krabi-lagoon.jpg" alt="" class="h-44 w-full object-cover rounded-lg" loading="lazy" />
+          <figcaption class="text-center text-xs font-semibold text-night-800 py-2 bg-white dark:bg-night-700 dark:text-sand-100">Emerald lagoons, Krabi</figcaption>
+        </figure>
+        <figure class="polaroid tilt-l absolute bottom-0 left-16 w-56 overflow-hidden">
+          <img src="images/bangkok-grand-palace.jpg" alt="" class="h-36 w-full object-cover rounded-lg" loading="lazy" />
+          <figcaption class="text-center text-xs font-semibold text-night-800 py-2 bg-white dark:bg-night-700 dark:text-sand-100">Grand Palace, Bangkok</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <a href="#planner" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm flex flex-col items-center gap-1 animate-bounce">Scroll to plan<span>↓</span></a>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center gap-8 text-sm text-night-700/70 dark:text-sand-100/70 whitespace-nowrap overflow-hidden">
+    <div class="flex gap-10 marquee">
+      <span>✅ 60-day visa-friendly planning</span><span>🏝️ 21+ hand-picked destinations</span><span>🧠 20-question scoring engine</span><span>🚐 Smart travel-flow routing</span><span>💸 Live cost estimates</span><span>🐘 Ethical experiences only</span>
+      <span aria-hidden="true">✅ 60-day visa-friendly planning</span><span aria-hidden="true">🏝️ 21+ hand-picked destinations</span><span aria-hidden="true">🧠 20-question scoring engine</span><span aria-hidden="true">🚐 Smart travel-flow routing</span><span aria-hidden="true">💸 Live cost estimates</span><span aria-hidden="true">🐘 Ethical experiences only</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="py-16 sm:py-24 relative overflow-hidden">
+  <div class="absolute inset-0 thai-pattern opacity-50" aria-hidden="true"></div>
+  <div class="relative max-w-7xl mx-auto px-4">
+    <div class="text-center max-w-2xl mx-auto">
+      <p class="text-teal-600 dark:text-teal-300 font-semibold uppercase text-sm tracking-widest">Effortless by design</p>
+      <h2 class="mt-2 text-3xl sm:text-5xl font-bold">Three steps to the perfect trip</h2>
+    </div>
+    <div class="mt-12 grid md:grid-cols-3 gap-6">
+      <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800">
+        <div class="h-44 overflow-hidden relative">
+          <img src="images/wat-phra-singh-mist.jpg" alt="Misty sunrise over Wat Phra Singh temple" class="card-img w-full h-full object-cover" loading="lazy" />
+          <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">1</span>
+        </div>
+        <div class="p-6 pt-8"><h3 class="font-bold text-xl">Tell us your style</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">Answer 20 quick questions — pace, budget, beaches vs. mountains, bucket-list dreams. About 3 minutes, entirely in your browser.</p></div>
+      </div>
+      <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800 md:translate-y-6">
+        <div class="h-44 overflow-hidden relative">
+          <img src="images/golden-temple-aerial.jpg" alt="Golden temple above the clouds on a mountain peak" class="card-img w-full h-full object-cover" loading="lazy" />
+          <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">2</span>
+        </div>
+        <div class="p-6 pt-8"><h3 class="font-bold text-xl">We score 21+ destinations</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">Our engine weighs every answer against each destination, then sequences your route from your arrival hub to minimize backtracking.</p></div>
+      </div>
+      <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800">
+        <div class="h-44 overflow-hidden relative">
+          <img src="images/koh-samui-beach.jpg" alt="Palm-fringed turquoise cove on Koh Samui" class="card-img w-full h-full object-cover" loading="lazy" />
+          <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">3</span>
+        </div>
+        <div class="p-6 pt-8"><h3 class="font-bold text-xl">Get your day-by-day plan</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">A mapped, costed, drag-to-reorder itinerary with hotels, activities and transport — export it, save it or share it with one tap.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANNER WIZARD -->
+<section id="planner" class="relative py-16 sm:py-24">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <p class="text-teal-600 dark:text-teal-300 font-semibold tracking-wide uppercase text-sm">Your Personal Concierge</p>
+      <h2 class="mt-2 text-3xl sm:text-5xl font-bold">The Trip Planner</h2>
+      <p class="mt-3 text-lg text-night-600/80 dark:text-sand-100/70">A guided, page-by-page quiz. Answer at your own pace — we score 21+ destinations against your style and build the ideal route.</p>
+    </div>
+
+    <!-- progress -->
+    <div x-show="planning" x-cloak class="mb-6 max-w-3xl mx-auto">
+      <div class="flex items-center justify-between text-sm font-medium mb-1.5">
+        <span x-text="`Step ${stepNum} of ${stepsTotal}`"></span>
+        <span class="text-teal-600 dark:text-teal-300" x-text="`${progressPct}%`"></span>
+      </div>
+      <div class="h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden"><div class="h-full bg-gradient-to-r from-teal-500 to-teal-400 prog-bar" :style="`width:${progressPct}%`"></div></div>
+    </div>
+
+    <div class="bg-white dark:bg-night-800 rounded-3xl shadow-card border border-black/5 dark:border-white/10 overflow-hidden min-h-[380px]">
+
+      <!-- INTRO -->
+      <div x-show="screen==='intro'" x-cloak class="relative step-enter min-h-[380px] grid sm:grid-cols-5">
+        <div class="relative hidden sm:block sm:col-span-2 overflow-hidden">
+          <img src="images/temple-sunset.jpg" alt="Golden spires of a Thai temple at sunset" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent to-white dark:to-night-800 opacity-0"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <p class="absolute bottom-4 left-4 right-4 text-white text-sm font-medium">“The best trip is the one built around you.”</p>
+        </div>
+        <div class="sm:col-span-3 p-8 sm:p-12 text-center sm:text-left flex flex-col justify-center">
+          <div class="text-5xl floaty mb-3">🧭</div>
+          <h3 class="text-2xl sm:text-3xl font-bold">Ready when you are</h3>
+          <p class="mt-3 max-w-lg text-night-600/80 dark:text-sand-100/70">About 3 minutes and 20 quick questions. Everything stays in your browser — nothing is uploaded.</p>
+          <div class="mt-6"><button @click="startWizard()" class="btn-shine inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-500 text-white font-bold px-8 py-4 rounded-full shadow-soft transition focus-ring">Start Planning My Trip →</button></div>
+          <p x-show="savedPlanExists" x-cloak class="mt-4 text-sm">…or <button @click="loadSaved()" class="text-teal-600 dark:text-teal-300 font-semibold underline">resume your saved plan</button>.</p>
+        </div>
+      </div>
+
+      <!-- QUESTION SCREEN (generic) -->
+      <div x-show="screen==='q'" x-cloak class="p-6 sm:p-10 step-enter" :key="cur">
+        <template x-if="activeQ">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wide text-teal-600 dark:text-teal-300" x-text="activeQ.cat"></p>
+            <h3 class="text-2xl sm:text-3xl font-bold mt-1" x-text="qTitle(activeQ)"></h3>
+            <p x-show="activeQ.help" class="text-night-600/70 dark:text-sand-100/60 mt-1.5" x-text="activeQ.help"></p>
+
+            <div class="mt-8">
+              <!-- text -->
+              <template x-if="activeQ.type==='text'">
+                <input type="text" x-model="a[activeQ.id]" :placeholder="activeQ.placeholder" @keydown.enter="nextScreen()" class="w-full max-w-md text-lg rounded-xl border border-black/10 dark:border-white/15 bg-transparent px-4 py-3 focus-ring" />
+              </template>
+              <!-- number (days) -->
+              <template x-if="activeQ.type==='number'">
+                <div class="max-w-md">
+                  <div class="text-4xl font-bold text-teal-600 dark:text-teal-300 mb-2" x-text="`${a[activeQ.id]} days`"></div>
+                  <input type="range" :min="activeQ.min" :max="activeQ.max" x-model.number="a[activeQ.id]" class="w-full" />
+                  <div class="flex justify-between text-xs text-night-500 mt-1"><span x-text="activeQ.min"></span><span x-text="activeQ.max"></span></div>
+                </div>
+              </template>
+              <!-- date -->
+              <template x-if="activeQ.type==='date'">
+                <input type="date" x-model="a[activeQ.id]" class="rounded-xl border border-black/10 dark:border-white/15 bg-transparent px-4 py-3 focus-ring" />
+              </template>
+              <!-- single -->
+              <template x-if="activeQ.type==='single'">
+                <div class="grid sm:grid-cols-2 gap-3">
+                  <template x-for="o in activeQ.opts" :key="o.v">
+                    <button type="button" @click="a[activeQ.id]=o.v; activeQ.auto && nextScreen()" class="flex items-center gap-3 text-left p-4 rounded-2xl border-2 transition" :class="a[activeQ.id]===o.v ? 'border-teal-500 bg-teal-500/10' : 'border-black/10 dark:border-white/15 hover:border-teal-300'">
+                      <span class="text-2xl" x-text="o.i"></span>
+                      <span><span class="font-semibold block" x-text="o.l"></span><span x-show="o.desc" class="text-xs text-night-500 dark:text-sand-100/50" x-text="o.desc"></span></span>
+                      <span x-show="a[activeQ.id]===o.v" class="ml-auto text-teal-500">✓</span>
+                    </button>
+                  </template>
+                </div>
+              </template>
+              <!-- multi -->
+              <template x-if="activeQ.type==='multi'">
+                <div>
+                  <p class="text-sm text-night-500 mb-3">Select all that apply.</p>
+                  <div class="flex flex-wrap gap-2.5">
+                    <template x-for="o in activeQ.opts" :key="o.v">
+                      <button type="button" @click="toggleMulti(activeQ.id,o.v)" class="flex items-center gap-2 px-4 py-2.5 rounded-full border-2 font-medium transition" :class="(a[activeQ.id]||[]).includes(o.v) ? 'border-teal-500 bg-teal-500/10 text-teal-700 dark:text-teal-300' : 'border-black/10 dark:border-white/15 hover:border-teal-300'">
+                        <span x-text="o.i"></span><span x-text="o.l"></span>
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </template>
+              <!-- scale -->
+              <template x-if="activeQ.type==='scale'">
+                <div class="max-w-lg">
+                  <input type="range" min="0" max="100" step="10" x-model.number="a[activeQ.id]" class="w-full" />
+                  <div class="flex justify-between text-sm font-medium mt-2"><span x-text="activeQ.left"></span><span class="text-night-400" x-text="a[activeQ.id]==50?'A mix of both':''"></span><span x-text="activeQ.right"></span></div>
+                </div>
+              </template>
+              <!-- hub -->
+              <template x-if="activeQ.type==='hub'">
+                <div class="grid grid-cols-2 gap-4 max-w-xl">
+                  <template x-for="hub in hubs" :key="hub.id">
+                    <button type="button" @click="a.hub=hub.id" class="relative rounded-2xl overflow-hidden border-2 transition text-left" :class="a.hub===hub.id ? 'border-teal-500 shadow-soft' : 'border-transparent hover:border-teal-300'">
+                      <img :src="hub.img" :alt="hub.alt" class="h-28 w-full object-cover" />
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                      <div class="absolute bottom-2 left-3 text-white"><p class="font-bold" x-text="hub.name"></p><p class="text-[11px] opacity-90" x-text="hub.info"></p></div>
+                      <span x-show="a.hub===hub.id" class="absolute top-2 right-2 bg-teal-500 text-white w-6 h-6 grid place-items-center rounded-full text-xs">✓</span>
+                    </button>
+                  </template>
+                </div>
+              </template>
+            </div>
+
+            <div class="flex justify-between items-center mt-10">
+              <button @click="prevScreen()" class="px-5 py-2.5 rounded-full font-semibold text-night-600 dark:text-sand-100/70 hover:bg-black/5 dark:hover:bg-white/5">← Back</button>
+              <button @click="nextScreen()" :disabled="!canAdvance" class="px-7 py-3 rounded-full bg-teal-600 hover:bg-teal-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold shadow-soft transition focus-ring">Next →</button>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- DESTINATIONS -->
+      <div x-show="screen==='dest'" x-cloak class="p-6 sm:p-10 step-enter">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wide text-teal-600 dark:text-teal-300">Destinations</p>
+            <h3 class="text-2xl sm:text-3xl font-bold mt-1" x-text="a.name ? `Where to, ${a.name}?` : 'Where would you love to go?'"></h3>
+            <p class="text-night-600/70 dark:text-sand-100/60 mt-1">Pick up to 10 — or leave it light and we'll suggest the rest.</p>
+          </div>
+          <span class="inline-flex items-center gap-2 bg-teal-500/10 text-teal-700 dark:text-teal-300 font-bold px-4 py-2 rounded-full"><span x-text="a.selected.length"></span>/10 selected</span>
+        </div>
+        <div class="mt-6 flex flex-wrap items-center gap-2">
+          <template x-for="r in regions" :key="r">
+            <button @click="regionFilter=r" class="px-3.5 py-1.5 rounded-full text-sm font-medium border transition" :class="regionFilter===r ? 'bg-teal-600 text-white border-teal-600' : 'border-black/10 dark:border-white/15 hover:border-teal-400'" x-text="r"></button>
+          </template>
+          <div class="ml-auto relative">
+            <input x-model="search" type="search" placeholder="Search…" class="rounded-full border border-black/10 dark:border-white/15 bg-transparent pl-9 pr-4 py-2 text-sm focus-ring w-40" aria-label="Search destinations" />
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-night-400">🔍</span>
+          </div>
+        </div>
+        <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <template x-for="d in filteredDestinations" :key="d.id">
+            <button @click="toggleDest(d.id)" class="group text-left rounded-2xl overflow-hidden bg-sand-50 dark:bg-night-700 border border-black/5 dark:border-white/10 shadow-card hover:shadow-soft transition relative" :class="a.selected.includes(d.id)?'dest-selected':''" :aria-pressed="a.selected.includes(d.id)">
+              <div class="relative h-36 overflow-hidden">
+                <img :src="d.img" :alt="d.alt" class="card-img w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <span x-show="d.overnight" class="absolute top-2 right-2 text-[10px] font-bold bg-gold-400 text-night-900 px-2 py-0.5 rounded-full">🌙 Overnight</span>
+                <span x-show="a.selected.includes(d.id)" class="absolute bottom-2 right-2 bg-teal-500 text-white w-7 h-7 grid place-items-center rounded-full shadow">✓</span>
+              </div>
+              <div class="p-3.5"><h4 class="font-bold text-lg leading-tight" x-text="d.name"></h4><p class="text-sm text-night-600/75 dark:text-sand-100/65 mt-1" x-text="d.blurb"></p></div>
+            </button>
+          </template>
+        </div>
+        <p x-show="filteredDestinations.length===0" class="text-center text-night-500 py-8">No destinations match — try another search.</p>
+        <div class="flex justify-between items-center mt-10">
+          <button @click="prevScreen()" class="px-5 py-2.5 rounded-full font-semibold text-night-600 dark:text-sand-100/70 hover:bg-black/5 dark:hover:bg-white/5">← Back</button>
+          <button @click="nextScreen()" class="px-7 py-3 rounded-full bg-teal-600 hover:bg-teal-500 text-white font-bold shadow-soft transition focus-ring">Next: Travel style →</button>
+        </div>
+      </div>
+
+      <!-- GENERATING -->
+      <div x-show="screen==='loading'" x-cloak class="p-16 text-center step-enter">
+        <div class="text-5xl floaty mb-4">🪷</div>
+        <p class="text-xl font-semibold" x-text="loadingMsg"></p>
+        <div class="mt-4 w-64 h-2 mx-auto rounded-full bg-black/10 dark:bg-white/10 overflow-hidden"><div class="h-full bg-teal-500 prog-bar" :style="`width:${loadPct}%`"></div></div>
+      </div>
+
+      <!-- RESULTS -->
+      <div x-show="screen==='results'" x-cloak class="step-enter">
+        <div class="p-6 sm:p-10 bg-gradient-to-br from-teal-700 to-teal-500 text-white">
+          <p class="text-teal-100 font-medium">Your personalized itinerary is ready</p>
+          <h3 class="text-3xl sm:text-4xl font-bold mt-1" x-text="`Hi ${a.name||'traveler'}! Here's your ${a.days}-day Thailand adventure`"></h3>
+          <div class="flex flex-wrap gap-4 mt-4 text-sm">
+            <span class="bg-white/15 px-3 py-1.5 rounded-full">🛬 Start: <b x-text="hubName(a.hub)"></b></span>
+            <span class="bg-white/15 px-3 py-1.5 rounded-full">📍 <b x-text="itinerary.length"></b> stops</span>
+            <span class="bg-white/15 px-3 py-1.5 rounded-full">💸 Est. <b x-text="costRange"></b></span>
+            <span class="bg-white/15 px-3 py-1.5 rounded-full">🗓️ <b x-text="prettyDate(a.startDate)"></b></span>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-5">
+            <button @click="exportPDF()" class="bg-white text-teal-700 font-bold px-5 py-2.5 rounded-full hover:bg-sand-50 transition focus-ring">📄 Save / Export PDF</button>
+            <button @click="savePlan()" class="bg-teal-800/60 border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-teal-800 transition focus-ring">💾 Save plan</button>
+            <button @click="sharePlan()" class="bg-teal-800/60 border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-teal-800 transition focus-ring">🔗 Share</button>
+            <button @click="editPrefs()" class="bg-teal-800/60 border border-white/30 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-teal-800 transition focus-ring">✏️ Modify answers</button>
+          </div>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-0">
+          <div class="lg:col-span-2 p-6 sm:p-8">
+            <div class="flex items-center justify-between mb-4"><h4 class="text-xl font-bold">Day-by-day plan</h4><span class="text-xs text-night-500">Drag stops ⇅ to reorder</span></div>
+            <ol class="space-y-4" id="timeline">
+              <template x-for="(stop,idx) in itinerary" :key="stop.uid">
+                <li draggable="true" @dragstart="dragStart(idx,$event)" @dragend="dragEnd($event)" @dragover.prevent="dragOver(idx,$event)" @drop="drop(idx)" class="relative rounded-2xl border border-black/10 dark:border-white/10 bg-sand-50 dark:bg-night-700 p-4 sm:p-5 cursor-grab active:cursor-grabbing transition">
+                  <div class="flex gap-4">
+                    <img :src="stop.img" :alt="stop.alt" class="w-24 h-24 rounded-xl object-cover flex-none hidden sm:block" loading="lazy" />
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-start justify-between gap-2">
+                        <div>
+                          <span class="text-xs font-bold uppercase tracking-wide text-teal-600 dark:text-teal-300" x-text="`Days ${stop.dayStart}–${stop.dayEnd} · ${stop.nights} night${stop.nights>1?'s':''}`"></span>
+                          <h5 class="text-lg font-bold" x-text="`${idx+1}. ${stop.name}`"></h5>
+                          <p class="text-xs text-night-500 dark:text-sand-100/50" x-text="stop.region"></p>
+                        </div>
+                        <button @click="removeStop(idx)" class="text-night-400 hover:text-red-500 p-1 focus-ring rounded" :aria-label="`Remove ${stop.name}`" title="Remove stop">✕</button>
+                      </div>
+                      <p class="text-sm mt-2 text-night-700/80 dark:text-sand-100/70" x-text="stop.travel"></p>
+                      <ul class="mt-2 space-y-1">
+                        <template x-for="(act,ai) in stop.activities" :key="ai"><li class="text-sm flex items-start gap-2"><span class="text-teal-500 mt-0.5">◆</span><span x-text="act"></span></li></template>
+                      </ul>
+                      <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                        <span class="bg-teal-500/10 text-teal-700 dark:text-teal-300 px-2.5 py-1 rounded-full">🏨 <span x-text="stop.hotel"></span></span>
+                        <span class="bg-gold-400/15 text-night-700 dark:text-gold-400 px-2.5 py-1 rounded-full">💸 <span x-text="stop.cost"></span></span>
+                        <a href="#" @click.prevent="" class="ml-auto text-teal-600 dark:text-teal-300 font-semibold hover:underline">Book experiences →</a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </template>
+            </ol>
+            <div class="mt-6 rounded-2xl bg-teal-500/5 border border-teal-500/20 p-5">
+              <h5 class="font-bold flex items-center gap-2">💡 Smart travel tips</h5>
+              <ul class="mt-2 text-sm space-y-1.5 text-night-700/85 dark:text-sand-100/75">
+                <li>• <b>Visa:</b> Many nationalities get a 60-day visa exemption — confirm yours before booking flights.</li>
+                <li>• <b>SIM/eSIM:</b> Grab an AIS or TrueMove eSIM at the airport for cheap, fast data nationwide.</li>
+                <li x-show="a.flights==='overland'">• <b>Overland:</b> You preferred to avoid flights — we've kept legs shorter, but a few long-distance transfers are unavoidable over 60 days.</li>
+                <li>• <b>Getting around:</b> Book domestic flights early; use Grab in cities and licensed minivans between towns.</li>
+                <li>• <b>Cash:</b> Keep baht for markets and islands; 7-Eleven ATMs are everywhere.</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="lg:col-span-1 border-t lg:border-t-0 lg:border-l border-black/10 dark:border-white/10 p-6 sm:p-8 bg-white dark:bg-night-800">
+            <h4 class="font-bold mb-3">Your route</h4>
+            <div id="map" class="h-64 rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 bg-teal-500/10" role="img" aria-label="Map of your Thailand route with numbered pins for each stop"></div>
+            <p class="text-[11px] text-night-500/70 mt-2">Numbered pins show your order; the dashed line is your travel path.</p>
+            <div class="mt-5">
+              <h4 class="font-bold mb-2">Trip summary</h4>
+              <dl class="text-sm space-y-1.5">
+                <div class="flex justify-between"><dt class="text-night-500">Total days</dt><dd class="font-semibold" x-text="a.days"></dd></div>
+                <div class="flex justify-between"><dt class="text-night-500">Stops</dt><dd class="font-semibold" x-text="itinerary.length"></dd></div>
+                <div class="flex justify-between"><dt class="text-night-500">Regions</dt><dd class="font-semibold" x-text="regionCount"></dd></div>
+                <div class="flex justify-between"><dt class="text-night-500">Est. total cost</dt><dd class="font-semibold text-teal-600 dark:text-teal-300" x-text="costRange"></dd></div>
+                <div class="flex justify-between"><dt class="text-night-500">Budget style</dt><dd class="font-semibold capitalize" x-text="a.budget"></dd></div>
+              </dl>
+              <div class="mt-4">
+                <h4 class="font-bold mb-2 text-sm">Top matches for your style</h4>
+                <ul class="space-y-1 text-xs">
+                  <template x-for="m in topMatches" :key="m.id"><li class="flex justify-between"><span x-text="m.name"></span><span class="text-teal-600 dark:text-teal-300 font-semibold" x-text="m.pct+'% match'"></span></li></template>
+                </ul>
+              </div>
+              <p class="text-[11px] text-night-500/70 mt-3">Costs are per-person estimates excluding international flights. For guidance only.</p>
+            </div>
+            <button @click="startWizard()" class="mt-6 w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-full transition focus-ring">Plan another trip</button>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <!-- floating selections -->
+    <div x-show="showSelections" x-cloak x-transition class="fixed bottom-4 right-4 z-40 bg-white dark:bg-night-800 shadow-soft border border-black/10 dark:border-white/10 rounded-2xl p-4 w-64 max-h-80 overflow-auto">
+      <p class="font-bold text-sm mb-2 flex items-center justify-between">My selections <span class="text-teal-600 dark:text-teal-300" x-text="`${a.selected.length}/10`"></span></p>
+      <ul class="space-y-1">
+        <template x-for="id in a.selected" :key="id">
+          <li class="flex items-center justify-between text-sm bg-sand-50 dark:bg-night-700 rounded-lg px-2.5 py-1.5"><span x-text="destById(id).name"></span><button @click="toggleDest(id)" class="text-night-400 hover:text-red-500" aria-label="Remove">✕</button></li>
+        </template>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS GALLERY -->
+<section id="destinations" class="py-16 sm:py-24 bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="max-w-2xl">
+        <p class="text-teal-600 dark:text-teal-300 font-semibold uppercase text-sm tracking-widest">Explore the Kingdom</p>
+        <h2 class="mt-2 text-3xl sm:text-5xl font-bold">21+ hand-picked destinations</h2>
+        <p class="mt-3 text-lg text-night-600/80 dark:text-sand-100/70">From misty northern temple towns to the emerald lagoons of the Andaman — every stop vetted for great stays and visitor-friendly infrastructure.</p>
+      </div>
+      <div class="flex gap-2 text-xs font-semibold">
+        <span class="px-3 py-1.5 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300">🏔️ Northern</span>
+        <span class="px-3 py-1.5 rounded-full bg-gold-400/15 text-night-700 dark:text-gold-400">🛕 Central</span>
+        <span class="px-3 py-1.5 rounded-full bg-saffron-500/10 text-saffron-600">🌾 Isan</span>
+        <span class="px-3 py-1.5 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300">🏝️ Southern</span>
+      </div>
+    </div>
+    <div class="mt-10 grid lg:grid-cols-4 gap-4">
+      <!-- illustrated map panel -->
+      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-b from-teal-700 to-night-900 p-6 flex flex-col row-span-2 shadow-card">
+        <div class="absolute inset-0 thai-pattern opacity-30" aria-hidden="true"></div>
+        <h3 class="relative font-bold text-white text-xl">Four regions,<br>one epic route</h3>
+        <p class="relative text-teal-100/85 text-sm mt-2">Our engine strings your picks into a smooth north-to-south flow — no wasted backtracking.</p>
+        <img src="images/thailand-map.png" alt="Illustrated map of Thailand's regions and major destinations" class="relative mt-4 mx-auto max-h-[420px] object-contain drop-shadow-2xl floaty" loading="lazy" />
+      </div>
+      <!-- mosaic -->
+      <div class="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-4 [grid-auto-rows:150px] sm:[grid-auto-rows:170px]">
+        <template x-for="(d,i) in destinations.slice(0,12)" :key="'g'+d.id">
+          <a href="#planner" @click="startWizard()" class="group relative rounded-2xl overflow-hidden shadow-card" :class="[0,5,8].includes(i)?'row-span-2':''">
+            <img :src="d.img" :alt="d.alt" class="card-img absolute inset-0 w-full h-full object-cover" loading="lazy" />
+            <div class="absolute inset-0 mosaic-caption"></div>
+            <span x-show="d.ph" class="ph-chip">Photo soon</span>
+            <div class="absolute bottom-0 p-4 text-white">
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur px-2 py-0.5 rounded-full" x-text="d.region"></span>
+              <h3 class="font-bold text-lg sm:text-xl mt-1 drop-shadow" x-text="d.name"></h3>
+              <p class="text-xs text-white/85 max-h-0 opacity-0 group-hover:max-h-16 group-hover:opacity-100 transition-all duration-300 overflow-hidden" x-text="d.blurb"></p>
+            </div>
+          </a>
+        </template>
+      </div>
+    </div>
+    <div class="text-center mt-10"><button @click="startWizard()" class="btn-shine bg-teal-600 hover:bg-teal-500 text-white font-bold px-8 py-4 rounded-full shadow-soft transition focus-ring">Plan a trip with these →</button></div>
+  </div>
+</section>
+
+<!-- SAMPLE ITINERARIES -->
+<section id="itineraries" class="py-16 sm:py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="max-w-2xl"><p class="text-teal-600 dark:text-teal-300 font-semibold uppercase text-sm tracking-wide">Ready to go</p><h2 class="mt-2 text-3xl sm:text-5xl font-bold">Popular itineraries</h2><p class="mt-3 text-lg text-night-600/80 dark:text-sand-100/70">Love one? Load it into the planner and customize every day.</p></div>
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+      <template x-for="s in sampleTrips" :key="s.id">
+        <article class="rounded-3xl overflow-hidden bg-white dark:bg-night-800 shadow-card border border-black/5 dark:border-white/10 flex flex-col">
+          <div class="relative h-44"><img :src="s.img" :alt="s.alt" class="w-full h-full object-cover" loading="lazy" /><span class="absolute top-3 left-3 bg-gold-400 text-night-900 text-xs font-bold px-3 py-1 rounded-full" x-text="`${s.days} days`"></span></div>
+          <div class="p-5 flex-1 flex flex-col"><h3 class="font-bold text-xl" x-text="s.title"></h3><p class="text-sm text-night-600/75 dark:text-sand-100/65 mt-1 flex-1" x-text="s.desc"></p><p class="text-xs text-night-500 mt-3" x-text="s.route"></p><button @click="loadSample(s)" class="mt-4 bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-full transition focus-ring">Use this itinerary →</button></div>
+        </article>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- VISA / UNCLE PONG -->
+<section class="py-16 sm:py-20 bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10">
+  <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="relative">
+      <img src="images/uncle-pong-immigration.jpg" alt="Illustration of a cheerful traveler being welcomed at Thai passport control" class="rounded-3xl shadow-soft w-full object-cover" loading="lazy" />
+      <img src="images/uncle-pong.jpg" alt="" class="ring-photo absolute -bottom-6 -right-2 sm:right-8 w-24 h-24 rounded-full object-cover floaty" loading="lazy" />
+    </div>
+    <div>
+      <p class="text-saffron-600 dark:text-gold-400 font-semibold uppercase text-sm tracking-widest">Before you fly</p>
+      <h2 class="mt-2 text-3xl sm:text-5xl font-bold">Sort your visa before you sort your beaches</h2>
+      <p class="mt-4 text-lg text-night-600/85 dark:text-sand-100/75 leading-relaxed">Most nationalities now enjoy a <b class="text-teal-700 dark:text-teal-300">60-day visa exemption</b> on arrival — which is exactly why our planner goes all the way to 60 days. Staying longer, retiring, or working remotely? There are 18+ legal long-stay routes.</p>
+      <ul class="mt-5 space-y-2.5 text-night-700/85 dark:text-sand-100/75">
+        <li class="flex gap-3"><span class="text-teal-500 mt-0.5">✓</span>60-day exemption for 90+ nationalities, extendable by 30 days</li>
+        <li class="flex gap-3"><span class="text-teal-500 mt-0.5">✓</span>DTV, retirement, LTR & education visas for longer stays</li>
+        <li class="flex gap-3"><span class="text-teal-500 mt-0.5">✓</span>Always verify current rules with official sources before booking</li>
+      </ul>
+      <a href="https://thaivisafinder.com" target="_blank" rel="noopener" class="btn-shine mt-7 inline-flex items-center gap-2 bg-gradient-to-r from-saffron-500 to-gold-500 hover:brightness-110 text-night-900 font-bold px-7 py-3.5 rounded-full shadow-soft transition focus-ring">Find your visa with Uncle Pong →</a>
+      <p class="mt-3 text-xs text-night-500/80 dark:text-sand-100/50">ThaiVisaFinder.com — our free sister tool comparing all 18 legal long-stay routes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="relative py-16 sm:py-24 text-white overflow-hidden">
+  <img src="images/temple-sunset.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" aria-hidden="true" />
+  <div class="absolute inset-0 bg-gradient-to-b from-night-900/85 via-teal-900/80 to-night-900/90" style="background:linear-gradient(180deg,rgba(11,17,32,.88),rgba(17,105,97,.82),rgba(11,17,32,.92))"></div>
+  <div class="relative max-w-7xl mx-auto px-4">
+    <div class="text-center max-w-2xl mx-auto"><h2 class="text-3xl sm:text-5xl font-bold drop-shadow">Loved by travelers worldwide</h2><p class="mt-3 text-teal-100">4.9/5 average from over 10,000 planned trips.</p></div>
+    <div class="mt-10 relative">
+      <div class="flex gap-5 transition-transform duration-500" :style="`transform:translateX(-${testIndex*100}%)`">
+        <template x-for="(t,i) in testimonials" :key="i">
+          <figure class="min-w-full sm:min-w-[calc(50%-10px)] lg:min-w-[calc(33.333%-14px)] bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/15">
+            <div class="text-gold-400 text-lg">★★★★★</div>
+            <blockquote class="mt-3 text-sand-100/95" x-text="t.quote"></blockquote>
+            <figcaption class="mt-4 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-gold-400 text-night-900 grid place-items-center font-bold" x-text="t.name[0]"></span><span><span class="font-semibold block" x-text="t.name"></span><span class="text-xs text-teal-100" x-text="t.role"></span></span></figcaption>
+          </figure>
+        </template>
+      </div>
+      <div class="flex justify-center gap-2 mt-6"><button @click="testIndex=Math.max(0,testIndex-1)" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 focus-ring" aria-label="Previous">←</button><button @click="testIndex=Math.min(testimonials.length-1,testIndex+1)" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 focus-ring" aria-label="Next">→</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter" class="py-16 sm:py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="rounded-3xl text-white p-8 sm:p-12 shadow-soft relative overflow-hidden">
+      <img src="images/koh-samui-temple.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" aria-hidden="true" />
+      <div class="absolute inset-0" style="background:linear-gradient(120deg,rgba(15,131,120,.94),rgba(23,163,148,.80))"></div>
+      <div class="absolute inset-0 thai-pattern opacity-30"></div>
+      <div class="relative grid lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold">Get Thailand tips in your inbox</h2>
+          <p class="mt-2 text-teal-50">Seasonal deals, hidden gems and itinerary ideas. No spam, unsubscribe anytime.</p>
+          <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" @submit.prevent="subscribe()" class="mt-5 flex flex-col sm:flex-row gap-3">
+            <input type="hidden" name="form-name" value="newsletter" />
+            <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+            <label class="sr-only" for="news-email">Email address</label>
+            <input id="news-email" name="email" x-model="newsletterEmail" type="email" required placeholder="you@email.com" class="flex-1 rounded-full px-5 py-3 text-night-800 focus-ring" />
+            <button :disabled="subscribing" class="bg-gold-400 hover:brightness-110 text-night-900 font-bold px-6 py-3 rounded-full transition focus-ring whitespace-nowrap disabled:opacity-60" x-text="subscribing ? 'Subscribing…' : 'Subscribe'">Subscribe</button>
+          </form>
+          <p x-show="subscribed" x-cloak class="mt-3 text-sm bg-white/20 rounded-full px-4 py-2 inline-block">🎉 You're in! Welcome aboard.</p>
+          <p x-show="subscribeError" x-cloak class="mt-3 text-sm bg-red-500/30 rounded-full px-4 py-2 inline-block">Something went wrong — please try again.</p>
+        </div>
+        <div class="lg:text-right text-sm text-teal-50/90">
+          <p>Questions about your plan or the site?</p>
+          <a href="contact.html" class="mt-3 inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 py-3 rounded-full backdrop-blur transition focus-ring">Contact us →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-night-900 text-sand-100/80 pt-14 pb-8 border-t border-white/10">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div>
+        <a href="#top" class="flex items-center gap-2"><span class="text-2xl">🪷</span><span class="font-display text-xl font-bold text-white">Thai<span class="text-teal-300">TripPlanner</span></span></a>
+        <p class="mt-3 text-sm">The #1 Thailand Trip Planner on the internet. Free, fast, and built by travelers who love the Kingdom.</p>
+        <div class="flex gap-3 mt-4 text-lg"><a href="#" aria-label="Instagram" class="hover:text-teal-300">📷</a><a href="#" aria-label="Facebook" class="hover:text-teal-300">👍</a><a href="#" aria-label="YouTube" class="hover:text-teal-300">▶️</a><a href="#" aria-label="X" class="hover:text-teal-300">✖️</a></div>
+      </div>
+      <div><h3 class="font-semibold text-white mb-3">Explore</h3><ul class="space-y-2 text-sm"><li><a href="#planner" class="hover:text-teal-300">Plan Your Trip</a></li><li><a href="#destinations" class="hover:text-teal-300">Destinations</a></li><li><a href="#itineraries" class="hover:text-teal-300">Itineraries</a></li></ul></div>
+      <div><h3 class="font-semibold text-white mb-3">Company</h3><ul class="space-y-2 text-sm"><li><a href="about.html" class="hover:text-teal-300">About</a></li><li><a href="contact.html" class="hover:text-teal-300">Contact</a></li><li><a href="contact.html" class="hover:text-teal-300">Support</a></li></ul></div>
+      <div><h3 class="font-semibold text-white mb-3">Legal</h3><ul class="space-y-2 text-sm"><li><a href="privacy.html" class="hover:text-teal-300">Privacy Policy</a></li><li><a href="cookies.html" class="hover:text-teal-300">Cookie Policy</a></li><li><a href="cookie-settings.html" class="hover:text-teal-300">Cookie Settings</a></li><li><a href="terms.html" class="hover:text-teal-300">Terms &amp; Disclaimer</a></li><li><a href="accessibility.html" class="hover:text-teal-300">Accessibility</a></li></ul></div>
+    </div>
+    <div class="mt-10 pt-6 border-t border-white/10 text-xs text-sand-100/60 space-y-2 text-center">
+      <p>© 2026 Genext Information Systems. All rights reserved. · <a href="index.html" class="underline hover:text-teal-300">thaitripplanner.com</a> · V1.0</p>
+      <p>For entertainment purposes only — not affiliated with the Thai Ministry of Tourism. Please do your own research. 🌴</p>
+    </div>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div x-show="cookieBanner" x-cloak x-transition class="fixed inset-x-0 bottom-0 z-[80] p-4">
+  <div class="max-w-4xl mx-auto glass border border-black/10 dark:border-white/15 rounded-2xl shadow-soft p-5 sm:p-6">
+    <div class="sm:flex items-start gap-6">
+      <div class="flex-1">
+        <h3 class="font-bold text-lg">🍪 We value your privacy</h3>
+        <p class="text-sm mt-1 text-night-600/85 dark:text-sand-100/75">We use minimal cookies to remember your theme and saved trip plans. We don't sell your data or run invasive tracking. Read our <a href="cookies.html" class="text-teal-600 dark:text-teal-300 underline">Cookie Policy</a>.</p>
+        <div x-show="cookieSettings" x-cloak class="mt-3 space-y-2 text-sm">
+          <label class="flex items-center gap-2"><input type="checkbox" checked disabled class="accent-teal-600"/> Essential (always on)</label>
+          <label class="flex items-center gap-2"><input type="checkbox" x-model="cookiePrefs.analytics" class="accent-teal-600"/> Analytics</label>
+          <label class="flex items-center gap-2"><input type="checkbox" x-model="cookiePrefs.marketing" class="accent-teal-600"/> Marketing</label>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-4 sm:mt-0">
+        <button @click="cookieSettings=!cookieSettings" class="px-4 py-2.5 rounded-full text-sm font-semibold border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5">Settings</button>
+        <button @click="acceptCookies('essential')" class="px-4 py-2.5 rounded-full text-sm font-semibold border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5">Reject non-essential</button>
+        <button @click="acceptCookies('all')" class="px-5 py-2.5 rounded-full text-sm font-bold bg-teal-600 hover:bg-teal-500 text-white">Accept all</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div x-show="toast" x-cloak x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[95] bg-night-900 text-white px-5 py-3 rounded-full shadow-soft text-sm" x-text="toast"></div>
+
+<script>
+function tripPlanner(){
+  return {
+    darkMode:false, mobileNav:false,
+    cur:0,
+    loadPct:0, loadingMsg:'Analyzing your preferences…',
+    cookieBanner:false, cookieSettings:false, cookiePrefs:{analytics:true,marketing:false},
+    toast:'', regionFilter:'All', search:'', testIndex:0,
+    savedPlanExists:false, newsletterEmail:'', subscribed:false, subscribing:false, subscribeError:false,
+    contact:{name:'',email:'',msg:''}, contactSent:false,
+    itinerary:[], costRange:'', dragIndex:null, _weights:null, topMatches:[],
+
+    a:{ name:'', companions:'partner', kids:'none', days:14, startDate:'', hub:'bangkok', selected:[],
+        vibe:'balanced', pace:'moderate', budget:'mid', stay:'mix', beachMountain:40, cityNature:50,
+        mustsee:['temples','beaches','food'], food:'mix', nightlife:'some', fitness:'moderate',
+        water:['snorkel'], culture2:'some', wellness:'no', special:['cooking'], flights:'happy', experience:'first' },
+
+    hubs:[
+      {id:'bangkok',name:'Bangkok (BKK)',info:'Best for north & central',img:'images/bangkok-grand-palace.jpg',alt:'Grand Palace at dusk, Bangkok'},
+      {id:'phuket',name:'Phuket (HKT)',info:'Andaman island gateway',img:'images/phuket-phang-nga.jpg',alt:'Phang Nga Bay view, Phuket'}
+    ],
+    regions:['All','Northern','Central','Isan','Southern'],
+
+    /* ---------- QUESTIONS (data-driven) ---------- */
+    questions:{
+      name:{cat:'The basics',type:'text',q:'First, what should we call you?',help:"We'll personalize your itinerary.",placeholder:'e.g. Fred'},
+      companions:{cat:'The basics',type:'single',auto:true,q:"Who's coming along?",opts:[{v:'solo',l:'Just me',i:'🧍'},{v:'partner',l:'With my partner',i:'💑'},{v:'family',l:'Family with kids',i:'👨‍👩‍👧'},{v:'friends',l:'Friends / group',i:'🎉'}]},
+      kids:{cat:'The basics',type:'single',auto:true,q:'Travelling with young children?',opts:[{v:'none',l:'No kids',i:'🚫'},{v:'young',l:'Yes, under 7',i:'🍼'},{v:'older',l:'Yes, 7–14',i:'🧒'}]},
+      days:{cat:'The basics',type:'number',q:'How many days do you have?',help:'Anywhere from a short break to a 60-day epic.',min:3,max:60},
+      startDate:{cat:'The basics',type:'date',q:'When do you plan to start?',help:'Roughly is fine — you can change it later.'},
+      hub:{cat:'The basics',type:'hub',q:'Where will you fly into?',help:'Your starting hub shapes the most efficient route.'},
+      vibe:{cat:'Your style',type:'single',auto:true,q:"What's your ideal trip vibe?",opts:[{v:'relaxed',l:'Relaxed & quiet',i:'🏖️',desc:'Slow mornings, calm beaches'},{v:'nightlife',l:'Buzzing nightlife',i:'🌃',desc:'Bars, walking streets'},{v:'balanced',l:'A balanced mix',i:'⚖️',desc:'A bit of everything'},{v:'culture',l:'Cultural immersion',i:'🛕',desc:'Temples, history, local life'},{v:'adventure',l:'Adventure & nature',i:'🥾',desc:'Jungle, mountains, action'}]},
+      pace:{cat:'Your style',type:'single',auto:true,q:'What pace suits you?',opts:[{v:'relaxed',l:'Relaxed',i:'🐢',desc:'Fewer moves, longer stays'},{v:'moderate',l:'Moderate',i:'🚶',desc:'A comfortable balance'},{v:'packed',l:'Packed',i:'⚡',desc:'See as much as possible'}]},
+      budget:{cat:'Your style',type:'single',auto:true,q:"What's your budget style?",opts:[{v:'budget',l:'Budget',i:'🎒',desc:'Hostels & street food'},{v:'mid',l:'Mid-range',i:'🏨',desc:'Nice hotels & comfort'},{v:'luxury',l:'Luxury',i:'💎',desc:'Resorts & fine dining'}]},
+      stay:{cat:'Your style',type:'single',auto:true,q:'Where do you like to sleep?',opts:[{v:'hostel',l:'Social hostels',i:'🛏️'},{v:'boutique',l:'Boutique hotels',i:'🏩'},{v:'resort',l:'Beach resorts',i:'🌴'},{v:'mix',l:'A mix',i:'🔀'}]},
+      beachMountain:{cat:'Preferences',type:'scale',q:'Beaches or mountains?',help:'Slide toward whatever pulls you more.',left:'🏝️ Beaches',right:'⛰️ Mountains'},
+      cityNature:{cat:'Preferences',type:'scale',q:'Cities or wild nature?',left:'🌆 Big cities',right:'🌿 Wild nature'},
+      mustsee:{cat:'Preferences',type:'multi',q:'What must you experience?',opts:[{v:'temples',l:'Ancient temples',i:'🛕'},{v:'beaches',l:'Pristine beaches',i:'🏝️'},{v:'nightlife',l:'Night markets & nightlife',i:'🍸'},{v:'cities',l:'Major cities',i:'🌆'},{v:'mountains',l:'Mountains & hiking',i:'⛰️'},{v:'wildlife',l:'Nature & wildlife',i:'🐘'},{v:'shopping',l:'Shopping & malls',i:'🛍️'},{v:'food',l:'Food experiences',i:'🍜'},{v:'islands',l:'Island hopping',i:'⛵'},{v:'wellness',l:'Wellness & spas',i:'🧘'}]},
+      food:{cat:'Preferences',type:'single',auto:true,q:'How adventurous are you with food?',opts:[{v:'lover',l:'Street-food lover',i:'🍢',desc:'Bring on the som tam'},{v:'mix',l:'A healthy mix',i:'🍽️',desc:'Local + familiar'},{v:'familiar',l:'Keep it familiar',i:'🍕',desc:'Comfort favorites'}]},
+      nightlife:{cat:'Preferences',type:'single',auto:true,q:'How much nightlife do you want?',opts:[{v:'none',l:'Little to none',i:'😴'},{v:'some',l:'A few good nights',i:'🍹'},{v:'big',l:'The full experience',i:'🎶'}]},
+      fitness:{cat:'Preferences',type:'single',auto:true,q:'Your activity level?',opts:[{v:'low',l:'Take it easy',i:'🛋️'},{v:'moderate',l:'Moderately active',i:'🚴'},{v:'high',l:'Very active',i:'🧗'}]},
+      water:{cat:'Preferences',type:'multi',q:'Water activities you would love?',opts:[{v:'snorkel',l:'Snorkeling',i:'🤿'},{v:'scuba',l:'Scuba diving',i:'🐠'},{v:'islandhop',l:'Island hopping',i:'⛵'},{v:'kayak',l:'Kayaking',i:'🛶'},{v:'none',l:'Not fussed',i:'🚫'}]},
+      culture2:{cat:'Preferences',type:'single',auto:true,q:'Interest in temples & history?',opts:[{v:'deep',l:'Deep dive',i:'📜',desc:'The more the better'},{v:'some',l:'Some highlights',i:'🏯'},{v:'light',l:'Just the icons',i:'📸'}]},
+      wellness:{cat:'Preferences',type:'single',auto:true,q:'Want wellness time (spa / yoga)?',opts:[{v:'yes',l:'Yes please',i:'🧘'},{v:'no',l:'Not a priority',i:'🙅'}]},
+      special:{cat:'Bucket list',type:'multi',q:'Any bucket-list experiences?',opts:[{v:'cooking',l:'Thai cooking class',i:'👩‍🍳'},{v:'elephant',l:'Ethical elephant sanctuary',i:'🐘'},{v:'muaythai',l:'Muay Thai match',i:'🥊'},{v:'festival',l:'Festivals & events',i:'🎆'},{v:'photography',l:'Photography spots',i:'📷'},{v:'diving',l:'Learn to dive',i:'🐡'}]},
+      flights:{cat:'Logistics',type:'single',auto:true,q:'How do you feel about domestic flights?',opts:[{v:'happy',l:'Happy to fly',i:'✈️',desc:'Save time between regions'},{v:'overland',l:'Prefer overland',i:'🚌',desc:'Trains, buses, ferries'}]},
+      experience:{cat:'Logistics',type:'single',auto:true,q:'Been to Thailand before?',opts:[{v:'first',l:'First time',i:'🆕'},{v:'repeat',l:"I've been before",i:'🔁'}]}
+    },
+
+    flow:[
+      {t:'intro'},
+      {t:'q',id:'name'},{t:'q',id:'companions'},{t:'q',id:'kids'},{t:'q',id:'days'},{t:'q',id:'startDate'},{t:'q',id:'hub'},
+      {t:'dest'},
+      {t:'q',id:'vibe'},{t:'q',id:'pace'},{t:'q',id:'budget'},{t:'q',id:'stay'},{t:'q',id:'beachMountain'},{t:'q',id:'cityNature'},{t:'q',id:'mustsee'},{t:'q',id:'food'},{t:'q',id:'nightlife'},{t:'q',id:'fitness'},{t:'q',id:'water'},{t:'q',id:'culture2'},{t:'q',id:'wellness'},{t:'q',id:'special'},{t:'q',id:'flights'},{t:'q',id:'experience'},
+      {t:'results'}
+    ],
+
+    /* ---------- destination dataset ---------- */
+    destinations:[
+      {id:'chiangmai',name:'Chiang Mai',region:'Northern',blurb:'Cultural heart — temples, night bazaars & misty mountains.',overnight:true,lat:18.7883,lng:98.9853,img:'images/chiang-mai-doi-suthep.jpg',alt:'Golden chedi of Wat Phra That Doi Suthep, Chiang Mai',s:{temples:3,cities:2,mountains:3,wildlife:2,food:3,wellness:2,shopping:2,culture:3,adventure:2}},
+      {id:'chiangrai',name:'Chiang Rai',region:'Northern',blurb:'Home of the dazzling White Temple & hillside tea plantations.',overnight:true,lat:19.9105,lng:99.8406,img:'images/chiang-rai.svg',alt:'Chiang Rai stylized temple artwork',ph:true,s:{temples:3,mountains:2,wildlife:1,food:2,culture:3,adventure:2}},
+      {id:'pai',name:'Pai',region:'Northern',blurb:'Laid-back mountain town — hot springs & hippie cafés.',overnight:true,lat:19.3583,lng:98.4419,img:'images/pai.svg',alt:'Pai mountain valley artwork',ph:true,s:{mountains:3,wellness:3,adventure:2,food:1,culture:1}},
+      {id:'sukhothai',name:'Sukhothai',region:'Northern',blurb:'Serene UNESCO ruins of Thailand’s first kingdom.',overnight:true,lat:17.0078,lng:99.7038,img:'images/sukhothai.svg',alt:'Sukhothai ancient ruins artwork',ph:true,s:{temples:3,culture:3,food:1,adventure:1}},
+      {id:'bangkok',name:'Bangkok',region:'Central',blurb:'Vibrant capital — grand temples, rooftop bars & street food.',overnight:true,lat:13.7563,lng:100.5018,img:'images/bangkok-grand-palace.jpg',alt:'The Grand Palace and Wat Phra Kaew glowing at dusk, Bangkok',s:{temples:3,cities:3,nightlife:3,shopping:3,food:3,wellness:2,culture:2}},
+      {id:'ayutthaya',name:'Ayutthaya',region:'Central',blurb:'Atmospheric UNESCO ruins of a former royal capital.',overnight:false,lat:14.3532,lng:100.5689,img:'images/ayutthaya.svg',alt:'Ayutthaya royal ruins artwork',ph:true,s:{temples:3,culture:3,cities:1,food:1}},
+      {id:'kanchanaburi',name:'Kanchanaburi',region:'Central',blurb:'River Kwai, waterfalls & poignant WWII history.',overnight:true,lat:14.0227,lng:99.5328,img:'images/kanchanaburi.svg',alt:'Kanchanaburi river valley artwork',ph:true,s:{wildlife:3,mountains:2,adventure:2,culture:2,wellness:1}},
+      {id:'khaoyai',name:'Khao Yai',region:'Central',blurb:'Thailand’s great national park — waterfalls & wildlife.',overnight:true,lat:14.4396,lng:101.3729,img:'images/khao-yai.svg',alt:'Khao Yai national park artwork',ph:true,s:{wildlife:3,mountains:3,adventure:3,wellness:1}},
+      {id:'nongkhai',name:'Udon Thani / Nong Khai',region:'Isan',blurb:'Mekong riverside culture, food & sacred Naga lore.',overnight:true,lat:17.8782,lng:102.7412,img:'images/nong-khai.svg',alt:'Nong Khai Mekong riverside artwork',ph:true,s:{culture:3,food:3,temples:2,wildlife:1}},
+      {id:'khonkaen',name:'Khon Kaen',region:'Isan',blurb:'Modern Isan hub — lakeside temples & lively student vibe.',overnight:true,lat:16.4419,lng:102.8360,img:'images/khon-kaen-city.jpg',alt:'City boulevard and golden gate of Khon Kaen',s:{cities:2,culture:2,food:3,temples:2}},
+      {id:'ubon',name:'Ubon Ratchathani',region:'Isan',blurb:'Dramatic temples, cliffs & the Emerald Triangle.',overnight:true,lat:15.2287,lng:104.8564,img:'images/ubon.svg',alt:'Ubon Ratchathani temple artwork',ph:true,s:{temples:3,wildlife:2,culture:3,adventure:2,mountains:1}},
+      {id:'phuket',name:'Phuket',region:'Southern',blurb:'Thailand’s biggest island — beaches, nightlife & luxury.',overnight:true,lat:7.8804,lng:98.3923,img:'images/phuket-phang-nga.jpg',alt:'Infinity pool overlooking the limestone karsts of Phang Nga Bay, Phuket',s:{beaches:3,nightlife:3,islands:2,shopping:2,wellness:2,food:2}},
+      {id:'krabi',name:'Krabi',region:'Southern',blurb:'Iconic limestone cliffs, Railay Beach & island tours.',overnight:true,lat:8.0863,lng:98.9063,img:'images/krabi-lagoon.jpg',alt:'Turquoise lagoon framed by limestone cliffs, Krabi',s:{beaches:3,islands:3,adventure:2,wellness:1,food:1}},
+      {id:'kohsamui',name:'Koh Samui',region:'Southern',blurb:'Relaxed luxury island with palm-fringed coves.',overnight:true,lat:9.5120,lng:100.0136,img:'images/koh-samui-beach.jpg',alt:'Palm-fringed cove with longtail boats, Koh Samui',s:{beaches:3,islands:2,wellness:3,nightlife:1,food:2}},
+      {id:'kohphiphi',name:'Koh Phi Phi',region:'Southern',blurb:'Postcard beaches, Maya Bay & buzzing island nightlife.',overnight:true,lat:7.7407,lng:98.7784,img:'images/koh-phi-phi.svg',alt:'Koh Phi Phi bay artwork',ph:true,s:{beaches:3,islands:3,nightlife:2,adventure:2}},
+      {id:'kohtao',name:'Koh Tao',region:'Southern',blurb:'World-class, affordable diving & snorkeling paradise.',overnight:true,lat:10.0956,lng:99.8403,img:'images/koh-tao.svg',alt:'Koh Tao island artwork',ph:true,s:{beaches:3,islands:3,adventure:3,wellness:1}},
+      {id:'kohlanta',name:'Koh Lanta',region:'Southern',blurb:'Quiet, family-friendly beaches & mellow sunsets.',overnight:true,lat:7.6247,lng:99.0400,img:'images/koh-lanta.svg',alt:'Koh Lanta sunset beach artwork',ph:true,s:{beaches:3,wellness:3,islands:1,food:1}},
+      {id:'kohchang',name:'Koh Chang',region:'Southern',blurb:'Jungle-clad island with waterfalls & tranquil bays.',overnight:true,lat:12.0490,lng:102.3210,img:'images/koh-chang-coast.jpg',alt:'Jungle-backed coastline and empty beach, Koh Chang',s:{beaches:2,wildlife:2,adventure:2,islands:2,wellness:2}},
+      {id:'similan',name:'Similan Islands',region:'Southern',blurb:'Pristine marine park — some of Asia’s best dive sites.',overnight:false,lat:8.6500,lng:97.6450,img:'images/similan.svg',alt:'Similan Islands marine park artwork',ph:true,s:{beaches:3,islands:3,adventure:3}},
+      {id:'huahin',name:'Hua Hin',region:'Southern',blurb:'Royal beach town near Bangkok — golf, markets & calm sea.',overnight:true,lat:12.5684,lng:99.9577,img:'images/hua-hin-market.jpg',alt:'The lively Market Village and night market area of Hua Hin',s:{beaches:2,shopping:2,wellness:2,food:2,nightlife:1}},
+      {id:'pattaya',name:'Pattaya / Jomtien',region:'Southern',blurb:'Lively resort city — nightlife, water sports & family parks.',overnight:true,lat:12.9236,lng:100.8825,img:'images/pattaya-bay.jpg',alt:'Sweeping bay and beachfront of Pattaya',s:{nightlife:3,beaches:2,shopping:2,cities:2,food:1}}
+    ],
+    regionOrder:{ bangkok:['Central','Northern','Isan','Southern'], phuket:['Southern','Central','Northern','Isan'] },
+
+    sampleTrips:[
+      {id:'northsouth',title:'Classic 14-Day North + South',days:14,desc:'The perfect first-timer loop: temples & mountains up north, then island bliss in the Andaman.',route:'Bangkok → Chiang Mai → Chiang Rai → Krabi → Koh Phi Phi',img:'images/chiang-mai-doi-suthep.jpg',alt:'Golden mountain temple of Doi Suthep, Chiang Mai',hub:'bangkok',sel:['bangkok','chiangmai','chiangrai','krabi','kohphiphi'],prefs:{companions:'partner',vibe:'balanced',mustsee:['temples','beaches','food','islands'],pace:'moderate',budget:'mid',special:['cooking']}},
+      {id:'familybeach',title:'Family Beach Escape',days:10,desc:'Easy, kid-friendly pace with calm beaches, elephants & gentle culture.',route:'Phuket → Krabi → Koh Lanta',img:'images/koh-samui-beach.jpg',alt:'Calm palm-lined beach cove',hub:'phuket',sel:['phuket','krabi','kohlanta'],prefs:{companions:'family',kids:'older',vibe:'relaxed',mustsee:['beaches','wildlife','food'],pace:'relaxed',budget:'mid',special:['elephant']}},
+      {id:'adventure',title:'21-Day Grand Adventure',days:21,desc:'Mountains, national parks, ruins and diving for the restless explorer.',route:'Bangkok → Khao Yai → Chiang Mai → Pai → Koh Tao',img:'images/doi-inthanon.jpg',alt:'Twin pagodas and mountain gardens of Doi Inthanon National Park',hub:'bangkok',sel:['bangkok','khaoyai','chiangmai','pai','kohtao'],prefs:{companions:'friends',vibe:'adventure',mustsee:['mountains','wildlife','islands','temples'],pace:'packed',budget:'budget',special:['diving'],water:['scuba','snorkel']}}
+    ],
+
+    testimonials:[
+      {name:'Sarah & Tom',role:'Honeymoon, UK',quote:'We planned our whole 3-week honeymoon in 20 minutes. The routing saved us two internal flights — genuinely felt like a private concierge.'},
+      {name:'Marcus',role:'Digital nomad, Germany',quote:'As someone who lives here half the year, I was skeptical. The destination mix and pacing were spot on. Now I send it to every visiting friend.'},
+      {name:'The Alvarez Family',role:'Family of 4, USA',quote:'Finally a planner that understood “relaxed with kids.” No crazy travel days, elephant sanctuary was ethical and amazing.'},
+      {name:'Priya',role:'Solo traveler, Canada',quote:'Loved that it flagged overnight-friendly towns and safe areas. Felt confident going solo across the north.'},
+      {name:'Jens',role:'Diver, Norway',quote:'Koh Tao + Similan in one loop with sensible ferries. The cost estimate was within 5% of what I actually spent.'},
+      {name:'Emma',role:'Backpacker, Australia',quote:'Budget mode nailed it — hostels, street food, night buses. Best free trip tool I have used, full stop.'}
+    ],
+    /* ---------- lifecycle ---------- */
+    init(){
+      const savedTheme=this._get('tt_theme');
+      this.darkMode = savedTheme ? savedTheme==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if(!this._get('tt_cookie')) setTimeout(()=>this.cookieBanner=true,1200);
+      this.savedPlanExists=!!this._get('tt_plan');
+      const d=new Date(); d.setDate(d.getDate()+30); this.a.startDate=d.toISOString().slice(0,10);
+      this._loadFromHash();
+      setInterval(()=>{ if(!document.hidden) this.testIndex=(this.testIndex+1)%Math.max(1,this.testimonials.length-2); },6000);
+      this.$watch('darkMode',v=>this._set('tt_theme',v?'dark':'light'));
+    },
+
+    /* ---------- helpers ---------- */
+    _get(k){ try{return localStorage.getItem(k)}catch(e){return null} },
+    _set(k,v){ try{localStorage.setItem(k,v)}catch(e){} },
+    toggleDark(){ this.darkMode=!this.darkMode; },
+    showToast(m){ this.toast=m; clearTimeout(this._t); this._t=setTimeout(()=>this.toast='',2600); },
+    destById(id){ return this.destinations.find(d=>d.id===id)||{}; },
+    hubName(id){ const h=this.hubs.find(x=>x.id===id); return h?h.name:id; },
+    prettyDate(s){ if(!s) return 'Flexible'; return new Date(s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); },
+    qTitle(q){ return q.id==='name' ? q.q : (this.a.name ? q.q : q.q); },
+
+    /* screen + flow */
+    get screen(){ if(this._loading) return 'loading'; return this.flow[this.cur].t; },
+    get activeQ(){ const f=this.flow[this.cur]; if(f.t!=='q') return null; return Object.assign({id:f.id}, this.questions[f.id]); },
+    get planning(){ const t=this.flow[this.cur].t; return t==='q'||t==='dest'; },
+    get stepsTotal(){ return this.flow.filter(f=>f.t==='q'||f.t==='dest').length; },
+    get stepNum(){ let n=0; for(let i=1;i<=this.cur && i<this.flow.length;i++){ if(this.flow[i].t==='q'||this.flow[i].t==='dest') n++; } return Math.min(n,this.stepsTotal); },
+    get progressPct(){ return Math.round((this.stepNum/this.stepsTotal)*100); },
+    get canAdvance(){ const q=this.activeQ; if(!q) return true; if(q.id==='name') return (this.a.name||'').trim().length>0; return true; },
+    get showSelections(){ const t=this.flow[this.cur].t; return (t==='dest'||t==='q') && this.cur>6 && this.a.selected.length>0 || (t==='dest'&&this.a.selected.length>0); },
+    get filteredDestinations(){ return this.destinations.filter(d=>{ const rOK=this.regionFilter==='All'||d.region===this.regionFilter; const q=this.search.trim().toLowerCase(); const sOK=!q||d.name.toLowerCase().includes(q)||d.blurb.toLowerCase().includes(q)||d.region.toLowerCase().includes(q); return rOK&&sOK; }); },
+    get regionCount(){ return new Set(this.itinerary.map(s=>s.region)).size; },
+
+    startWizard(){ this.cur=1; this._loading=false; this.$nextTick(()=>this._scroll()); },
+    _scroll(){ document.getElementById('planner')?.scrollIntoView({behavior:'smooth'}); },
+    nextScreen(){
+      if(this.activeQ && !this.canAdvance){ this.showToast('Please add your name to continue.'); return; }
+      if(this.flow[this.cur].t==='dest' && this.a.selected.length===0){ /* allowed: engine fills */ }
+      this.cur++;
+      if(this.flow[this.cur] && this.flow[this.cur].t==='results'){ this.generate(); return; }
+      this._scroll();
+    },
+    prevScreen(){ if(this.cur>0){ this.cur--; this._loading=false; this._scroll(); } },
+    editPrefs(){ this.cur=this.flow.findIndex(f=>f.id==='vibe'); this._loading=false; this._scroll(); },
+
+    toggleDest(id){ const i=this.a.selected.indexOf(id); if(i>-1) this.a.selected.splice(i,1); else { if(this.a.selected.length>=10){ this.showToast('That’s the max — 10 destinations.'); return; } this.a.selected.push(id); } },
+    toggleMulti(id,v){ if(!Array.isArray(this.a[id])) this.a[id]=[]; const arr=this.a[id], i=arr.indexOf(v); if(i>-1) arr.splice(i,1); else arr.push(v); },
+
+    /* ---------- SCORING ENGINE ---------- */
+    computeWeights(){
+      const a=this.a; const w={temples:0,beaches:0,nightlife:0,cities:0,mountains:0,wildlife:0,shopping:0,food:0,islands:0,wellness:0,culture:0,adventure:0};
+      const add=(k,n)=>{ if(w[k]!==undefined) w[k]+=n; };
+      ({relaxed:['beaches','wellness'],nightlife:['nightlife','cities'],balanced:['temples','beaches','food'],culture:['temples','culture','cities'],adventure:['mountains','wildlife','adventure','islands']}[a.vibe]||[]).forEach(t=>add(t,2.5));
+      const bm=a.beachMountain??50; add('beaches',(100-bm)/22); add('islands',(100-bm)/34); add('mountains',bm/22);
+      const cn=a.cityNature??50; add('cities',(100-cn)/28); add('wildlife',cn/24); add('mountains',cn/40);
+      (a.mustsee||[]).forEach(t=>add(t,3));
+      add('food',{lover:3,mix:1.5,familiar:0.3}[a.food]??1);
+      add('nightlife',{big:3,some:1.2,none:-1.5}[a.nightlife]??0);
+      const f={low:0,moderate:1,high:2.5}[a.fitness]??1; add('adventure',f); add('mountains',f*0.7);
+      (a.water||[]).forEach(t=>{ if(t==='none')return; add('islands',1.2); add('beaches',0.8); if(t==='scuba'){add('islands',0.8);add('adventure',0.6);} });
+      add('temples',{deep:3,some:1.2,light:0.2}[a.culture2]??1); add('culture',{deep:2,some:1,light:0.2}[a.culture2]??1);
+      if(a.wellness==='yes') add('wellness',2.5);
+      if((a.mustsee||[]).includes('shopping')) add('shopping',1);
+      if(a.companions==='family'){ add('beaches',1.5); add('wildlife',1.5); add('nightlife',-2.5); }
+      if(a.kids==='young'){ add('nightlife',-2); add('adventure',-1); add('beaches',1); }
+      if(a.companions==='solo'){ add('adventure',0.8); add('cities',0.8); }
+      if(a.companions==='friends'){ add('nightlife',1); add('islands',1); }
+      if(a.budget==='luxury'){ add('wellness',1.5); add('beaches',1); }
+      if(a.budget==='budget'){ add('culture',1); add('mountains',1); }
+      if(a.stay==='resort'){ add('beaches',1); add('wellness',0.8); }
+      if(a.special&&a.special.includes('diving')){ add('islands',1.5); add('adventure',1); }
+      if(a.special&&a.special.includes('elephant')){ add('wildlife',1.5); }
+      // clamp negatives to small floor
+      for(const k in w){ if(w[k]<0) w[k]=Math.max(w[k],-3); }
+      return w;
+    },
+    scoreDestination(d){ const w=this._weights||this.computeWeights(); let s=0; for(const k in w){ s+=(d.s[k]||0)*w[k]; } if((this.a.selected||[]).includes(d.id)) s+=40; return s; },
+    orderByFlow(list){ const order=this.regionOrder[this.a.hub]||this.regionOrder.bangkok; return [...list].sort((x,y)=>{ const rx=order.indexOf(x.region),ry=order.indexOf(y.region); if(rx!==ry) return rx-ry; return this.a.hub==='bangkok'?y.lat-x.lat:x.lat-y.lat; }); },
+
+    generate(){
+      this._loading=true; this.loadPct=0; this.cur=this.flow.findIndex(f=>f.t==='results');
+      const msgs=['Analyzing your 20 answers…','Scoring 21 destinations…','Optimizing your travel route…','Estimating costs & travel times…','Polishing your itinerary…'];
+      let i=0; this.loadingMsg=msgs[0];
+      const iv=setInterval(()=>{ this.loadPct=Math.min(100,this.loadPct+Math.random()*22); i=Math.min(msgs.length-1,i+1); this.loadingMsg=msgs[i]; if(this.loadPct>=100){ clearInterval(iv); this._build(); } },380);
+      this._scroll();
+    },
+
+    _build(){
+      this._weights=this.computeWeights();
+      const scored=this.destinations.map(d=>({d,sc:this.scoreDestination(d)})).sort((x,y)=>y.sc-x.sc);
+      // top matches (for sidebar) — normalize to %
+      const max=scored[0].sc||1;
+      this.topMatches=scored.slice(0,5).map(x=>({id:x.d.id,name:x.d.name,pct:Math.max(60,Math.round((x.sc/max)*100))}));
+      let picked=this.destinations.filter(d=>this.a.selected.includes(d.id));
+      const paceNights={relaxed:4,moderate:3,packed:2}[this.a.pace];
+      let target=Math.max(1,Math.min(10,Math.round(this.a.days/paceNights)));
+      if(picked.length<target){
+        const extras=scored.filter(x=>!this.a.selected.includes(x.d.id)).slice(0,target-picked.length).map(x=>x.d);
+        picked=picked.concat(extras);
+      }
+      if(picked.length>target){ picked=picked.map(d=>({d,sc:this.scoreDestination(d)})).sort((a,b)=>b.sc-a.sc).slice(0,target).map(x=>x.d); }
+      let ordered=this.orderByFlow(picked);
+      const per=Math.floor(this.a.days/ordered.length); let remainder=this.a.days-per*ordered.length;
+      let day=1;
+      const hotels={budget:'Hostel / guesthouse',mid:'Boutique 3–4★ hotel',luxury:'5★ resort / villa'};
+      const nightly={budget:[18,35],mid:[45,90],luxury:[140,350]}[this.a.budget];
+      this.itinerary=ordered.map((d,idx)=>{
+        let nights=per+(remainder>0?1:0); if(remainder>0) remainder--; if(nights<1) nights=1;
+        const dayStart=day,dayEnd=day+nights-1; day+=nights;
+        return { uid:d.id+'_'+idx, id:d.id, name:d.name, region:d.region, img:d.img, alt:d.alt, lat:d.lat, lng:d.lng,
+          nights, dayStart, dayEnd, travel:this._travelText(idx,ordered,d), travelShort:this._travelShort(idx,ordered,d),
+          activities:this._activitiesFor(d), hotel:hotels[this.a.budget], cost:'~$'+(nightly[0]*nights)+'–'+(nightly[1]*nights)+' stay' };
+      });
+      this._costRange();
+      this._loading=false;
+      this.$nextTick(()=>this._renderMap());
+      this.showToast('✨ Your itinerary is ready!');
+    },
+
+    _legMode(idx,ordered,d){
+      if(idx===0) return {mode:'🛬 Arrive',time:''};
+      const prev=ordered[idx-1]; const dist=this._haversine(prev.lat,prev.lng,d.lat,d.lng);
+      const island=(d.id.startsWith('koh')||d.id==='similan'||d.id==='kohphiphi');
+      if(dist>500 && this.a.flights!=='overland') return {mode:'✈️ Flight',time:`~${(dist/650+0.6).toFixed(1)}h`,prev:prev.name};
+      if(island && dist<300) return {mode:'⛴️ Ferry',time:`~${Math.max(1,dist/40).toFixed(1)}h`,prev:prev.name};
+      if(dist>180) return {mode:'🚐 Bus/minivan',time:`~${(dist/60).toFixed(1)}h`,prev:prev.name};
+      return {mode:'🚐 Minivan',time:`~${Math.max(1,dist/60).toFixed(1)}h`,prev:prev.name};
+    },
+    _travelText(idx,ordered,d){ const l=this._legMode(idx,ordered,d); if(idx===0) return `🛬 Arrive at your ${this.hubName(this.a.hub)} hub, then head to ${d.name}.`; return `${l.mode} from ${l.prev} to ${d.name} (${l.time}).`; },
+    _travelShort(idx,ordered,d){ const l=this._legMode(idx,ordered,d); return idx===0?'Trip start':`${l.mode} ${l.time}`; },
+
+    _activitiesFor(d){
+      const acts=[]; const s=d.s;
+      const map={temples:'Explore ancient temples & shrines',beaches:'Beach day & sunset swim',islands:'Island-hopping boat tour',nightlife:'Night market & evening scene',cities:'City highlights & rooftop views',mountains:'Scenic viewpoint hike',wildlife:'Nature & wildlife excursion',shopping:'Markets & shopping',food:'Street-food crawl',wellness:'Thai massage & spa time'};
+      const w=this._weights||{};
+      const strengths=Object.keys(s).filter(k=>map[k]).sort((x,y)=> (s[y]*(1+(w[y]||0)/5)) - (s[x]*(1+(w[x]||0)/5)) );
+      strengths.slice(0,3).forEach(k=>acts.push(map[k]));
+      const sp=this.a.special||[];
+      if(sp.includes('cooking') && s.food) acts.push('👩‍🍳 Thai cooking class');
+      if((this.a.water||[]).some(x=>x!=='none') && (s.islands||s.beaches)) acts.push('🤿 Snorkel / dive trip');
+      if(sp.includes('elephant') && (s.wildlife||d.region==='Northern')) acts.push('🐘 Ethical elephant sanctuary visit');
+      if(sp.includes('muaythai') && s.cities) acts.push('🥊 Live Muay Thai match');
+      if(sp.includes('photography')) acts.push('📷 Golden-hour photo spots');
+      if(this.a.wellness==='yes' && s.wellness) acts.push('🧘 Spa & yoga session');
+      return acts.slice(0,4);
+    },
+
+    _costRange(){
+      const nightly={budget:[18,35],mid:[45,90],luxury:[140,350]}[this.a.budget];
+      const daily={budget:[25,40],mid:[45,80],luxury:[120,260]}[this.a.budget];
+      const nights=this.a.days; const interCity=this.itinerary.length*40;
+      const lo=nightly[0]*nights+daily[0]*this.a.days+interCity;
+      const hi=nightly[1]*nights+daily[1]*this.a.days+interCity*2;
+      this.costRange='$'+Math.round(lo/10)*10+'–$'+Math.round(hi/10)*10+' pp';
+    },
+    _haversine(a,b,c,d){ const R=6371,r=Math.PI/180; const dLat=(c-a)*r,dLon=(d-b)*r; const x=Math.sin(dLat/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(x)); },
+
+    /* ---------- MAP ---------- */
+    _renderMap(){
+      const el=document.getElementById('map'); if(!el||!window.L) return;
+      if(this._map){ this._map.remove(); this._map=null; }
+      this._map=L.map(el,{scrollWheelZoom:false});
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(this._map);
+      const pts=[];
+      // hub marker
+      const hub=this.hubs.find(h=>h.id===this.a.hub); const hd=this.destById(this.a.hub);
+      this.itinerary.forEach((s,i)=>{
+        const icon=L.divIcon({className:'tt-pin',html:`<div style="background:#0f8378;color:#fff;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #fff"><span style="transform:rotate(45deg);font-weight:700;font-size:12px">${i+1}</span></div>`,iconSize:[26,26],iconAnchor:[13,26]});
+        L.marker([s.lat,s.lng],{icon}).addTo(this._map).bindPopup(`<b>${i+1}. ${s.name}</b><br><span style="font-size:11px">Days ${s.dayStart}–${s.dayEnd} · ${s.nights}n</span><br><span style="color:#0f8378;font-size:11px">${s.travelShort}</span>`);
+        pts.push([s.lat,s.lng]);
+      });
+      if(pts.length>1) L.polyline(pts,{color:'#0f8378',weight:3,dashArray:'6 8',opacity:.85}).addTo(this._map);
+      if(pts.length>1) this._map.fitBounds(pts,{padding:[28,28]}); else if(pts.length) this._map.setView(pts[0],9); else this._map.setView([13.5,100.5],5);
+      setTimeout(()=>this._map&&this._map.invalidateSize(),200);
+    },
+
+    /* ---------- drag reorder ---------- */
+    dragStart(i,e){ this.dragIndex=i; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; },
+    dragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('#timeline li').forEach(li=>li.classList.remove('drag-over')); },
+    dragOver(i,e){ e.currentTarget.classList.add('drag-over'); },
+    drop(i){ if(this.dragIndex===null||this.dragIndex===i) return; const arr=this.itinerary; const [m]=arr.splice(this.dragIndex,1); arr.splice(i,0,m); this._renumber(); this.dragIndex=null; this._renderMap(); },
+    removeStop(i){ this.itinerary.splice(i,1); if(!this.itinerary.length) this.showToast('No stops left — add some!'); this._renumber(); this._renderMap(); },
+    _renumber(){ let day=1; this.itinerary.forEach((s,idx)=>{ s.dayStart=day; s.dayEnd=day+s.nights-1; day+=s.nights; s.travel=this._travelText(idx,this.itinerary,this.destById(s.id)); s.travelShort=this._travelShort(idx,this.itinerary,this.destById(s.id)); }); this._costRange(); },
+
+    /* ---------- persistence & sharing ---------- */
+    savePlan(){ this._set('tt_plan',JSON.stringify({a:this.a,itinerary:this.itinerary})); this.savedPlanExists=true; this.showToast('💾 Plan saved to this browser.'); },
+    loadSaved(){ const raw=this._get('tt_plan'); if(!raw) return; const p=JSON.parse(raw); this.a=Object.assign(this.a,p.a); this.itinerary=p.itinerary||[]; this._weights=this.computeWeights(); this.cur=this.flow.findIndex(f=>f.t==='results'); this._loading=false; this._costRange(); this.$nextTick(()=>{this._scroll();this._renderMap();}); },
+    sharePlan(){ const payload=btoa(encodeURIComponent(JSON.stringify(this.a))); const url=location.origin+location.pathname+'#plan='+payload; if(navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>this.showToast('🔗 Shareable link copied!')); } else this.showToast('Share link ready'); history.replaceState(null,'','#plan='+payload); },
+    _loadFromHash(){ const m=location.hash.match(/plan=([^&]+)/); if(!m) return; try{ const o=JSON.parse(decodeURIComponent(atob(m[1]))); this.a=Object.assign(this.a,o); this.$nextTick(()=>this.generate()); }catch(e){} },
+    loadSample(s){ this.a.hub=s.hub; this.a.days=s.days; this.a.selected=[...s.sel]; Object.assign(this.a,s.prefs); this.generate(); },
+    exportPDF(){ this.showToast('🖨️ Opening print dialog — choose “Save as PDF”.'); setTimeout(()=>window.print(),400); },
+    async subscribe(){
+      if(!this.newsletterEmail || this.subscribing) return;
+      this.subscribing=true; this.subscribeError=false;
+      try{
+        const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({'form-name':'newsletter',email:this.newsletterEmail}).toString()});
+        if(!res.ok) throw new Error(res.status);
+        this.subscribed=true; this.newsletterEmail='';
+      }catch(e){ this.subscribeError=true; }
+      finally{ this.subscribing=false; }
+    },
+    sendContact(){ this.contactSent=true; this.contact={name:'',email:'',msg:''}; },
+    acceptCookies(mode){ this._set('tt_cookie',mode); if(mode==='essential') this.cookiePrefs={analytics:false,marketing:false}; this.cookieBanner=false; this.cookieSettings=false; }
+  }
+}
+</script>
+</body></html>
