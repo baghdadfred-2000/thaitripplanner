@@ -410,11 +410,18 @@
                     <div class="flex-1 min-w-0">
                       <div class="flex items-start justify-between gap-2">
                         <div>
-                          <span class="text-xs font-bold uppercase tracking-wide" :class="stop.depart?'text-gold-500':'text-teal-600 dark:text-teal-300'" x-text="stop.depart?`Day ${stop.dayStart} · Departure day`:`Days ${stop.dayStart}–${stop.dayEnd} · ${stop.nights} night${stop.nights>1?'s':''}`"></span>
+                          <span class="text-xs font-bold uppercase tracking-wide" :class="stop.depart?'text-gold-500':'text-teal-600 dark:text-teal-300'" x-text="stopLabel(stop)"></span>
                           <h5 class="text-lg font-bold" x-text="`${idx+1}. ${stop.name}`"></h5>
                           <p class="text-xs text-night-500 dark:text-sand-100/50" x-text="stop.region"></p>
                         </div>
-                        <button x-show="!stop.depart" @click="removeStop(idx)" class="text-night-400 hover:text-red-500 p-1 focus-ring rounded" :aria-label="`Remove ${stop.name}`" title="Remove stop">✕</button>
+                        <div class="flex items-center gap-1.5">
+                          <div x-show="!stop.depart" class="flex items-center gap-1 bg-teal-500/10 rounded-full px-1.5 py-0.5">
+                            <button @click="subNight(idx)" class="w-6 h-6 rounded-full hover:bg-teal-500/25 text-teal-700 dark:text-teal-300 font-bold leading-none focus-ring" :aria-label="`One night less in ${stop.name}`" title="One night less">−</button>
+                            <span class="text-xs font-bold text-teal-700 dark:text-teal-300 min-w-[2ch] text-center" x-text="stop.nights+'n'"></span>
+                            <button @click="addNight(idx)" class="w-6 h-6 rounded-full hover:bg-teal-500/25 text-teal-700 dark:text-teal-300 font-bold leading-none focus-ring" :aria-label="`One night more in ${stop.name}`" title="One night more">+</button>
+                          </div>
+                          <button x-show="!stop.depart" @click="removeStop(idx)" class="text-night-400 hover:text-red-500 p-1 focus-ring rounded" :aria-label="`Remove ${stop.name}`" title="Remove stop">✕</button>
+                        </div>
                       </div>
                       <p class="text-sm mt-2 text-night-700/80 dark:text-sand-100/70" x-text="stop.travel"></p>
                       <ul class="mt-2 space-y-1">
@@ -997,8 +1004,57 @@ function tripPlanner(){
     dragEnd(e){ e.target.classList.remove('dragging'); document.querySelectorAll('#timeline li').forEach(li=>li.classList.remove('drag-over')); },
     dragOver(i,e){ e.currentTarget.classList.add('drag-over'); },
     drop(i){ if(this.dragIndex===null||this.dragIndex===i) return; const arr=this.itinerary; const [m]=arr.splice(this.dragIndex,1); const di=arr.findIndex(s=>s.depart); let t=i; if(di>-1&&t>=di) t=di; arr.splice(t,0,m); this._renumber(); this.dragIndex=null; this._renderMap(); },
-    removeStop(i){ this.itinerary.splice(i,1); if(!this.itinerary.length) this.showToast('No stops left — add some!'); this._renumber(); this._renderMap(); },
-    _renumber(){ let day=1; this.itinerary.forEach((s,idx)=>{ if(s.depart){ s.dayStart=s.dayEnd=day; const pv=this.itinerary[idx-1]; if(pv) s.travel=this._returnText(this.destById(pv.id),s.id); return; } s.dayStart=day; s.dayEnd=day+s.nights-1; day+=s.nights; s.travel=this._travelText(idx,this.itinerary,this.destById(s.id)); s.travelShort=this._travelShort(idx,this.itinerary,this.destById(s.id)); }); this._costRange(); },
+    /* Removing a stop keeps the trip the same total length: its nights are
+       redistributed to the remaining stops (fewest-nights first). */
+    removeStop(i){
+      const [rm]=this.itinerary.splice(i,1);
+      const stays=this.itinerary.filter(s=>!s.depart);
+      if(!stays.length){ this.showToast('No stops left — add some!'); this._renumber(); this._renderMap(); return; }
+      let freed=(rm&&!rm.depart)?rm.nights:0;
+      while(freed>0){ let t=stays[0]; stays.forEach(s=>{ if(s.nights<t.nights) t=s; }); t.nights++; freed--; }
+      if(rm&&!rm.depart&&rm.nights>0) this.showToast(`↔️ ${rm.nights} night${rm.nights>1?'s':''} redistributed — still a ${this.a.days}-day trip.`);
+      this._renumber(); this._renderMap();
+    },
+    /* +/- nights: total trip length never changes — a night added here is borrowed
+       from another stop (later stops first). Min 1 night everywhere, except the
+       fly-in hub (first stop) which may be a 0-night pass-through. */
+    _minNights(i){ return i===0?0:1; },
+    addNight(i){
+      const arr=this.itinerary, s=arr[i]; if(!s||s.depart) return;
+      let donor=-1;
+      for(let j=i+1;j<arr.length;j++){ if(!arr[j].depart&&arr[j].nights>this._minNights(j)){donor=j;break;} }
+      if(donor<0) for(let j=i-1;j>=0;j--){ if(!arr[j].depart&&arr[j].nights>this._minNights(j)){donor=j;break;} }
+      if(donor<0){ this.showToast('No spare nights — every other stop is at its minimum.'); return; }
+      arr[donor].nights--; s.nights++; this._renumber(); this._renderMap();
+    },
+    subNight(i){
+      const arr=this.itinerary, s=arr[i]; if(!s||s.depart) return;
+      if(s.nights<=this._minNights(i)){ this.showToast(i===0?'Your arrival hub is already a pass-through.':'Every stop needs at least 1 night.'); return; }
+      let rec=-1;
+      for(let j=i+1;j<arr.length;j++){ if(!arr[j].depart){rec=j;break;} }
+      if(rec<0) for(let j=i-1;j>=0;j--){ if(!arr[j].depart){rec=j;break;} }
+      if(rec<0){ this.showToast('No other stop to give the night to.'); return; }
+      s.nights--; arr[rec].nights++; this._renumber(); this._renderMap();
+    },
+    _dateStr(n){ if(!this.a.startDate) return ''; const d=new Date(this.a.startDate); if(isNaN(d)) return ''; d.setDate(d.getDate()+n-1); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); },
+    stopLabel(s){
+      const d1=this._dateStr(s.dayStart), d2=this._dateStr(s.dayEnd);
+      if(s.depart) return `Day ${s.dayStart}${d1?' · '+d1:''} · Departure day`;
+      if(!s.nights) return `Day ${s.dayStart}${d1?' · '+d1:''} · pass-through, no overnight`;
+      const dates=d1?(s.dayStart===s.dayEnd?` · ${d1}`:` · ${d1} – ${d2}`):'';
+      return `${s.dayStart===s.dayEnd?`Day ${s.dayStart}`:`Days ${s.dayStart}–${s.dayEnd}`}${dates} · ${s.nights} night${s.nights>1?'s':''}`;
+    },
+    _renumber(){
+      let day=1;
+      const nightly={budget:[18,35],mid:[45,90],luxury:[140,350]}[this.a.budget];
+      this.itinerary.forEach((s,idx)=>{
+        if(s.depart){ s.dayStart=s.dayEnd=day; const pv=this.itinerary[idx-1]; if(pv) s.travel=this._returnText(this.destById(pv.id),s.id); return; }
+        s.dayStart=day; s.dayEnd=day+Math.max(0,s.nights-1); day+=s.nights;
+        s.travel=this._travelText(idx,this.itinerary,this.destById(s.id)); s.travelShort=this._travelShort(idx,this.itinerary,this.destById(s.id));
+        s.cost='~$'+(nightly[0]*s.nights)+'–'+(nightly[1]*s.nights)+' stay';
+      });
+      this._costRange();
+    },
 
     /* ---------- persistence & sharing ---------- */
     savePlan(){ this._set('tt_plan',JSON.stringify({a:this.a,itinerary:this.itinerary})); this.savedPlanExists=true; this.showToast('💾 Plan saved to this browser.'); },
