@@ -676,14 +676,16 @@ function tripPlanner(){
     contact:{name:'',email:'',msg:''}, contactSent:false,
     itinerary:[], costRange:'', dragIndex:null, _weights:null, topMatches:[],
 
-    a:{ name:'', companions:'partner', kids:'none', days:14, startDate:'', hub:'bangkok', selected:[],
+    a:{ name:'', companions:'partner', kids:'none', days:14, startDate:'', hub:'bkk', selected:[],
         vibe:'balanced', pace:'moderate', budget:'mid', stay:'mix', beachMountain:40, cityNature:50,
         mustsee:['temples','beaches','food'], food:'mix', nightlife:'some', fitness:'moderate',
         water:['snorkel'], culture2:'some', wellness:'no', special:['cooking'], flights:'happy', exit:'same', experience:'first' },
 
     hubs:[
-      {id:'bangkok',name:'Bangkok (BKK)',info:'Best for north & central',img:'images/bangkok.jpeg',alt:'Grand Palace at dusk, Bangkok'},
-      {id:'phuket',name:'Phuket (HKT)',info:'Andaman island gateway',img:'images/phuket.jpg',alt:'Phang Nga Bay view, Phuket'}
+      {id:'bkk',dest:'bangkok',apt:'BKK',name:'Bangkok · Suvarnabhumi (BKK)',info:'Main international gateway',img:'images/bangkok.jpeg',alt:'Grand Palace at dusk, Bangkok'},
+      {id:'dmk',dest:'bangkok',apt:'DMK',name:'Bangkok · Don Mueang (DMK)',info:'Budget-airline hub',img:'images/bangkok.jpeg',alt:'Grand Palace at dusk, Bangkok'},
+      {id:'hkt',dest:'phuket',apt:'HKT',name:'Phuket (HKT)',info:'Andaman island gateway',img:'images/phuket.jpg',alt:'Phang Nga Bay view, Phuket'},
+      {id:'cnx',dest:'chiangmai',apt:'CNX',name:'Chiang Mai (CNX)',info:'Northern culture gateway',img:'images/chiangmai.jpg',alt:'Golden temple of Chiang Mai'}
     ],
     regions:['All','Northern','Central','Isan','Southern'],
 
@@ -694,7 +696,7 @@ function tripPlanner(){
       kids:{cat:'The basics',type:'single',auto:true,q:'Travelling with young children?',opts:[{v:'none',l:'No kids',i:'🚫'},{v:'young',l:'Yes, under 7',i:'🍼'},{v:'older',l:'Yes, 7–14',i:'🧒'}]},
       days:{cat:'The basics',type:'number',q:'How many days do you have?',help:'Anywhere from a short break to a 60-day epic.',min:3,max:60},
       startDate:{cat:'The basics',type:'date',q:'When do you plan to start?',help:'Roughly is fine — you can change it later.'},
-      hub:{cat:'The basics',type:'hub',q:'Where will you fly into?',help:'Your starting hub shapes the most efficient route.'},
+      hub:{cat:'The basics',type:'hub',q:'Where will you fly into?',help:'Thailand has four main international gateways — your starting hub shapes the most efficient route.'},
       vibe:{cat:'Your style',type:'single',auto:true,q:"What's your ideal trip vibe?",opts:[{v:'relaxed',l:'Relaxed & quiet',i:'🏖️',desc:'Slow mornings, calm beaches'},{v:'nightlife',l:'Buzzing nightlife',i:'🌃',desc:'Bars, walking streets'},{v:'balanced',l:'A balanced mix',i:'⚖️',desc:'A bit of everything'},{v:'culture',l:'Cultural immersion',i:'🛕',desc:'Temples, history, local life'},{v:'adventure',l:'Adventure & nature',i:'🥾',desc:'Jungle, mountains, action'}]},
       pace:{cat:'Your style',type:'single',auto:true,q:'What pace suits you?',opts:[{v:'relaxed',l:'Relaxed',i:'🐢',desc:'Fewer moves, longer stays'},{v:'moderate',l:'Moderate',i:'🚶',desc:'A comfortable balance'},{v:'packed',l:'Packed',i:'⚡',desc:'See as much as possible'}]},
       budget:{cat:'Your style',type:'single',auto:true,q:"What's your budget style?",opts:[{v:'budget',l:'Budget',i:'🎒',desc:'Hostels & street food'},{v:'mid',l:'Mid-range',i:'🏨',desc:'Nice hotels & comfort'},{v:'luxury',l:'Luxury',i:'💎',desc:'Resorts & fine dining'}]},
@@ -710,7 +712,7 @@ function tripPlanner(){
       wellness:{cat:'Preferences',type:'single',auto:true,q:'Want wellness time (spa / yoga)?',opts:[{v:'yes',l:'Yes please',i:'🧘'},{v:'no',l:'Not a priority',i:'🙅'}]},
       special:{cat:'Bucket list',type:'multi',q:'Any bucket-list experiences?',opts:[{v:'cooking',l:'Thai cooking class',i:'👩‍🍳'},{v:'elephant',l:'Ethical elephant sanctuary',i:'🐘'},{v:'muaythai',l:'Muay Thai match',i:'🥊'},{v:'festival',l:'Festivals & events',i:'🎆'},{v:'photography',l:'Photography spots',i:'📷'},{v:'diving',l:'Learn to dive',i:'🐡'}]},
       flights:{cat:'Logistics',type:'single',auto:true,q:'How do you feel about domestic flights?',opts:[{v:'happy',l:'Happy to fly',i:'✈️',desc:'Save time between regions'},{v:'overland',l:'Prefer overland',i:'🚌',desc:'Trains, buses, ferries'}]},
-      exit:{cat:'Logistics',type:'single',auto:true,q:'Where will you fly out of Thailand from?',help:'We route your trip as a loop that ends at your departure airport.',opts:[{v:'same',l:'Same airport I arrived at',i:'↩️',desc:'Classic round-trip loop'},{v:'bangkok',l:'Bangkok (BKK)',i:'🛫',desc:'Depart from the capital'},{v:'phuket',l:'Phuket (HKT)',i:'🌴',desc:'Depart from the Andaman gateway'},{v:'onward',l:'Onward to another country',i:'🌏',desc:'We route you to the best international hub'}]},
+      exit:{cat:'Logistics',type:'single',auto:true,q:'Where will you fly out of Thailand from?',help:'We route your trip as a loop that ends at your departure airport.',opts:[{v:'same',l:'Same airport I arrived at',i:'↩️',desc:'Classic round-trip loop'},{v:'bkk',l:'Bangkok · Suvarnabhumi (BKK)',i:'🛫',desc:'Depart from the capital'},{v:'dmk',l:'Bangkok · Don Mueang (DMK)',i:'🛫',desc:'Budget-airline hub'},{v:'hkt',l:'Phuket (HKT)',i:'🌴',desc:'Depart from the Andaman gateway'},{v:'cnx',l:'Chiang Mai (CNX)',i:'⛰️',desc:'Depart from the north'},{v:'onward',l:'Onward to another country',i:'🌏',desc:'We route you to the best international hub'}]},
       experience:{cat:'Logistics',type:'single',auto:true,q:'Been to Thailand before?',opts:[{v:'first',l:'First time',i:'🆕'},{v:'repeat',l:"I've been before",i:'🔁'}]}
     },
 
@@ -724,7 +726,7 @@ function tripPlanner(){
 
     /* ---------- destination dataset ---------- */
     destinations:[
-      {id:'chiangmai',name:'Chiang Mai',region:'Northern',blurb:'Cultural heart — temples, night bazaars & misty mountains.',overnight:true,apt:'CNX',lat:18.7883,lng:98.9853,img:'images/chiangmai.jpg',alt:'Golden temple of Chiang Mai',s:{temples:3,cities:2,mountains:3,wildlife:2,food:3,wellness:2,shopping:2,culture:3,adventure:2}},
+      {id:'chiangmai',name:'Chiang Mai',region:'Northern',blurb:'Cultural heart — temples, night bazaars & misty mountains.',overnight:true,apt:'CNX',intl:true,lat:18.7883,lng:98.9853,img:'images/chiangmai.jpg',alt:'Golden temple of Chiang Mai',s:{temples:3,cities:2,mountains:3,wildlife:2,food:3,wellness:2,shopping:2,culture:3,adventure:2}},
       {id:'chiangrai',name:'Chiang Rai',region:'Northern',blurb:'Home of the dazzling White Temple & hillside tea plantations.',overnight:true,apt:'CEI',lat:19.9105,lng:99.8406,img:'images/chiangrai.jpeg',alt:'The White Temple of Chiang Rai',s:{temples:3,mountains:2,wildlife:1,food:2,culture:3,adventure:2}},
       {id:'pai',name:'Pai',region:'Northern',blurb:'Laid-back mountain town — hot springs & hippie cafés.',overnight:true,nearApt:{name:'Chiang Mai (CNX)',code:'CNX',hrs:3.5,mode:'🚐 mountain minivan'},lat:19.3583,lng:98.4419,img:'images/pai.jpg',alt:'Mountain valley of Pai',s:{mountains:3,wellness:3,adventure:2,food:1,culture:1}},
       {id:'sukhothai',name:'Sukhothai',region:'Northern',blurb:'Serene UNESCO ruins of Thailand’s first kingdom.',overnight:true,apt:'THS',lat:17.0078,lng:99.7038,img:'images/sukhothai.jpeg',alt:'Ancient ruins of Sukhothai Historical Park',s:{temples:3,culture:3,food:1,adventure:1}},
@@ -750,12 +752,12 @@ function tripPlanner(){
       {id:'suratthani',name:'Surat Thani',region:'Southern',blurb:'Riverside city — gateway to Khao Sok & the Gulf islands.',overnight:true,apt:'URT',lat:9.1382,lng:99.3215,img:'images/SuratThani.jpg',alt:'Riverside city of Surat Thani',s:{culture:2,food:2,wildlife:2,adventure:2,temples:1}},
       {id:'kohlipe',name:'Koh Lipe',region:'Southern',blurb:'The “Maldives of Thailand” — tiny island, dazzling reefs.',overnight:true,nearApt:{name:'Hat Yai (HDY)',code:'HDY',hrs:3.5,mode:'🚤+🚐 boat & drive'},lat:6.4880,lng:99.3040,img:'images/kohlipe.jpeg',alt:'Dazzling reefs of Koh Lipe',s:{beaches:3,islands:3,adventure:2,wellness:2}}
     ],
-    regionOrder:{ bangkok:['Central','Northern','Isan','Southern'], phuket:['Southern','Central','Northern','Isan'] },
+    regionOrder:{ bkk:['Central','Northern','Isan','Southern'], dmk:['Central','Northern','Isan','Southern'], hkt:['Southern','Central','Northern','Isan'], cnx:['Northern','Central','Isan','Southern'] },
 
     sampleTrips:[
-      {id:'northsouth',title:'Classic 14-Day North + South',days:14,desc:'The perfect first-timer loop: temples & mountains up north, then island bliss in the Andaman.',route:'Bangkok → Chiang Mai → Chiang Rai → Krabi → Koh Phi Phi',img:'images/chiangmai.jpg',alt:'Golden mountain temple of Doi Suthep, Chiang Mai',hub:'bangkok',sel:['bangkok','chiangmai','chiangrai','krabi','kohphiphi'],prefs:{companions:'partner',vibe:'balanced',mustsee:['temples','beaches','food','islands'],pace:'moderate',budget:'mid',special:['cooking']}},
-      {id:'familybeach',title:'Family Beach Escape',days:10,desc:'Easy, kid-friendly pace with calm beaches, elephants & gentle culture.',route:'Phuket → Krabi → Koh Lanta',img:'images/kohsamui.jpg',alt:'Calm palm-lined beach cove',hub:'phuket',sel:['phuket','krabi','kohlanta'],prefs:{companions:'family',kids:'older',vibe:'relaxed',mustsee:['beaches','wildlife','food'],pace:'relaxed',budget:'mid',special:['elephant']}},
-      {id:'adventure',title:'21-Day Grand Adventure',days:21,desc:'Rivers, waterfalls, mountains and diving for the restless explorer.',route:'Bangkok → Kanchanaburi → Chiang Mai → Pai → Koh Tao',img:'images/Doi Inthanon National Park_AdobeStock_138637796.jpg.webp',alt:'Twin pagodas and mountain gardens of Doi Inthanon National Park',hub:'bangkok',sel:['bangkok','kanchanaburi','chiangmai','pai','kohtao'],prefs:{companions:'friends',vibe:'adventure',mustsee:['mountains','wildlife','islands','temples'],pace:'packed',budget:'budget',special:['diving'],water:['scuba','snorkel']}}
+      {id:'northsouth',title:'Classic 14-Day North + South',days:14,desc:'The perfect first-timer loop: temples & mountains up north, then island bliss in the Andaman.',route:'Bangkok → Chiang Mai → Chiang Rai → Krabi → Koh Phi Phi',img:'images/chiangmai.jpg',alt:'Golden mountain temple of Doi Suthep, Chiang Mai',hub:'bkk',sel:['bangkok','chiangmai','chiangrai','krabi','kohphiphi'],prefs:{companions:'partner',vibe:'balanced',mustsee:['temples','beaches','food','islands'],pace:'moderate',budget:'mid',special:['cooking']}},
+      {id:'familybeach',title:'Family Beach Escape',days:10,desc:'Easy, kid-friendly pace with calm beaches, elephants & gentle culture.',route:'Phuket → Krabi → Koh Lanta',img:'images/kohsamui.jpg',alt:'Calm palm-lined beach cove',hub:'hkt',sel:['phuket','krabi','kohlanta'],prefs:{companions:'family',kids:'older',vibe:'relaxed',mustsee:['beaches','wildlife','food'],pace:'relaxed',budget:'mid',special:['elephant']}},
+      {id:'adventure',title:'21-Day Grand Adventure',days:21,desc:'Rivers, waterfalls, mountains and diving for the restless explorer.',route:'Bangkok → Kanchanaburi → Chiang Mai → Pai → Koh Tao',img:'images/Doi Inthanon National Park_AdobeStock_138637796.jpg.webp',alt:'Twin pagodas and mountain gardens of Doi Inthanon National Park',hub:'bkk',sel:['bangkok','kanchanaburi','chiangmai','pai','kohtao'],prefs:{companions:'friends',vibe:'adventure',mustsee:['mountains','wildlife','islands','temples'],pace:'packed',budget:'budget',special:['diving'],water:['scuba','snorkel']}}
     ],
 
     testimonials:[
@@ -785,6 +787,8 @@ function tripPlanner(){
     showToast(m){ this.toast=m; clearTimeout(this._t); this._t=setTimeout(()=>this.toast='',2600); },
     destById(id){ return this.destinations.find(d=>d.id===id)||{}; },
     hubName(id){ const h=this.hubs.find(x=>x.id===id); return h?h.name:id; },
+    hubDest(id){ const h=this.hubs.find(x=>x.id===id); return h?h.dest:id; },
+    _normHub(v){ return {bangkok:'bkk',phuket:'hkt',chiangmai:'cnx'}[v]||v; },
     prettyDate(s){ if(!s) return 'Flexible'; return new Date(s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); },
     qTitle(q){ return q.id==='name' ? q.q : (this.a.name ? q.q : q.q); },
 
@@ -849,8 +853,9 @@ function tripPlanner(){
        remaining stop — no zig-zagging across the country. */
     orderByFlow(list){
       const rest=[...list], route=[];
-      let cur=this.destById(this.a.hub)||{lat:13.7563,lng:100.5018};
-      const hi=rest.findIndex(d=>d.id===this.a.hub);
+      const hubDestId=this.hubDest(this.a.hub);
+      let cur=this.destById(hubDestId)||{lat:13.7563,lng:100.5018};
+      const hi=rest.findIndex(d=>d.id===hubDestId);
       if(hi>-1){ cur=rest.splice(hi,1)[0]; route.push(cur); }
       while(rest.length){
         let bi=0,bd=Infinity;
@@ -861,37 +866,42 @@ function tripPlanner(){
     },
 
     /* ---------- AIRPORTS & RETURN LOGIC ---------- */
-    hubApt:{bangkok:'BKK',phuket:'HKT'},
+    hubApt:{bkk:'BKK',dmk:'DMK',hkt:'HKT',cnx:'CNX'},
     flightRoutes:['BKK-CNX','BKK-CEI','BKK-HKT','BKK-KBV','BKK-USM','BKK-KKC','BKK-TDX','BKK-THS','BKK-HDY','BKK-URT','CNX-HKT','CNX-KBV','CNX-USM','HKT-USM','HDY-CNX'],
-    _direct(a,b){ return !!a&&!!b&&(a===b||this.flightRoutes.includes(a+'-'+b)||this.flightRoutes.includes(b+'-'+a)); },
+    /* DMK serves the same city & domestic network as BKK — normalize for route checks */
+    _aptNorm(c){ return c==='DMK'?'BKK':c; },
+    _sameCity(a,b){ return !!a&&!!b&&this._aptNorm(a)===this._aptNorm(b); },
+    _direct(a,b){ if(!a||!b) return false; a=this._aptNorm(a); b=this._aptNorm(b); return a===b||this.flightRoutes.includes(a+'-'+b)||this.flightRoutes.includes(b+'-'+a); },
     _aptOf(d){ return d.apt?{code:d.apt,hrs:0,mode:'',name:d.name}:(d.nearApt?{code:d.nearApt.code,hrs:d.nearApt.hrs,mode:d.nearApt.mode,name:d.nearApt.name}:{code:null,hrs:0}); },
     exitHubId(ordered){
       const e=this.a.exit||'same';
-      if(e==='bangkok'||e==='phuket') return e;
+      if(this.hubs.some(h=>h.id===e)) return e;
       if(e==='same') return this.a.hub;
-      const last=(ordered&&ordered[ordered.length-1])||this.destById(this.a.hub);
-      const b=this.destById('bangkok'),p=this.destById('phuket');
-      return this._haversine(last.lat,last.lng,b.lat,b.lng)<=this._haversine(last.lat,last.lng,p.lat,p.lng)?'bangkok':'phuket';
+      /* onward: nearest international hub to the final stop (bkk listed first wins ties) */
+      const last=(ordered&&ordered[ordered.length-1])||this.destById(this.hubDest(this.a.hub));
+      let best='bkk',bd=Infinity;
+      this.hubs.forEach(h=>{ const hd=this.destById(h.dest); const dd=this._haversine(last.lat,last.lng,hd.lat,hd.lng); if(dd<bd){bd=dd;best=h.id;} });
+      return best;
     },
     _departStop(last,exitId){
-      const hd=this.destById(exitId);
+      const hd=this.destById(this.hubDest(exitId));
       return { uid:'depart_'+exitId, id:exitId, depart:true, name:'Departure · '+this.hubName(exitId), region:hd.region||'', img:hd.img, alt:hd.alt, lat:hd.lat, lng:hd.lng,
         nights:0, dayStart:this.a.days, dayEnd:this.a.days, travel:this._returnText(last,exitId), travelShort:'🛫 Fly home', activities:[], hotel:'', cost:'' };
     },
     _returnText(last,exitId){
       if(!last) return '';
-      const exitApt=this.hubApt[exitId], hubN=this.hubName(exitId), hd=this.destById(exitId);
+      const exitApt=this.hubApt[exitId], hubN=this.hubName(exitId), hd=this.destById(this.hubDest(exitId));
       const outro=this.a.exit==='onward'?'connect straight onto your onward international flight':'catch your international flight home from '+hubN;
       const distHub=this._haversine(last.lat,last.lng,hd.lat,hd.lng);
       if(last.apt){
-        if(last.apt===exitApt) return `🛫 You're already at your departure hub — head to the airport and ${outro}.`;
+        if(this._sameCity(last.apt,exitApt)) return `🛫 You're already at your departure hub — head to the airport and ${outro}.`;
         if(this.a.flights!=='overland' && this._direct(last.apt,exitApt)) return `✈️ Quick domestic flight from ${last.name} (${last.apt}) to ${hubN} (~${(distHub/650+0.6).toFixed(1)}h) — you can ${outro} the same day.`;
         if(this.a.flights!=='overland') return `✈️ Fly from ${last.name} (${last.apt}) to ${hubN} via Bangkok (~${(distHub/650+2.2).toFixed(1)}h) — allow a generous connection before you ${outro}.`;
         const oh=Math.round(distHub/55); return `🚌 Overland from ${last.name} back to ${hubN} (~${oh}h${oh>=8?' — consider an overnight bus or train':''}), then ${outro}.`;
       }
       const a=this._aptOf(last);
       const step1=`${a.mode} from ${last.name} to ${a.name} (~${a.hrs}h)`;
-      if(a.code===exitApt) return `${step1}, arriving in time to ${outro}.`;
+      if(this._sameCity(a.code,exitApt)) return `${step1}, arriving in time to ${outro}.`;
       if(this.a.flights!=='overland' && this._direct(a.code,exitApt)) return `${step1}, then a domestic flight to ${hubN} (~1.3h) — you can ${outro} the same day.`;
       const th=Math.max(2,Math.round(distHub/55)+Math.round(a.hrs)); return `${step1}, then continue overland to ${hubN} (~${th}h total${th>=8?' — consider an overnight bus':''}), and ${outro}.`;
     },
@@ -995,7 +1005,7 @@ function tripPlanner(){
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(this._map);
       const pts=[];
       // hub marker
-      const hub=this.hubs.find(h=>h.id===this.a.hub); const hd=this.destById(this.a.hub);
+      const hub=this.hubs.find(h=>h.id===this.a.hub); const hd=this.destById(this.hubDest(this.a.hub));
       this.itinerary.forEach((s,i)=>{
         const icon=L.divIcon({className:'tt-pin',html:`<div style="background:${s.depart?'#e89a1c':'#0f8378'};color:#fff;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #fff"><span style="transform:rotate(45deg);font-weight:700;font-size:12px">${s.depart?'✈':i+1}</span></div>`,iconSize:[26,26],iconAnchor:[13,26]});
         L.marker([s.lat,s.lng],{icon}).addTo(this._map).bindPopup(s.depart?`<b>${s.name}</b><br><span style="font-size:11px">Day ${s.dayStart} · fly home</span>`:`<b>${i+1}. ${s.name}</b><br><span style="font-size:11px">Days ${s.dayStart}–${s.dayEnd} · ${s.nights}n</span><br><span style="color:#0f8378;font-size:11px">${s.travelShort}</span>`);
@@ -1065,9 +1075,9 @@ function tripPlanner(){
 
     /* ---------- persistence & sharing ---------- */
     savePlan(){ this._set('tt_plan',JSON.stringify({a:this.a,itinerary:this.itinerary})); this.savedPlanExists=true; this.showToast('💾 Plan saved to this browser.'); },
-    loadSaved(){ const raw=this._get('tt_plan'); if(!raw) return; const p=JSON.parse(raw); this.a=Object.assign(this.a,p.a); this.itinerary=p.itinerary||[]; this._weights=this.computeWeights(); this.cur=this.flow.findIndex(f=>f.t==='results'); this._loading=false; this._costRange(); this.$nextTick(()=>{this._scroll();this._renderMap();}); },
+    loadSaved(){ const raw=this._get('tt_plan'); if(!raw) return; const p=JSON.parse(raw); this.a=Object.assign(this.a,p.a); this.a.hub=this._normHub(this.a.hub); this.a.exit=this._normHub(this.a.exit); this.itinerary=p.itinerary||[]; this._weights=this.computeWeights(); this.cur=this.flow.findIndex(f=>f.t==='results'); this._loading=false; this._costRange(); this.$nextTick(()=>{this._scroll();this._renderMap();}); },
     sharePlan(){ const payload=btoa(encodeURIComponent(JSON.stringify(this.a))); const url=location.origin+location.pathname+'#plan='+payload; if(navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>this.showToast('🔗 Shareable link copied!')); } else this.showToast('Share link ready'); history.replaceState(null,'','#plan='+payload); },
-    _loadFromHash(){ const m=location.hash.match(/plan=([^&]+)/); if(!m) return; try{ const o=JSON.parse(decodeURIComponent(atob(m[1]))); this.a=Object.assign(this.a,o); this.$nextTick(()=>this.generate()); }catch(e){} },
+    _loadFromHash(){ const m=location.hash.match(/plan=([^&]+)/); if(!m) return; try{ const o=JSON.parse(decodeURIComponent(atob(m[1]))); this.a=Object.assign(this.a,o); this.a.hub=this._normHub(this.a.hub); this.a.exit=this._normHub(this.a.exit); this.$nextTick(()=>this.generate()); }catch(e){} },
     loadSample(s){ this.a.hub=s.hub; this.a.days=s.days; this.a.selected=[...s.sel]; Object.assign(this.a,s.prefs); this.generate(); },
     exportPDF(){ this.showToast('🖨️ Opening print dialog — choose “Save as PDF”.'); setTimeout(()=>window.print(),400); },
     async subscribe(){
