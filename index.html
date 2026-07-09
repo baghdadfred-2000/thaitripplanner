@@ -98,9 +98,6 @@
         <span class="text-sand-200/80">Planning progress</span>
         <div class="w-24 h-1.5 rounded-full bg-white/20 overflow-hidden"><div class="h-full bg-gold-400 prog-bar" :style="`width:${progressPct}%`"></div></div>
       </div>
-      <label class="flex items-center gap-1"><span class="sr-only">Language</span>
-        <select class="bg-transparent text-sand-100 focus-ring rounded cursor-pointer" aria-label="Language"><option class="text-black">EN</option><option class="text-black">TH</option><option class="text-black">DE</option><option class="text-black">FR</option></select>
-      </label>
     </div>
   </div>
 </div>
@@ -112,7 +109,7 @@
     <ul class="hidden lg:flex items-center gap-1 text-sm font-medium">
       <li><a href="#top" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Home</a></li>
       <li><a href="#planner" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Plan Your Trip</a></li>
-      <li><a href="#destinations" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Destinations</a></li>
+      <li><a href="destinations.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Destinations</a></li>
       <li><a href="#itineraries" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Itineraries</a></li>
       <li><a href="about.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">About</a></li>
       <li><a href="contact.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Contact</a></li>
@@ -126,7 +123,7 @@
     </div>
   </nav>
   <div x-show="mobileNav" x-cloak x-transition class="lg:hidden border-t border-black/5 dark:border-white/10 glass px-4 py-3 space-y-1 text-sm font-medium">
-    <template x-for="l in [['Home','#top'],['Plan Your Trip','#planner'],['Destinations','#destinations'],['Itineraries','#itineraries'],['About','about.html'],['Contact','contact.html']]">
+    <template x-for="l in [['Home','#top'],['Plan Your Trip','#planner'],['Destinations','destinations.html'],['Itineraries','#itineraries'],['About','about.html'],['Contact','contact.html']]">
       <a :href="l[1]" @click="mobileNav=false" class="block px-3 py-2.5 rounded-lg hover:bg-teal-500/10" x-text="l[0]"></a>
     </template>
   </div>
@@ -487,47 +484,22 @@
   </div>
 </section>
 
-<!-- DESTINATIONS GALLERY -->
+<!-- DESTINATIONS CTA -->
 <section id="destinations" class="py-16 sm:py-24 bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="flex flex-wrap items-end justify-between gap-6">
-      <div class="max-w-2xl">
-        <p class="text-teal-600 dark:text-teal-300 font-semibold uppercase text-sm tracking-widest">Explore the Kingdom</p>
+    <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-teal-700 to-night-900 text-white p-8 sm:p-14 shadow-soft">
+      <div class="absolute inset-0 thai-pattern opacity-30" aria-hidden="true"></div>
+      <img src="images/thailand-map.png" alt="" aria-hidden="true" class="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 max-h-[300px] object-contain opacity-90 floaty" loading="lazy" />
+      <div class="relative max-w-2xl">
+        <p class="text-teal-200 font-semibold uppercase text-sm tracking-widest">Explore the Kingdom</p>
         <h2 class="mt-2 text-3xl sm:text-5xl font-bold">25 hand-picked destinations</h2>
-        <p class="mt-3 text-lg text-night-600/80 dark:text-sand-100/70">From misty northern temple towns to the emerald lagoons of the Andaman — every stop vetted for great stays and visitor-friendly infrastructure.</p>
-      </div>
-      <div class="flex flex-wrap gap-2 text-xs font-semibold" role="group" aria-label="Filter destinations by region">
-        <button @click="galleryFilter='All'" class="px-3 py-1.5 rounded-full transition focus-ring" :class="galleryFilter==='All' ? 'bg-teal-600 text-white' : 'bg-teal-500/10 text-teal-700 dark:text-teal-300 hover:bg-teal-500/20'" :aria-pressed="galleryFilter==='All'">🇹🇭 All</button>
-        <button @click="galleryFilter='Northern'" class="px-3 py-1.5 rounded-full transition focus-ring" :class="galleryFilter==='Northern' ? 'bg-teal-600 text-white' : 'bg-teal-500/10 text-teal-700 dark:text-teal-300 hover:bg-teal-500/20'" :aria-pressed="galleryFilter==='Northern'">🏔️ Northern</button>
-        <button @click="galleryFilter='Central'" class="px-3 py-1.5 rounded-full transition focus-ring" :class="galleryFilter==='Central' ? 'bg-teal-600 text-white' : 'bg-gold-400/15 text-night-700 dark:text-gold-400 hover:bg-gold-400/30'" :aria-pressed="galleryFilter==='Central'">🛕 Central</button>
-        <button @click="galleryFilter='Isan'" class="px-3 py-1.5 rounded-full transition focus-ring" :class="galleryFilter==='Isan' ? 'bg-teal-600 text-white' : 'bg-saffron-500/10 text-saffron-600 hover:bg-saffron-500/20'" :aria-pressed="galleryFilter==='Isan'">🌾 Isan</button>
-        <button @click="galleryFilter='Southern'" class="px-3 py-1.5 rounded-full transition focus-ring" :class="galleryFilter==='Southern' ? 'bg-teal-600 text-white' : 'bg-teal-500/10 text-teal-700 dark:text-teal-300 hover:bg-teal-500/20'" :aria-pressed="galleryFilter==='Southern'">🏝️ Southern</button>
+        <p class="mt-3 text-lg text-teal-50/90">From misty northern temple towns to the emerald lagoons of the Andaman — browse every region, filter the interactive map, and find the stops that fit your trip.</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="destinations.html" class="btn-shine inline-flex items-center gap-2 bg-gold-400 hover:brightness-110 text-night-900 font-bold px-8 py-4 rounded-full shadow-soft transition focus-ring">Explore all 25 destinations →</a>
+          <a href="#planner" @click="startWizard()" class="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 py-4 rounded-full backdrop-blur transition focus-ring">Start planning →</a>
+        </div>
       </div>
     </div>
-    <div class="mt-10 grid lg:grid-cols-4 gap-4">
-      <!-- illustrated map panel -->
-      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-b from-teal-700 to-night-900 p-6 flex flex-col row-span-2 shadow-card">
-        <div class="absolute inset-0 thai-pattern opacity-30" aria-hidden="true"></div>
-        <h3 class="relative font-bold text-white text-xl">Four regions,<br>one epic route</h3>
-        <p class="relative text-teal-100/85 text-sm mt-2">Our engine strings your picks into a smooth north-to-south flow — no wasted backtracking.</p>
-        <img src="images/thailand-map.png" alt="Illustrated map of Thailand's regions and major destinations" class="relative mt-4 mx-auto max-h-[420px] object-contain drop-shadow-2xl floaty" loading="lazy" />
-      </div>
-      <!-- mosaic -->
-      <div class="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-4 [grid-auto-rows:150px] sm:[grid-auto-rows:170px]">
-        <template x-for="(d,i) in galleryDestinations" :key="'g'+d.id">
-          <a href="#planner" @click="startWizard()" class="group relative rounded-2xl overflow-hidden shadow-card" :class="[0,5,8].includes(i)?'row-span-2':''">
-            <img :src="d.img" :alt="d.alt" class="card-img absolute inset-0 w-full h-full object-cover" loading="lazy" />
-            <div class="absolute inset-0 mosaic-caption"></div>
-            <div class="absolute bottom-0 p-4 text-white">
-              <span class="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur px-2 py-0.5 rounded-full" x-text="d.region"></span>
-              <h3 class="font-bold text-lg sm:text-xl mt-1 drop-shadow" x-text="d.name"></h3>
-              <p class="text-xs text-white/85 max-h-0 opacity-0 group-hover:max-h-16 group-hover:opacity-100 transition-all duration-300 overflow-hidden" x-text="d.blurb"></p>
-            </div>
-          </a>
-        </template>
-      </div>
-    </div>
-    <div class="text-center mt-10"><button @click="startWizard()" class="btn-shine bg-teal-600 hover:bg-teal-500 text-white font-bold px-8 py-4 rounded-full shadow-soft transition focus-ring">Plan a trip with these →</button></div>
   </div>
 </section>
 
@@ -600,7 +572,7 @@
         <p class="mt-3 text-sm">The #1 Thailand Trip Planner on the internet. Free, fast, and built by travelers who love the Kingdom.</p>
         <div class="flex gap-3 mt-4 text-lg"><a href="#" aria-label="Instagram" class="hover:text-teal-300">📷</a><a href="#" aria-label="Facebook" class="hover:text-teal-300">👍</a><a href="#" aria-label="YouTube" class="hover:text-teal-300">▶️</a><a href="#" aria-label="X" class="hover:text-teal-300">✖️</a></div>
       </div>
-      <div><h3 class="font-semibold text-white mb-3">Explore</h3><ul class="space-y-2 text-sm"><li><a href="#planner" class="hover:text-teal-300">Plan Your Trip</a></li><li><a href="#destinations" class="hover:text-teal-300">Destinations</a></li><li><a href="#itineraries" class="hover:text-teal-300">Itineraries</a></li></ul></div>
+      <div><h3 class="font-semibold text-white mb-3">Explore</h3><ul class="space-y-2 text-sm"><li><a href="#planner" class="hover:text-teal-300">Plan Your Trip</a></li><li><a href="destinations.html" class="hover:text-teal-300">Destinations</a></li><li><a href="#itineraries" class="hover:text-teal-300">Itineraries</a></li></ul></div>
       <div><h3 class="font-semibold text-white mb-3">Company</h3><ul class="space-y-2 text-sm"><li><a href="about.html" class="hover:text-teal-300">About</a></li><li><a href="contact.html" class="hover:text-teal-300">Contact</a></li></ul></div>
       <div><h3 class="font-semibold text-white mb-3">Legal</h3><ul class="space-y-2 text-sm"><li><a href="privacy.html" class="hover:text-teal-300">Privacy Policy</a></li><li><a href="cookies.html" class="hover:text-teal-300">Cookie Policy</a></li><li><a href="cookie-settings.html" class="hover:text-teal-300">Cookie Settings</a></li><li><a href="terms.html" class="hover:text-teal-300">Terms &amp; Disclaimer</a></li><li><a href="accessibility.html" class="hover:text-teal-300">Accessibility</a></li></ul></div>
     </div>
@@ -635,6 +607,7 @@
 
 <div x-show="toast" x-cloak x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[95] bg-night-900 text-white px-5 py-3 rounded-full shadow-soft text-sm" x-text="toast"></div>
 
+<script src="assets/destinations.js"></script>
 <script>
 function tripPlanner(){
   return {
@@ -696,33 +669,7 @@ function tripPlanner(){
     ],
 
     /* ---------- destination dataset ---------- */
-    destinations:[
-      {id:'chiangmai',name:'Chiang Mai',region:'Northern',blurb:'Cultural heart — temples, night bazaars & misty mountains.',overnight:true,apt:'CNX',intl:true,lat:18.7883,lng:98.9853,img:'images/chiangmai.jpg',alt:'Golden temple of Chiang Mai',s:{temples:3,cities:2,mountains:3,wildlife:2,food:3,wellness:2,shopping:2,culture:3,adventure:2}},
-      {id:'chiangrai',name:'Chiang Rai',region:'Northern',blurb:'Home of the dazzling White Temple & hillside tea plantations.',overnight:true,apt:'CEI',lat:19.9105,lng:99.8406,img:'images/chiangrai.jpeg',alt:'The White Temple of Chiang Rai',s:{temples:3,mountains:2,wildlife:1,food:2,culture:3,adventure:2}},
-      {id:'pai',name:'Pai',region:'Northern',blurb:'Laid-back mountain town — hot springs & hippie cafés.',overnight:true,nearApt:{name:'Chiang Mai (CNX)',code:'CNX',hrs:3.5,mode:'🚐 mountain minivan'},lat:19.3583,lng:98.4419,img:'images/pai.jpg',alt:'Mountain valley of Pai',s:{mountains:3,wellness:3,adventure:2,food:1,culture:1}},
-      {id:'sukhothai',name:'Sukhothai',region:'Northern',blurb:'Serene UNESCO ruins of Thailand’s first kingdom.',overnight:true,apt:'THS',lat:17.0078,lng:99.7038,img:'images/sukhothai.jpeg',alt:'Ancient ruins of Sukhothai Historical Park',s:{temples:3,culture:3,food:1,adventure:1}},
-      {id:'bangkok',name:'Bangkok',region:'Central',blurb:'Vibrant capital — grand temples, rooftop bars & street food.',overnight:true,apt:'BKK',intl:true,lat:13.7563,lng:100.5018,img:'images/bangkok.jpeg',alt:'The Grand Palace and Wat Phra Kaew, Bangkok',s:{temples:3,cities:3,nightlife:3,shopping:3,food:3,wellness:2,culture:2}},
-      {id:'ayutthaya',name:'Ayutthaya',region:'Central',blurb:'Atmospheric UNESCO ruins of a former royal capital.',overnight:false,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:1.5,mode:'🚐 drive'},lat:14.3532,lng:100.5689,img:'images/ayutthaya.jpg',alt:'Royal temple ruins of Ayutthaya',s:{temples:3,culture:3,cities:1,food:1}},
-      {id:'kanchanaburi',name:'Kanchanaburi',region:'Central',blurb:'River Kwai, waterfalls & poignant WWII history.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:2.5,mode:'🚐 drive'},lat:14.0227,lng:99.5328,img:'images/kanchanaburi.jpg',alt:'River Kwai valley, Kanchanaburi',s:{wildlife:3,mountains:2,adventure:2,culture:2,wellness:1}},
-      {id:'huahin',name:'Hua Hin',region:'Central',blurb:'Royal beach town near Bangkok — golf, markets & calm sea.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:3,mode:'🚐 drive'},lat:12.5684,lng:99.9577,img:'images/hua-hin.jpg',alt:'Beachfront of Hua Hin',s:{beaches:2,shopping:2,wellness:2,food:2,nightlife:1}},
-      {id:'pattaya',name:'Pattaya / Jomtien',region:'Central',blurb:'Lively resort city — nightlife, water sports & family parks.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:2,mode:'🚗 drive'},lat:12.9236,lng:100.8825,img:'images/pattaya.jpg',alt:'Sweeping bay and beachfront of Pattaya',s:{nightlife:3,beaches:2,shopping:2,cities:2,food:1}},
-      {id:'kohlarn',name:'Koh Larn',region:'Central',blurb:'Coral Island — a quick hop from Pattaya to calm, sandy bays.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:2.7,mode:'⛴️+🚗 ferry & drive'},lat:12.9186,lng:100.7810,img:'images/kohlarn.jpg',alt:'Sandy beach of Koh Larn',s:{beaches:3,islands:2,food:1,adventure:1}},
-      {id:'rayong',name:'Rayong',region:'Central',blurb:'Laid-back eastern coast, fruit orchards & the ferry to Koh Samet.',overnight:true,nearApt:{name:'Bangkok (BKK)',code:'BKK',hrs:2.5,mode:'🚐 drive'},lat:12.6814,lng:101.2789,img:'images/rayong.jpg',alt:'Coastline of Rayong',s:{beaches:2,islands:2,food:2,wildlife:1}},
-      {id:'trat',name:'Trat',region:'Central',blurb:'Sleepy provincial charm & the jump-off point for Koh Chang.',overnight:true,apt:'TDX',lat:12.2428,lng:102.5177,img:'images/trat.jpg',alt:'Town and coast of Trat province',s:{islands:2,food:2,culture:1,beaches:1}},
-      {id:'kohchang',name:'Koh Chang',region:'Central',blurb:'Jungle-clad island with waterfalls & tranquil bays.',overnight:true,nearApt:{name:'Trat (TDX)',code:'TDX',hrs:1.5,mode:'⛴️+🚐 ferry & drive'},lat:12.0490,lng:102.3210,img:'images/kohchang.jpeg',alt:'Jungle-backed coastline of Koh Chang',s:{beaches:2,wildlife:2,adventure:2,islands:2,wellness:2}},
-      {id:'khonkaen',name:'Khon Kaen',region:'Isan',blurb:'Modern Isan hub — lakeside temples & lively student vibe.',overnight:true,apt:'KKC',lat:16.4419,lng:102.8360,img:'images/khon-kaen.jpg',alt:'City boulevard and golden gate of Khon Kaen',s:{cities:2,culture:2,food:3,temples:2}},
-      {id:'phuket',name:'Phuket',region:'Southern',blurb:'Thailand’s biggest island — beaches, nightlife & luxury.',overnight:true,apt:'HKT',intl:true,lat:7.8804,lng:98.3923,img:'images/phuket.jpg',alt:'Beaches and bays of Phuket',s:{beaches:3,nightlife:3,islands:2,shopping:2,wellness:2,food:2}},
-      {id:'krabi',name:'Krabi',region:'Southern',blurb:'Iconic limestone cliffs, Railay Beach & island tours.',overnight:true,apt:'KBV',lat:8.0863,lng:98.9063,img:'images/krabi.jpg',alt:'Limestone cliffs and turquoise water, Krabi',s:{beaches:3,islands:3,adventure:2,wellness:1,food:1}},
-      {id:'kohsamui',name:'Koh Samui',region:'Southern',blurb:'Relaxed luxury island with palm-fringed coves.',overnight:true,apt:'USM',lat:9.5120,lng:100.0136,img:'images/kohsamui.jpg',alt:'Palm-fringed cove of Koh Samui',s:{beaches:3,islands:2,wellness:3,nightlife:1,food:2}},
-      {id:'kohphiphi',name:'Koh Phi Phi',region:'Southern',blurb:'Postcard beaches, Maya Bay & buzzing island nightlife.',overnight:true,nearApt:{name:'Phuket (HKT)',code:'HKT',hrs:2,mode:'⛴️ ferry'},lat:7.7407,lng:98.7784,img:'images/kohphiphi.jpg',alt:'Twin bays of Koh Phi Phi',s:{beaches:3,islands:3,nightlife:2,adventure:2}},
-      {id:'kohtao',name:'Koh Tao',region:'Southern',blurb:'World-class, affordable diving & snorkeling paradise.',overnight:true,nearApt:{name:'Koh Samui (USM)',code:'USM',hrs:2,mode:'⛴️ ferry'},lat:10.0956,lng:99.8403,img:'images/kohtao.jpg',alt:'Clear diving waters of Koh Tao',s:{beaches:3,islands:3,adventure:3,wellness:1}},
-      {id:'kohlanta',name:'Koh Lanta',region:'Southern',blurb:'Quiet, family-friendly beaches & mellow sunsets.',overnight:true,nearApt:{name:'Krabi (KBV)',code:'KBV',hrs:1.5,mode:'🚐+⛴️ van & ferry'},lat:7.6247,lng:99.0400,img:'images/kohlanta.jpeg',alt:'Sunset beach of Koh Lanta',s:{beaches:3,wellness:3,islands:1,food:1}},
-      {id:'kohphangan',name:'Koh Phangan',region:'Southern',blurb:'Full Moon Party island with a serene, yoga-loving north coast.',overnight:true,nearApt:{name:'Koh Samui (USM)',code:'USM',hrs:1,mode:'⛴️ ferry'},lat:9.7313,lng:100.0135,img:'images/KohPhangan.jpeg',alt:'Beach and palms of Koh Phangan',s:{beaches:3,islands:3,nightlife:3,wellness:2,food:1}},
-      {id:'hatyai',name:'Hat Yai',region:'Southern',blurb:'The deep south’s food capital — markets, dim sum & city buzz.',overnight:true,apt:'HDY',lat:7.0086,lng:100.4747,img:'images/hatyai.jpeg',alt:'City skyline of Hat Yai',s:{cities:2,food:3,shopping:3,culture:2,temples:1}},
-      {id:'phangnga',name:'Phang Nga',region:'Southern',blurb:'James Bond Island & emerald bays of towering limestone karsts.',overnight:true,nearApt:{name:'Phuket (HKT)',code:'HKT',hrs:1.5,mode:'🚐 drive'},lat:8.4510,lng:98.5150,img:'images/PhangNga.jpeg',alt:'Limestone karsts rising from Phang Nga Bay',s:{islands:3,adventure:3,wildlife:2,beaches:2}},
-      {id:'suratthani',name:'Surat Thani',region:'Southern',blurb:'Riverside city — gateway to Khao Sok & the Gulf islands.',overnight:true,apt:'URT',lat:9.1382,lng:99.3215,img:'images/SuratThani.jpg',alt:'Riverside city of Surat Thani',s:{culture:2,food:2,wildlife:2,adventure:2,temples:1}},
-      {id:'kohlipe',name:'Koh Lipe',region:'Southern',blurb:'The “Maldives of Thailand” — tiny island, dazzling reefs.',overnight:true,nearApt:{name:'Hat Yai (HDY)',code:'HDY',hrs:3.5,mode:'🚤+🚐 boat & drive'},lat:6.4880,lng:99.3040,img:'images/kohlipe.jpeg',alt:'Dazzling reefs of Koh Lipe',s:{beaches:3,islands:3,adventure:2,wellness:2}}
-    ],
+    destinations: window.TTP_DESTINATIONS,
     regionOrder:{ bkk:['Central','Northern','Isan','Southern'], dmk:['Central','Northern','Isan','Southern'], hkt:['Southern','Central','Northern','Isan'], cnx:['Northern','Central','Isan','Southern'] },
 
     sampleTrips:[
@@ -1066,4 +1013,4 @@ function tripPlanner(){
   }
 }
 </script>
-</body></html>
+</body></html>                                                                                                                                                                                                                                                                                                                                                                                 
