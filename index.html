@@ -589,31 +589,17 @@
   </div>
 </section>
 
-<!-- NEWSLETTER -->
-<section id="newsletter" class="py-16 sm:py-24">
+<!-- CONTACT CTA -->
+<section id="contact-cta" class="py-16 sm:py-24">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="rounded-3xl text-white p-8 sm:p-12 shadow-soft relative overflow-hidden">
+    <div class="rounded-3xl text-white p-8 sm:p-12 shadow-soft relative overflow-hidden text-center">
       <img src="images/kohsamui.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" aria-hidden="true" />
       <div class="absolute inset-0" style="background:linear-gradient(120deg,rgba(15,131,120,.94),rgba(23,163,148,.80))"></div>
       <div class="absolute inset-0 thai-pattern opacity-30"></div>
-      <div class="relative grid lg:grid-cols-2 gap-8 items-center">
-        <div>
-          <h2 class="text-2xl sm:text-3xl font-bold">Get Thailand tips in your inbox</h2>
-          <p class="mt-2 text-teal-50">Seasonal deals, hidden gems and itinerary ideas. No spam, unsubscribe anytime.</p>
-          <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" @submit.prevent="subscribe()" class="mt-5 flex flex-col sm:flex-row gap-3">
-            <input type="hidden" name="form-name" value="newsletter" />
-            <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
-            <label class="sr-only" for="news-email">Email address</label>
-            <input id="news-email" name="email" x-model="newsletterEmail" type="email" required placeholder="you@email.com" class="flex-1 rounded-full px-5 py-3 text-night-800 focus-ring" />
-            <button :disabled="subscribing" class="bg-gold-400 hover:brightness-110 text-night-900 font-bold px-6 py-3 rounded-full transition focus-ring whitespace-nowrap disabled:opacity-60" x-text="subscribing ? 'Subscribing…' : 'Subscribe'">Subscribe</button>
-          </form>
-          <p x-show="subscribed" x-cloak class="mt-3 text-sm bg-white/20 rounded-full px-4 py-2 inline-block">🎉 You're in! Welcome aboard.</p>
-          <p x-show="subscribeError" x-cloak class="mt-3 text-sm bg-red-500/30 rounded-full px-4 py-2 inline-block">Something went wrong — please try again.</p>
-        </div>
-        <div class="lg:text-right text-sm text-teal-50/90">
-          <p>Questions about your plan or the site?</p>
-          <a href="contact.html" class="mt-3 inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 py-3 rounded-full backdrop-blur transition focus-ring">Contact us →</a>
-        </div>
+      <div class="relative max-w-xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold">Questions about your plan or the site?</h2>
+        <p class="mt-2 text-teal-50">Spotted something out of date, have a suggestion, or just need a hand? We read every message.</p>
+        <a href="contact.html" class="mt-6 inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 py-3 rounded-full backdrop-blur transition focus-ring">Contact us &rarr;</a>
       </div>
     </div>
   </div>
