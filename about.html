@@ -7,7 +7,11 @@
 <title>About — ThaiTripPlanner | thaitripplanner.com</title>
 <meta name="description" content="About thaitripplanner.com — a free, private, browser-based Thailand trip planner that builds a personalized 3–60 day itinerary from 25 destinations."/>
 <link rel="canonical" href="https://thaitripplanner.com/about.html"/>
-<meta property="og:type" content="website"/><meta property="og:title" content="About — ThaiTripPlanner"/><meta property="og:description" content="A free, private Thailand trip planner built to help travelers plan smarter."/><meta property="og:url" content="https://thaitripplanner.com/about.html"/><meta property="og:image" content="images/hero-islands.jpg"/>
+<!-- SEO: indexing directives + social metadata completeness (added; Twitter inherits from OG once card type is set) -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/>
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/>
+<meta property="og:type" content="website"/><meta property="og:site_name" content="ThaiTripPlanner"/><meta property="og:locale" content="en_US"/><meta property="og:title" content="About — ThaiTripPlanner"/><meta property="og:description" content="A free, private Thailand trip planner built to help travelers plan smarter."/><meta property="og:url" content="https://thaitripplanner.com/about.html"/><meta property="og:image" content="https://thaitripplanner.com/images/hero-islands.jpg"/><meta property="og:image:width" content="1536"/><meta property="og:image:height" content="864"/><meta property="og:image:alt" content="Aerial view of the emerald islands and turquoise lagoons of Thailand"/>
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content="https://thaitripplanner.com/images/hero-islands.jpg"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🪷%3C/text%3E%3C/svg%3E"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{teal:{300:'#5fd6c3',500:'#17a394',600:'#0f8378',700:'#116961'},gold:{400:'#e2b857'},sand:{50:'#faf6ef',100:'#f3ebdd',200:'#e6d7bf'},night:{900:'#0b1120',800:'#111a2e'}},fontFamily:{display:['"Playfair Display"','Georgia','serif'],sans:['"Plus Jakarta Sans"','system-ui','sans-serif']}}}}</script>
@@ -26,6 +30,33 @@
 .dark .prose td{border-color:rgba(255,255,255,.12)}
 </style>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+<!-- SEO: JSON-LD structured data added (AboutPage + BreadcrumbList). No visible content changed. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://thaitripplanner.com/about.html#webpage",
+      "url": "https://thaitripplanner.com/about.html",
+      "name": "About ThaiTripPlanner",
+      "description": "About thaitripplanner.com — a free, private, browser-based Thailand trip planner that builds a personalized 3–60 day itinerary from 25 destinations.",
+      "inLanguage": "en",
+      "dateModified": "2026-06-21",
+      "isPartOf": { "@id": "https://thaitripplanner.com/#website" },
+      "about": { "@id": "https://thaitripplanner.com/#organization" },
+      "publisher": { "@id": "https://thaitripplanner.com/#organization" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://thaitripplanner.com/" },
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://thaitripplanner.com/about.html" }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body class="bg-sand-50 dark:bg-night-900 text-night-800 dark:text-sand-100 antialiased">
 <header class="sticky top-0 z-50 glass border-b border-black/5 dark:border-white/10 shadow-sm">
@@ -54,7 +85,7 @@
   </div>
 </header>
 <div class="relative h-48 sm:h-60 overflow-hidden">
-  <img src="images/wat-phra-singh-mist.jpg" alt="" class="absolute inset-0 w-full h-full object-cover"/>
+  <img src="images/wat-phra-singh-mist.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" width="800" height="560" loading="lazy" decoding="async"/>
   <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(11,17,32,.5),rgba(11,17,32,.78))"></div>
   <div class="relative max-w-3xl mx-auto px-4 h-full flex flex-col justify-center">
     <nav aria-label="Breadcrumb" class="text-xs text-white/60 mb-2"><a href="index.html" class="hover:underline">Home</a> / <span>About</span></nav>
@@ -78,7 +109,7 @@
 
 <h2>Who's behind it</h2>
 <figure class="my-5">
-  <img src="images/uncle-pong.jpg" alt="Uncle Pong — the cheerful fictional host of our Thailand tools" class="w-40 h-40 rounded-2xl object-cover shadow-lg"/>
+  <img src="images/uncle-pong.jpg" alt="Uncle Pong — the cheerful fictional host of our Thailand tools" class="w-40 h-40 rounded-2xl object-cover shadow-lg" width="700" height="700" loading="lazy" decoding="async"/>
 </figure>
 <p>The Service is operated by <b>Genext Information Systems</b>, an independent web project run by a small team based in Thailand. ThaiTripPlanner started as a spreadsheet passed between expat friends who'd spent years exploring every corner of the Kingdom. It is part of a small family of free Thailand tools that also includes <a href="https://thaivisafinder.com" target="_blank" rel="noopener">ThaiVisaFinder</a> (long-stay visa comparison) and <a href="https://thaiholidaybudget.com" target="_blank" rel="noopener">Uncle Pong's Thailand Holiday Estimator</a> (trip cost calculator). "Uncle Pong" — the cheery fellow pictured here — is a fictional, good-natured host persona created to make planning a bit more fun. We are independent and not affiliated with any government body, airline, hotel or venue.</p>
 

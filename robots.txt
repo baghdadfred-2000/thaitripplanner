@@ -1,0 +1,71 @@
+# robots.txt for https://thaitripplanner.com/
+# Goal: let Google (and other reputable search + AI crawlers) index all public
+# content, while keeping private/utility endpoints and tracking URLs out of the index.
+# Test changes in Google Search Console > Settings > robots.txt.
+
+# ------------------------------------------------------------------
+# Default rule for all crawlers
+# ------------------------------------------------------------------
+User-agent: *
+Allow: /
+
+# Private / non-content areas (none are public on this static site, listed
+# defensively so they never get indexed if added later)
+Disallow: /admin/
+Disallow: /login/
+Disallow: /account/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /thank-you/
+Disallow: /staging/
+Disallow: /dev/
+Disallow: /*.json$
+
+# Do not index tracking / session query-string variants of pages (canonical
+# URLs are clean). This keeps duplicate URLs out of the index.
+Disallow: /*?*utm_
+Disallow: /*?*fbclid=
+Disallow: /*?*gclid=
+Disallow: /*#plan=
+
+# ------------------------------------------------------------------
+# Google — explicit allow of everything public.
+# Never block the CSS/JS/images Googlebot needs to render the page.
+# ------------------------------------------------------------------
+User-agent: Googlebot
+Allow: /
+Allow: /assets/
+Allow: /images/
+Allow: /*.css$
+Allow: /*.js$
+
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /
+
+# ------------------------------------------------------------------
+# Google AI / generative crawlers (AI Overviews & Gemini grounding)
+# ------------------------------------------------------------------
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+# Reputable third-party AI crawlers (optional — remove any you wish to block)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# ------------------------------------------------------------------
+# Sitemap
+# ------------------------------------------------------------------
+Sitemap: https://thaitripplanner.com/sitemap.xml

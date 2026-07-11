@@ -10,13 +10,27 @@
   <meta name="description" content="Plan your dream Thailand trip in minutes. ThaiTripPlanner is the #1 Thailand trip planner — a free concierge-style tool that builds a personalized 3–60 day itinerary from 25 destinations based on a detailed travel-style quiz." />
   <meta name="keywords" content="Thailand trip planner, Thailand itinerary, Bangkok, Phuket, Chiang Mai, Krabi, Thailand travel, island hopping, trip planner" />
   <meta name="author" content="ThaiTripPlanner" />
+  <!-- SEO: explicit indexing directives for Google (added) -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://thaitripplanner.com/" />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ThaiTripPlanner" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:title" content="ThaiTripPlanner — The #1 Thailand Trip Planner" />
   <meta property="og:description" content="Build a personalized 3–60 day Thailand itinerary in minutes." />
   <meta property="og:url" content="https://thaitripplanner.com/" />
-  <meta property="og:image" content="images/hero-islands.jpg" />
+  <!-- SEO: og:image made absolute + dimensions/alt added for reliable social + AI extraction -->
+  <meta property="og:image" content="https://thaitripplanner.com/images/hero-islands.jpg" />
+  <meta property="og:image:width" content="1536" />
+  <meta property="og:image:height" content="864" />
+  <meta property="og:image:alt" content="Aerial view of the emerald islands and turquoise lagoons of Thailand" />
   <meta name="twitter:card" content="summary_large_image" />
+  <!-- SEO: completed Twitter Card tags (added) -->
+  <meta name="twitter:title" content="ThaiTripPlanner — The #1 Thailand Trip Planner" />
+  <meta name="twitter:description" content="Build a personalized 3–60 day Thailand itinerary in minutes." />
+  <meta name="twitter:image" content="https://thaitripplanner.com/images/hero-islands.jpg" />
+  <meta name="twitter:image:alt" content="Aerial view of the emerald islands and turquoise lagoons of Thailand" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🪷%3C/text%3E%3C/svg%3E" />
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -86,6 +100,54 @@
     .num-badge{font-family:'Playfair Display',serif;background:linear-gradient(135deg,#e2b857,#e89a1c);color:#0b1120}
     @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
   </style>
+
+  <!-- SEO: JSON-LD structured data added (Organization + WebSite + WebApplication) to help Google & AI Overviews understand, extract and cite this page. No visible content changed. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://thaitripplanner.com/#organization",
+        "name": "ThaiTripPlanner",
+        "legalName": "Genext Information Systems",
+        "url": "https://thaitripplanner.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://thaitripplanner.com/apple-touch-icon.png"
+        },
+        "description": "A free, browser-based Thailand trip planner that builds a personalized 3–60 day itinerary from 25 destinations."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://thaitripplanner.com/#website",
+        "url": "https://thaitripplanner.com/",
+        "name": "ThaiTripPlanner",
+        "description": "The Thailand trip planner that builds a personalized 3–60 day itinerary in minutes.",
+        "publisher": { "@id": "https://thaitripplanner.com/#organization" },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://thaitripplanner.com/#app",
+        "name": "ThaiTripPlanner",
+        "url": "https://thaitripplanner.com/",
+        "applicationCategory": "TravelApplication",
+        "operatingSystem": "Any (web browser)",
+        "browserRequirements": "Requires JavaScript",
+        "description": "A concierge-style tool that scores 25 Thailand destinations against a travel-style quiz and builds a mapped, costed, day-by-day itinerary of up to 60 days.",
+        "isPartOf": { "@id": "https://thaitripplanner.com/#website" },
+        "publisher": { "@id": "https://thaitripplanner.com/#organization" },
+        "inLanguage": "en",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body class="bg-sand-50 dark:bg-night-900 text-night-800 dark:text-sand-100 antialiased">
@@ -135,7 +197,7 @@
 
 <!-- HERO -->
 <section class="relative min-h-[94vh] flex items-center overflow-hidden grain">
-  <img src="images/hero-islands.jpg" alt="Aerial view of the emerald islands and turquoise lagoons of Ang Thong Marine Park, Thailand" class="kenburns absolute inset-0 w-full h-full object-cover" fetchpriority="high" />
+  <img src="images/hero-islands.jpg" alt="Aerial view of the emerald islands and turquoise lagoons of Ang Thong Marine Park, Thailand" class="kenburns absolute inset-0 w-full h-full object-cover" fetchpriority="high" width="1536" height="864" decoding="async" /><!-- SEO: width/height added for CLS; LCP image kept eager with fetchpriority -->
   <div class="absolute inset-0 hero-overlay"></div>
   <div class="absolute inset-0 hero-vignette"></div>
   <div class="relative max-w-7xl mx-auto px-4 w-full pt-14 pb-28">
@@ -156,15 +218,15 @@
       </div>
       <div class="hidden lg:block lg:col-span-5 relative h-[460px]" aria-hidden="true">
         <figure class="polaroid tilt-l absolute top-2 left-6 w-64 overflow-hidden floaty">
-          <img src="images/chiangmai.jpg" alt="" class="h-44 w-full object-cover rounded-lg" loading="lazy" />
+          <img src="images/chiangmai.jpg" alt="" class="h-44 w-full object-cover rounded-lg" loading="lazy" width="1200" height="675" decoding="async" />
           <figcaption class="text-center text-xs font-semibold text-night-800 py-2 bg-white dark:bg-night-700 dark:text-sand-100">Wat Doi Suthep, Chiang Mai</figcaption>
         </figure>
         <figure class="polaroid tilt-r absolute top-40 right-0 w-64 overflow-hidden">
-          <img src="images/krabi.jpg" alt="" class="h-44 w-full object-cover rounded-lg" loading="lazy" />
+          <img src="images/krabi.jpg" alt="" class="h-44 w-full object-cover rounded-lg" loading="lazy" width="900" height="563" decoding="async" />
           <figcaption class="text-center text-xs font-semibold text-night-800 py-2 bg-white dark:bg-night-700 dark:text-sand-100">Emerald lagoons, Krabi</figcaption>
         </figure>
         <figure class="polaroid tilt-l absolute bottom-0 left-16 w-56 overflow-hidden">
-          <img src="images/bangkok.jpeg" alt="" class="h-36 w-full object-cover rounded-lg" loading="lazy" />
+          <img src="images/bangkok.jpeg" alt="" class="h-36 w-full object-cover rounded-lg" loading="lazy" width="3200" height="2400" decoding="async" />
           <figcaption class="text-center text-xs font-semibold text-night-800 py-2 bg-white dark:bg-night-700 dark:text-sand-100">Grand Palace, Bangkok</figcaption>
         </figure>
       </div>
@@ -194,21 +256,21 @@
     <div class="mt-12 grid md:grid-cols-3 gap-6">
       <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800">
         <div class="h-44 overflow-hidden relative">
-          <img src="images/wat-phra-singh-mist.jpg" alt="Misty sunrise over Wat Phra Singh temple" class="card-img w-full h-full object-cover" loading="lazy" />
+          <img src="images/wat-phra-singh-mist.jpg" alt="Misty sunrise over Wat Phra Singh temple" class="card-img w-full h-full object-cover" loading="lazy" width="800" height="560" decoding="async" />
           <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">1</span>
         </div>
         <div class="p-6 pt-8"><h3 class="font-bold text-xl">Tell us your style</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">Answer 20 quick questions — pace, budget, beaches vs. mountains, bucket-list dreams. About 3 minutes, entirely in your browser.</p></div>
       </div>
       <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800 md:translate-y-6">
         <div class="h-44 overflow-hidden relative">
-          <img src="images/golden-temple-aerial.jpg" alt="Golden temple above the clouds on a mountain peak" class="card-img w-full h-full object-cover" loading="lazy" />
+          <img src="images/golden-temple-aerial.jpg" alt="Golden temple above the clouds on a mountain peak" class="card-img w-full h-full object-cover" loading="lazy" width="800" height="520" decoding="async" />
           <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">2</span>
         </div>
         <div class="p-6 pt-8"><h3 class="font-bold text-xl">We score 25 destinations</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">Our engine weighs every answer against each destination, then sequences your route from your arrival hub to minimize backtracking.</p></div>
       </div>
       <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800">
         <div class="h-44 overflow-hidden relative">
-          <img src="images/kohsamui.jpg" alt="Palm-fringed turquoise cove on Koh Samui" class="card-img w-full h-full object-cover" loading="lazy" />
+          <img src="images/kohsamui.jpg" alt="Palm-fringed turquoise cove on Koh Samui" class="card-img w-full h-full object-cover" loading="lazy" width="669" height="446" decoding="async" />
           <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">3</span>
         </div>
         <div class="p-6 pt-8"><h3 class="font-bold text-xl">Get your day-by-day plan</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">A mapped, costed, drag-to-reorder itinerary with hotels, activities and transport — export it, save it or share it with one tap.</p></div>
@@ -240,7 +302,7 @@
       <!-- INTRO -->
       <div x-show="screen==='intro'" x-cloak class="relative step-enter min-h-[380px] grid sm:grid-cols-5">
         <div class="relative hidden sm:block sm:col-span-2 overflow-hidden">
-          <img src="images/temple-sunset.jpg" alt="Golden spires of a Thai temple at sunset" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          <img src="images/temple-sunset.jpg" alt="Golden spires of a Thai temple at sunset" class="absolute inset-0 w-full h-full object-cover" loading="lazy" width="1400" height="933" decoding="async" />
           <div class="absolute inset-0 bg-gradient-to-r from-transparent to-white dark:to-night-800 opacity-0"></div>
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <p class="absolute bottom-4 left-4 right-4 text-white text-sm font-medium">“The best trip is the one built around you.”</p>
@@ -491,7 +553,7 @@
   <div class="max-w-7xl mx-auto px-4">
     <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-teal-700 to-night-900 text-white p-8 sm:p-14 shadow-soft">
       <div class="absolute inset-0 thai-pattern opacity-30" aria-hidden="true"></div>
-      <img src="images/thailand-map.png" alt="" aria-hidden="true" class="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 max-h-[300px] object-contain opacity-90 floaty" loading="lazy" />
+      <img src="images/thailand-map.png" alt="" aria-hidden="true" class="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 max-h-[300px] object-contain opacity-90 floaty" loading="lazy" width="323" height="490" decoding="async" />
       <div class="relative max-w-2xl">
         <p class="text-teal-200 font-semibold uppercase text-sm tracking-widest">Explore the Kingdom</p>
         <h2 class="mt-2 text-3xl sm:text-5xl font-bold">25 hand-picked destinations</h2>
@@ -524,8 +586,8 @@
 <section class="py-16 sm:py-20 bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10">
   <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-10 items-center">
     <div class="relative">
-      <img src="images/uncle-pong-immigration.jpg" alt="Illustration of a cheerful traveler being welcomed at Thai passport control" class="rounded-3xl shadow-soft w-full object-cover" loading="lazy" />
-      <img src="images/uncle-pong.jpg" alt="" class="ring-photo absolute -bottom-6 -right-2 sm:right-8 w-24 h-24 rounded-full object-cover floaty" loading="lazy" />
+      <img src="images/uncle-pong-immigration.jpg" alt="Illustration of a cheerful traveler being welcomed at Thai passport control" class="rounded-3xl shadow-soft w-full object-cover" loading="lazy" width="1100" height="825" decoding="async" />
+      <img src="images/uncle-pong.jpg" alt="" class="ring-photo absolute -bottom-6 -right-2 sm:right-8 w-24 h-24 rounded-full object-cover floaty" loading="lazy" width="700" height="700" decoding="async" />
     </div>
     <div>
       <p class="text-saffron-600 dark:text-gold-400 font-semibold uppercase text-sm tracking-widest">Before you fly</p>
@@ -544,7 +606,7 @@
 
 <!-- TESTIMONIALS -->
 <section class="relative py-16 sm:py-24 text-white overflow-hidden">
-  <img src="images/temple-sunset.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" aria-hidden="true" />
+  <img src="images/temple-sunset.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" aria-hidden="true" width="1400" height="933" decoding="async" />
   <div class="absolute inset-0 bg-gradient-to-b from-night-900/85 via-teal-900/80 to-night-900/90" style="background:linear-gradient(180deg,rgba(11,17,32,.88),rgba(17,105,97,.82),rgba(11,17,32,.92))"></div>
   <div class="relative max-w-7xl mx-auto px-4">
     <div class="text-center max-w-2xl mx-auto"><h2 class="text-3xl sm:text-5xl font-bold drop-shadow">Loved by travelers worldwide</h2><p class="mt-3 text-teal-100">4.9/5 average from over 10,000 planned trips.</p></div>
