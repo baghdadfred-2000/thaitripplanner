@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth" x-data="{ darkMode:false, mobileNav:false, _get(k){try{return localStorage.getItem(k)}catch(e){return null}}, _set(k,v){try{localStorage.setItem(k,v)}catch(e){}}, initTheme(){ const s=this._get('tt_theme'); this.darkMode = s ? s==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; this.$watch('darkMode',v=>this._set('tt_theme',v?'dark':'light')); }, toggleDark(){ this.darkMode=!this.darkMode; } }" x-init="initTheme()" :class="{ 'dark': darkMode }">
 <head>
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>About — ThaiTripPlanner | thaitripplanner.com</title>
 <meta name="description" content="About thaitripplanner.com — a free, private, browser-based Thailand trip planner that builds a personalized 3–60 day itinerary from 25 destinations."/>
