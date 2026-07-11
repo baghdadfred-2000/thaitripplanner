@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" x-data="{ darkMode:false, mobileNav:false, _get(k){try{return localStorage.getItem(k)}catch(e){return null}}, _set(k,v){try{localStorage.setItem(k,v)}catch(e){}}, initTheme(){ const s=this._get('tt_theme'); this.darkMode = s ? s==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; this.$watch('darkMode',v=>this._set('tt_theme',v?'dark':'light')); }, toggleDark(){ this.darkMode=!this.darkMode; } }" x-init="initTheme()" :class="{ 'dark': darkMode }">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Accessibility Statement — ThaiTripPlanner | thaitripplanner.com</title>
@@ -8,20 +8,51 @@
 <meta property="og:type" content="website"/><meta property="og:title" content="Accessibility Statement — ThaiTripPlanner"/><meta property="og:url" content="https://thaitripplanner.com/accessibility.html"/><meta property="og:image" content="images/hero-islands.jpg"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🪷%3C/text%3E%3C/svg%3E"/>
 <script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{colors:{teal:{300:'#5fd6c3',500:'#17a394',600:'#0f8378',700:'#116961'},gold:{400:'#e2b857'},sand:{50:'#faf6ef',100:'#f3ebdd',200:'#e6d7bf'},night:{900:'#0b1120',800:'#111a2e'}},fontFamily:{display:['"Playfair Display"','Georgia','serif'],sans:['"Plus Jakarta Sans"','system-ui','sans-serif']}}}}</script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{colors:{teal:{300:'#5fd6c3',500:'#17a394',600:'#0f8378',700:'#116961'},gold:{400:'#e2b857'},sand:{50:'#faf6ef',100:'#f3ebdd',200:'#e6d7bf'},night:{900:'#0b1120',800:'#111a2e'}},fontFamily:{display:['"Playfair Display"','Georgia','serif'],sans:['"Plus Jakarta Sans"','system-ui','sans-serif']}}}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>body{font-family:'Plus Jakarta Sans',sans-serif}h1,h2{font-family:'Playfair Display',serif}.prose h2{font-size:1.35rem;font-weight:700;margin-top:2rem;margin-bottom:.5rem}.prose p{margin:.6rem 0;line-height:1.75}.prose ul{margin:.6rem 0;padding-left:1.25rem;list-style:disc}.prose li{margin:.35rem 0;line-height:1.65}.prose a{color:#0f8378;text-decoration:underline}</style>
+<style>body{font-family:'Plus Jakarta Sans',sans-serif}h1,h2{font-family:'Playfair Display',serif}.prose h2{font-size:1.35rem;font-weight:700;margin-top:2rem;margin-bottom:.5rem}.prose p{margin:.6rem 0;line-height:1.75}.prose ul{margin:.6rem 0;padding-left:1.25rem;list-style:disc}.prose li{margin:.35rem 0;line-height:1.65}.prose a{color:#0f8378;text-decoration:underline}
+.glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.72)}
+.dark .glass{background:rgba(17,26,46,.72)}
+[x-cloak]{display:none!important}
+.focus-ring:focus-visible{outline:2px solid #17a394;outline-offset:2px}
+.shadow-soft{box-shadow:0 10px 40px -12px rgba(15,131,120,.25)}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.floaty{animation:floaty 5s ease-in-out infinite}
+.dark .prose a{color:#5fd6c3}
+.dark .prose th{background:#1a2540;border-color:rgba(255,255,255,.12);color:#f3ebdd}
+.dark .prose td{border-color:rgba(255,255,255,.12)}
+</style>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
-<body class="bg-sand-50 text-night-800 antialiased">
-<header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-black/5">
-  <div class="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-    <a href="index.html" class="flex items-center gap-2"><span class="text-2xl">🪷</span><span class="font-display text-xl font-bold">Thai<span class="text-teal-600">TripPlanner</span></span></a>
-    <a href="index.html" class="text-sm font-semibold text-teal-700 hover:underline">← Back to planner</a>
+<body class="bg-sand-50 dark:bg-night-900 text-night-800 dark:text-sand-100 antialiased">
+<header class="sticky top-0 z-50 glass border-b border-black/5 dark:border-white/10 shadow-sm">
+  <nav class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16" aria-label="Primary">
+    <a href="index.html" class="flex items-center gap-2"><span class="text-2xl floaty">🪷</span><span class="font-display text-xl font-bold tracking-tight">Thai<span class="text-teal-600 dark:text-teal-300">TripPlanner</span></span></a>
+    <ul class="hidden lg:flex items-center gap-1 text-sm font-medium">
+      <li><a href="index.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Home</a></li>
+      <li><a href="index.html#planner" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Plan Your Trip</a></li>
+      <li><a href="destinations.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Destinations</a></li>
+      <li><a href="index.html#itineraries" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Itineraries</a></li>
+      <li><a href="about.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">About</a></li>
+      <li><a href="contact.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Contact</a></li>
+    </ul>
+    <div class="flex items-center gap-2">
+      <button @click="toggleDark()" class="p-2 rounded-lg hover:bg-teal-500/10 focus-ring" :aria-label="darkMode?'Switch to light mode':'Switch to dark mode'"><span x-show="!darkMode">🌅</span><span x-show="darkMode" x-cloak>🌙</span></button>
+      <a href="index.html#planner" class="hidden sm:inline-flex items-center gap-1.5 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-soft transition focus-ring">Start Planning</a>
+      <button @click="mobileNav=!mobileNav" class="lg:hidden p-2 rounded-lg hover:bg-teal-500/10 focus-ring" aria-label="Menu" :aria-expanded="mobileNav">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path x-show="!mobileNav" d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/><path x-show="mobileNav" x-cloak d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div x-show="mobileNav" x-cloak x-transition class="lg:hidden border-t border-black/5 dark:border-white/10 glass px-4 py-3 space-y-1 text-sm font-medium">
+    <template x-for="l in [['Home','index.html'],['Plan Your Trip','index.html#planner'],['Destinations','destinations.html'],['Itineraries','index.html#itineraries'],['About','about.html'],['Contact','contact.html']]">
+      <a :href="l[1]" @click="mobileNav=false" class="block px-3 py-2.5 rounded-lg hover:bg-teal-500/10" x-text="l[0]"></a>
+    </template>
   </div>
 </header>
 <div class="relative h-48 sm:h-60 overflow-hidden">
-  <img src="images/doi-inthanon.jpg" alt="" class="absolute inset-0 w-full h-full object-cover"/>
+  <img src="images/wat-phra-singh-mist.jpg" alt="" class="absolute inset-0 w-full h-full object-cover"/>
   <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(11,17,32,.5),rgba(11,17,32,.78))"></div>
   <div class="relative max-w-3xl mx-auto px-4 h-full flex flex-col justify-center">
     <nav aria-label="Breadcrumb" class="text-xs text-white/60 mb-2"><a href="index.html" class="hover:underline">Home</a> / <span>Legal</span></nav>
@@ -30,7 +61,7 @@
   </div>
 </div>
 <main class="max-w-3xl mx-auto px-4 py-12">
-  <div class="prose text-[15px] text-night-800/90">
+  <div class="prose text-[15px] text-night-800/90 dark:text-sand-100/90">
 
 <p><b>Genext Information Systems</b> is committed to making thaitripplanner.com usable by as many people as possible, including people who rely on assistive technology. Accessibility is an ongoing effort, and we welcome feedback that helps us improve.</p>
 
