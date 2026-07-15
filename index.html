@@ -174,7 +174,6 @@
       <li><a href="#top" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Home</a></li>
       <li><a href="#planner" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Plan Your Trip</a></li>
       <li><a href="destinations.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Destinations</a></li>
-      <li><a href="#itineraries" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Itineraries</a></li>
       <li><a href="about.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">About</a></li>
       <li><a href="contact.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Contact</a></li>
     </ul>
@@ -187,7 +186,7 @@
     </div>
   </nav>
   <div x-show="mobileNav" x-cloak x-transition class="lg:hidden border-t border-black/5 dark:border-white/10 glass px-4 py-3 space-y-1 text-sm font-medium">
-    <template x-for="l in [['Home','#top'],['Plan Your Trip','#planner'],['Destinations','destinations.html'],['Itineraries','#itineraries'],['About','about.html'],['Contact','contact.html']]">
+    <template x-for="l in [['Home','#top'],['Plan Your Trip','#planner'],['Destinations','destinations.html'],['About','about.html'],['Contact','contact.html']]">
       <a :href="l[1]" @click="mobileNav=false" class="block px-3 py-2.5 rounded-lg hover:bg-teal-500/10" x-text="l[0]"></a>
     </template>
   </div>
@@ -196,11 +195,11 @@
 <main id="main"><span id="top"></span>
 
 <!-- HERO -->
-<section class="relative min-h-[94vh] flex items-center overflow-hidden grain">
+<section class="relative min-h-[78vh] flex items-center overflow-hidden grain">
   <img src="images/hero-islands.jpg" alt="Aerial view of the emerald islands and turquoise lagoons of Ang Thong Marine Park, Thailand" class="kenburns absolute inset-0 w-full h-full object-cover" fetchpriority="high" width="1536" height="864" decoding="async" /><!-- SEO: width/height added for CLS; LCP image kept eager with fetchpriority -->
   <div class="absolute inset-0 hero-overlay"></div>
   <div class="absolute inset-0 hero-vignette"></div>
-  <div class="relative max-w-7xl mx-auto px-4 w-full pt-14 pb-28">
+  <div class="relative max-w-7xl mx-auto px-4 w-full pt-10 pb-20">
     <div class="grid lg:grid-cols-12 gap-10 items-center">
       <div class="lg:col-span-7 max-w-2xl text-white">
         <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium border border-white/25 tracking-wide">🇹🇭 The #1 Thailand Trip Planner on the Internet</span>
@@ -208,9 +207,9 @@
         <p class="mt-5 text-lg sm:text-2xl text-sand-100/95 font-light leading-relaxed">Up to <span class="text-gold-400 font-semibold">60 days</span> of temples, islands and street-food nights — a concierge-grade itinerary shaped around <em>your</em> travel style.</p>
         <div class="mt-9 flex flex-wrap gap-3">
           <button @click="startWizard()" class="btn-shine inline-flex items-center gap-2 bg-gradient-to-r from-gold-500 to-saffron-500 hover:brightness-110 text-night-900 font-bold text-lg px-8 py-4 rounded-full shadow-soft transition focus-ring">Start Planning My Trip <span aria-hidden="true">→</span></button>
-          <a href="#itineraries" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-lg px-8 py-4 rounded-full backdrop-blur transition focus-ring">See Sample Trips</a>
+          <a href="#featured" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-lg px-8 py-4 rounded-full backdrop-blur transition focus-ring">See Top Destinations</a>
         </div>
-        <dl class="mt-11 flex flex-wrap gap-x-10 gap-y-4 text-white/95">
+        <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-4 text-white/95">
           <div><dd class="text-3xl font-bold text-gold-400 font-display">10,000+</dd><dt class="text-sm text-sand-100/75 mt-0.5">trips planned</dt></div>
           <div class="border-l border-white/20 pl-10"><dd class="text-3xl font-bold text-gold-400 font-display">4.9/5 ★</dd><dt class="text-sm text-sand-100/75 mt-0.5">traveler rating</dt></div>
           <div class="border-l border-white/20 pl-10"><dd class="text-3xl font-bold text-gold-400 font-display">25</dd><dt class="text-sm text-sand-100/75 mt-0.5">destinations scored</dt></div>
@@ -246,33 +245,33 @@
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="py-16 sm:py-24 relative overflow-hidden">
+<section class="py-10 sm:py-14 relative overflow-hidden">
   <div class="absolute inset-0 thai-pattern opacity-50" aria-hidden="true"></div>
   <div class="relative max-w-7xl mx-auto px-4">
     <div class="text-center max-w-2xl mx-auto">
       <p class="text-teal-600 dark:text-teal-300 font-semibold uppercase text-sm tracking-widest">Effortless by design</p>
       <h2 class="mt-2 text-3xl sm:text-5xl font-bold">Three steps to the perfect trip</h2>
     </div>
-    <div class="mt-12 grid md:grid-cols-3 gap-6">
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
       <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800">
         <div class="h-44 overflow-hidden relative">
           <img src="images/wat-phra-singh-mist.jpg" alt="Misty sunrise over Wat Phra Singh temple" class="card-img w-full h-full object-cover" loading="lazy" width="800" height="560" decoding="async" />
-          <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">1</span>
         </div>
+        <span class="num-badge absolute top-[9.5rem] left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft z-10">1</span>
         <div class="p-6 pt-8"><h3 class="font-bold text-xl">Tell us your style</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">Answer 20 quick questions — pace, budget, beaches vs. mountains, bucket-list dreams. About 3 minutes, entirely in your browser.</p></div>
       </div>
-      <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800 md:translate-y-6">
+      <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800">
         <div class="h-44 overflow-hidden relative">
           <img src="images/golden-temple-aerial.jpg" alt="Golden temple above the clouds on a mountain peak" class="card-img w-full h-full object-cover" loading="lazy" width="800" height="520" decoding="async" />
-          <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">2</span>
         </div>
+        <span class="num-badge absolute top-[9.5rem] left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft z-10">2</span>
         <div class="p-6 pt-8"><h3 class="font-bold text-xl">We score 25 destinations</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">Our engine weighs every answer against each destination, then sequences your route from your arrival hub to minimize backtracking.</p></div>
       </div>
       <div class="group relative rounded-3xl overflow-hidden shadow-card border border-black/5 dark:border-white/10 bg-white dark:bg-night-800">
         <div class="h-44 overflow-hidden relative">
           <img src="images/kohsamui.jpg" alt="Palm-fringed turquoise cove on Koh Samui" class="card-img w-full h-full object-cover" loading="lazy" width="669" height="446" decoding="async" />
-          <span class="num-badge absolute -bottom-5 left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft">3</span>
         </div>
+        <span class="num-badge absolute top-[9.5rem] left-6 w-12 h-12 rounded-2xl grid place-items-center text-xl font-bold shadow-soft z-10">3</span>
         <div class="p-6 pt-8"><h3 class="font-bold text-xl">Get your day-by-day plan</h3><p class="mt-2 text-sm text-night-600/80 dark:text-sand-100/70 leading-relaxed">A mapped, costed, drag-to-reorder itinerary with hotels, activities and transport — export it, save it or share it with one tap.</p></div>
       </div>
     </div>
@@ -280,7 +279,7 @@
 </section>
 
 <!-- PLANNER WIZARD -->
-<section id="planner" class="relative py-16 sm:py-24">
+<section id="planner" class="relative py-10 sm:py-14">
   <div class="max-w-5xl mx-auto px-4">
     <div class="text-center max-w-2xl mx-auto mb-8">
       <p class="text-teal-600 dark:text-teal-300 font-semibold tracking-wide uppercase text-sm">Your Personal Concierge</p>
@@ -549,78 +548,39 @@
 </section>
 
 <!-- DESTINATIONS CTA -->
-<section id="destinations" class="py-16 sm:py-24 bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10">
+<!-- FEATURED DESTINATIONS -->
+<section id="featured" class="py-10 sm:py-14 bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-teal-700 to-night-900 text-white p-8 sm:p-14 shadow-soft">
-      <div class="absolute inset-0 thai-pattern opacity-30" aria-hidden="true"></div>
-      <img src="images/thailand-map.png" alt="" aria-hidden="true" class="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 max-h-[300px] object-contain opacity-90 floaty" loading="lazy" width="323" height="490" decoding="async" />
-      <div class="relative max-w-2xl">
-        <p class="text-teal-200 font-semibold uppercase text-sm tracking-widest">Explore the Kingdom</p>
-        <h2 class="mt-2 text-3xl sm:text-5xl font-bold">25 hand-picked destinations</h2>
-        <p class="mt-3 text-lg text-teal-50/90">From misty northern temple towns to the emerald lagoons of the Andaman — browse every region, filter the interactive map, and find the stops that fit your trip.</p>
-        <div class="mt-7 flex flex-wrap gap-3">
-          <a href="destinations.html" class="btn-shine inline-flex items-center gap-2 bg-gold-400 hover:brightness-110 text-night-900 font-bold px-8 py-4 rounded-full shadow-soft transition focus-ring">Explore all 25 destinations →</a>
-          <a href="#planner" @click="startWizard()" class="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 py-4 rounded-full backdrop-blur transition focus-ring">Start planning →</a>
-        </div>
-      </div>
+    <div class="text-center max-w-3xl mx-auto">
+      <p class="text-teal-600 dark:text-teal-300 font-semibold uppercase text-sm tracking-widest">The perfect mix</p>
+      <h2 class="mt-2 text-3xl sm:text-5xl font-bold">City, beach & island</h2>
+      <p class="mt-3 text-lg text-night-600/80 dark:text-sand-100/70">Bangkok, Krabi, and the Phi Phi Islands — from exploring temples and street food to island hopping, staying connected the whole way.</p>
     </div>
-  </div>
-</section>
-
-<!-- SAMPLE ITINERARIES -->
-<section id="itineraries" class="py-16 sm:py-24">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="max-w-2xl"><p class="text-teal-600 dark:text-teal-300 font-semibold uppercase text-sm tracking-wide">Ready to go</p><h2 class="mt-2 text-3xl sm:text-5xl font-bold">Popular itineraries</h2><p class="mt-3 text-lg text-night-600/80 dark:text-sand-100/70">Love one? Load it into the planner and customize every day.</p></div>
     <div class="mt-8 grid md:grid-cols-3 gap-6">
-      <template x-for="s in sampleTrips" :key="s.id">
-        <article class="rounded-3xl overflow-hidden bg-white dark:bg-night-800 shadow-card border border-black/5 dark:border-white/10 flex flex-col">
-          <div class="relative h-44"><img :src="s.img" :alt="s.alt" class="w-full h-full object-cover" loading="lazy" /><span class="absolute top-3 left-3 bg-gold-400 text-night-900 text-xs font-bold px-3 py-1 rounded-full" x-text="`${s.days} days`"></span></div>
-          <div class="p-5 flex-1 flex flex-col"><h3 class="font-bold text-xl" x-text="s.title"></h3><p class="text-sm text-night-600/75 dark:text-sand-100/65 mt-1 flex-1" x-text="s.desc"></p><p class="text-xs text-night-500 mt-3" x-text="s.route"></p><button @click="loadSample(s)" class="mt-4 bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-full transition focus-ring">Use this itinerary →</button></div>
-        </article>
-      </template>
-    </div>
-  </div>
-</section>
-
-<!-- VISA / UNCLE PONG -->
-<section class="py-16 sm:py-20 bg-white dark:bg-night-800 border-y border-black/5 dark:border-white/10">
-  <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-10 items-center">
-    <div class="relative">
-      <img src="images/uncle-pong-immigration.jpg" alt="Illustration of a cheerful traveler being welcomed at Thai passport control" class="rounded-3xl shadow-soft w-full object-cover" loading="lazy" width="1100" height="825" decoding="async" />
-      <img src="images/uncle-pong.jpg" alt="" class="ring-photo absolute -bottom-6 -right-2 sm:right-8 w-24 h-24 rounded-full object-cover floaty" loading="lazy" width="700" height="700" decoding="async" />
-    </div>
-    <div>
-      <p class="text-saffron-600 dark:text-gold-400 font-semibold uppercase text-sm tracking-widest">Before you fly</p>
-      <h2 class="mt-2 text-3xl sm:text-5xl font-bold">Sort your visa before you sort your beaches</h2>
-      <p class="mt-4 text-lg text-night-600/85 dark:text-sand-100/75 leading-relaxed">Most nationalities now enjoy a <b class="text-teal-700 dark:text-teal-300">60-day visa exemption</b> on arrival — which is exactly why our planner goes all the way to 60 days. Staying longer, retiring, or working remotely? There are 18+ legal long-stay routes.</p>
-      <ul class="mt-5 space-y-2.5 text-night-700/85 dark:text-sand-100/75">
-        <li class="flex gap-3"><span class="text-teal-500 mt-0.5">✓</span>60-day exemption for 90+ nationalities, extendable by 30 days</li>
-        <li class="flex gap-3"><span class="text-teal-500 mt-0.5">✓</span>DTV, retirement, LTR & education visas for longer stays</li>
-        <li class="flex gap-3"><span class="text-teal-500 mt-0.5">✓</span>Always verify current rules with official sources before booking</li>
-      </ul>
-      <a href="https://thaivisafinder.com" target="_blank" rel="noopener" class="btn-shine mt-7 inline-flex items-center gap-2 bg-gradient-to-r from-saffron-500 to-gold-500 hover:brightness-110 text-night-900 font-bold px-7 py-3.5 rounded-full shadow-soft transition focus-ring">Find your visa with Uncle Pong →</a>
-      <p class="mt-3 text-xs text-night-500/80 dark:text-sand-100/50">ThaiVisaFinder.com — our free sister tool comparing all 18 legal long-stay routes.</p>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="relative py-16 sm:py-24 text-white overflow-hidden">
-  <img src="images/temple-sunset.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" aria-hidden="true" width="1400" height="933" decoding="async" />
-  <div class="absolute inset-0 bg-gradient-to-b from-night-900/85 via-teal-900/80 to-night-900/90" style="background:linear-gradient(180deg,rgba(11,17,32,.88),rgba(17,105,97,.82),rgba(11,17,32,.92))"></div>
-  <div class="relative max-w-7xl mx-auto px-4">
-    <div class="text-center max-w-2xl mx-auto"><h2 class="text-3xl sm:text-5xl font-bold drop-shadow">Loved by travelers worldwide</h2><p class="mt-3 text-teal-100">4.9/5 average from over 10,000 planned trips.</p></div>
-    <div class="mt-10 relative">
-      <div class="flex gap-5 transition-transform duration-500" :style="`transform:translateX(-${testIndex*100}%)`">
-        <template x-for="(t,i) in testimonials" :key="i">
-          <figure class="min-w-full sm:min-w-[calc(50%-10px)] lg:min-w-[calc(33.333%-14px)] bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/15">
-            <div class="text-gold-400 text-lg">★★★★★</div>
-            <blockquote class="mt-3 text-sand-100/95" x-text="t.quote"></blockquote>
-            <figcaption class="mt-4 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-gold-400 text-night-900 grid place-items-center font-bold" x-text="t.name[0]"></span><span><span class="font-semibold block" x-text="t.name"></span><span class="text-xs text-teal-100" x-text="t.role"></span></span></figcaption>
-          </figure>
-        </template>
-      </div>
-      <div class="flex justify-center gap-2 mt-6"><button @click="testIndex=Math.max(0,testIndex-1)" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 focus-ring" aria-label="Previous">←</button><button @click="testIndex=Math.min(testimonials.length-1,testIndex+1)" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 focus-ring" aria-label="Next">→</button></div>
+      <article class="group rounded-3xl overflow-hidden bg-sand-50 dark:bg-night-900 shadow-card border border-black/5 dark:border-white/10 flex flex-col">
+        <div class="relative h-52 overflow-hidden"><img src="images/bangkok-grand-palace.jpg" alt="Golden spires of the Grand Palace in Bangkok" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async" /><span class="absolute top-3 left-3 bg-gold-400 text-night-900 text-xs font-bold px-3 py-1 rounded-full">🏙️ The City</span></div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-bold text-2xl">Bangkok</h3>
+          <p class="mt-2 text-sm leading-relaxed text-night-600/80 dark:text-sand-100/70 flex-1">Bangkok is pure electricity — a city where golden temples rise beside glass skyscrapers and every street corner smells like something delicious. Start at dawn with monks collecting alms near Wat Pho, spend the afternoon gliding along the Chao Phraya River, then dive into the legendary street-food scene of Chinatown after dark. Rooftop bars, floating markets, tuk-tuk rides, and the dazzling Grand Palace — Thailand's capital rewards the curious at every turn. It's also the perfect launchpad: two airports, easy rail links, and ferries south mean your whole adventure starts here.</p>
+          <a href="destinations.html#bangkok" class="mt-5 inline-flex items-center gap-2 text-teal-700 dark:text-teal-300 font-semibold hover:gap-3 transition-all">Explore Bangkok →</a>
+        </div>
+      </article>
+      <article class="group rounded-3xl overflow-hidden bg-sand-50 dark:bg-night-900 shadow-card border border-black/5 dark:border-white/10 flex flex-col">
+        <div class="relative h-52 overflow-hidden"><img src="images/krabi-lagoon.jpg" alt="Emerald lagoon framed by limestone cliffs in Krabi" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async" /><span class="absolute top-3 left-3 bg-gold-400 text-night-900 text-xs font-bold px-3 py-1 rounded-full">🏖️ The Beach</span></div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-bold text-2xl">Krabi</h3>
+          <p class="mt-2 text-sm leading-relaxed text-night-600/80 dark:text-sand-100/70 flex-1">Krabi is what screensavers dream of being — towering limestone karsts erupting from jade-green water, hidden lagoons, and beaches you reach by longtail boat. Railay's cliffs draw climbers from around the world, while Ao Nang serves up sunset dinners on the sand. Kayak through mangrove forests, soak in the Emerald Pool, climb 1,260 steps to the Tiger Cave Temple for a panorama you'll never forget, then island-hop the Hong Islands by day and feast on fresh seafood by night. Laid-back, affordable, and impossibly photogenic, Krabi is southern Thailand at its absolute best.</p>
+          <a href="destinations.html#krabi" class="mt-5 inline-flex items-center gap-2 text-teal-700 dark:text-teal-300 font-semibold hover:gap-3 transition-all">Explore Krabi →</a>
+        </div>
+      </article>
+      <article class="group rounded-3xl overflow-hidden bg-sand-50 dark:bg-night-900 shadow-card border border-black/5 dark:border-white/10 flex flex-col">
+        <div class="relative h-52 overflow-hidden"><img src="images/kohphiphi.jpg" alt="Turquoise bay and twin beaches of the Phi Phi Islands" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async" /><span class="absolute top-3 left-3 bg-gold-400 text-night-900 text-xs font-bold px-3 py-1 rounded-full">🏝️ The Islands</span></div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-bold text-2xl">Phi Phi Islands</h3>
+          <p class="mt-2 text-sm leading-relaxed text-night-600/80 dark:text-sand-100/70 flex-1">The Phi Phi Islands are the Thailand you've seen in the movies — literally. Maya Bay, framed by sheer 100-metre cliffs, starred in "The Beach," and it's even more breathtaking in person. Snorkel with blacktip reef sharks in gin-clear water, watch monkeys patrol their own beach, and dive some of the Andaman's richest coral reefs. Hike to the Koh Phi Phi Don viewpoint for the iconic twin-bay panorama, then let the evening slide into beachfront fire shows and barefoot bars. No cars, no roads — just boats, beaches, and the kind of blue water that doesn't seem real.</p>
+          <a href="destinations.html#kohphiphi" class="mt-5 inline-flex items-center gap-2 text-teal-700 dark:text-teal-300 font-semibold hover:gap-3 transition-all">Explore Phi Phi →</a>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -638,7 +598,7 @@
         <p class="mt-3 text-sm">The #1 Thailand Trip Planner on the internet. Free, fast, and built by travelers who love the Kingdom.</p>
         <div class="flex gap-3 mt-4 text-lg"><a href="#" aria-label="Instagram" class="hover:text-teal-300">📷</a><a href="#" aria-label="Facebook" class="hover:text-teal-300">👍</a><a href="#" aria-label="YouTube" class="hover:text-teal-300">▶️</a><a href="#" aria-label="X" class="hover:text-teal-300">✖️</a></div>
       </div>
-      <div><h3 class="font-semibold text-white mb-3">Explore</h3><ul class="space-y-2 text-sm"><li><a href="#planner" class="hover:text-teal-300">Plan Your Trip</a></li><li><a href="destinations.html" class="hover:text-teal-300">Destinations</a></li><li><a href="#itineraries" class="hover:text-teal-300">Itineraries</a></li></ul></div>
+      <div><h3 class="font-semibold text-white mb-3">Explore</h3><ul class="space-y-2 text-sm"><li><a href="#planner" class="hover:text-teal-300">Plan Your Trip</a></li><li><a href="destinations.html" class="hover:text-teal-300">Destinations</a></li><li><a href="#featured" class="hover:text-teal-300">Top Destinations</a></li></ul></div>
       <div><h3 class="font-semibold text-white mb-3">Company</h3><ul class="space-y-2 text-sm"><li><a href="about.html" class="hover:text-teal-300">About</a></li><li><a href="contact.html" class="hover:text-teal-300">Contact</a></li></ul></div>
       <div><h3 class="font-semibold text-white mb-3">Legal</h3><ul class="space-y-2 text-sm"><li><a href="privacy.html" class="hover:text-teal-300">Privacy Policy</a></li><li><a href="cookies.html" class="hover:text-teal-300">Cookie Policy</a></li><li><a href="cookie-settings.html" class="hover:text-teal-300">Cookie Settings</a></li><li><a href="terms.html" class="hover:text-teal-300">Terms &amp; Disclaimer</a></li><li><a href="accessibility.html" class="hover:text-teal-300">Accessibility</a></li></ul></div>
     </div>
@@ -681,7 +641,7 @@ function tripPlanner(){
     cur:0,
     loadPct:0, loadingMsg:'Analyzing your preferences…',
     cookieBanner:false, cookieSettings:false, cookiePrefs:{analytics:true,marketing:false},
-    toast:'', regionFilter:'All', galleryFilter:'All', search:'', testIndex:0,
+    toast:'', regionFilter:'All', galleryFilter:'All', search:'',
     savedPlanExists:false, newsletterEmail:'', subscribed:false, subscribing:false, subscribeError:false,
     contact:{name:'',email:'',msg:''}, contactSent:false,
     itinerary:[], costRange:'', dragIndex:null, _weights:null, topMatches:[],
@@ -738,20 +698,6 @@ function tripPlanner(){
     destinations: window.TTP_DESTINATIONS,
     regionOrder:{ bkk:['Central','Northern','Isan','Southern'], dmk:['Central','Northern','Isan','Southern'], hkt:['Southern','Central','Northern','Isan'], cnx:['Northern','Central','Isan','Southern'] },
 
-    sampleTrips:[
-      {id:'northsouth',title:'Classic 14-Day North + South',days:14,desc:'The perfect first-timer loop: temples & mountains up north, then island bliss in the Andaman.',route:'Bangkok → Chiang Mai → Chiang Rai → Krabi → Koh Phi Phi',img:'images/chiangmai.jpg',alt:'Golden mountain temple of Doi Suthep, Chiang Mai',hub:'bkk',sel:['bangkok','chiangmai','chiangrai','krabi','kohphiphi'],prefs:{companions:'partner',vibe:'balanced',mustsee:['temples','beaches','food','islands'],pace:'moderate',budget:'mid',special:['cooking']}},
-      {id:'familybeach',title:'Family Beach Escape',days:10,desc:'Easy, kid-friendly pace with calm beaches, elephants & gentle culture.',route:'Phuket → Krabi → Koh Lanta',img:'images/kohsamui.jpg',alt:'Calm palm-lined beach cove',hub:'hkt',sel:['phuket','krabi','kohlanta'],prefs:{companions:'family',kids:'older',vibe:'relaxed',mustsee:['beaches','wildlife','food'],pace:'relaxed',budget:'mid',special:['elephant']}},
-      {id:'adventure',title:'21-Day Grand Adventure',days:21,desc:'Rivers, waterfalls, mountains and diving for the restless explorer.',route:'Bangkok → Kanchanaburi → Chiang Mai → Pai → Koh Tao',img:'images/Doi Inthanon National Park_AdobeStock_138637796.jpg.webp',alt:'Twin pagodas and mountain gardens of Doi Inthanon National Park',hub:'bkk',sel:['bangkok','kanchanaburi','chiangmai','pai','kohtao'],prefs:{companions:'friends',vibe:'adventure',mustsee:['mountains','wildlife','islands','temples'],pace:'packed',budget:'budget',special:['diving'],water:['scuba','snorkel']}}
-    ],
-
-    testimonials:[
-      {name:'Sarah & Tom',role:'Honeymoon, UK',quote:'We planned our whole 3-week honeymoon in 20 minutes. The routing saved us two internal flights — genuinely felt like a private concierge.'},
-      {name:'Marcus',role:'Digital nomad, Germany',quote:'As someone who lives here half the year, I was skeptical. The destination mix and pacing were spot on. Now I send it to every visiting friend.'},
-      {name:'The Alvarez Family',role:'Family of 4, USA',quote:'Finally a planner that understood “relaxed with kids.” No crazy travel days, elephant sanctuary was ethical and amazing.'},
-      {name:'Priya',role:'Solo traveler, Canada',quote:'Loved that it flagged overnight-friendly towns and safe areas. Felt confident going solo across the north.'},
-      {name:'Jens',role:'Diver, Norway',quote:'Koh Tao + Similan in one loop with sensible ferries. The cost estimate was within 5% of what I actually spent.'},
-      {name:'Emma',role:'Backpacker, Australia',quote:'Budget mode nailed it — hostels, street food, night buses. Best free trip tool I have used, full stop.'}
-    ],
     /* ---------- lifecycle ---------- */
     init(){
       const savedTheme=this._get('tt_theme');
@@ -760,7 +706,6 @@ function tripPlanner(){
       this.savedPlanExists=!!this._get('tt_plan');
       const d=new Date(); d.setDate(d.getDate()+30); this.a.startDate=d.toISOString().slice(0,10);
       this._loadFromHash();
-      setInterval(()=>{ if(!document.hidden) this.testIndex=(this.testIndex+1)%Math.max(1,this.testimonials.length-2); },6000);
       this.$watch('darkMode',v=>this._set('tt_theme',v?'dark':'light'));
     },
 
@@ -1062,7 +1007,6 @@ function tripPlanner(){
     loadSaved(){ const raw=this._get('tt_plan'); if(!raw) return; const p=JSON.parse(raw); this.a=Object.assign(this.a,p.a); this.a.hub=this._normHub(this.a.hub); this.a.exit=this._normHub(this.a.exit); this.itinerary=p.itinerary||[]; this._weights=this.computeWeights(); this.cur=this.flow.findIndex(f=>f.t==='results'); this._loading=false; this._costRange(); this.$nextTick(()=>{this._scroll();this._renderMap();}); },
     sharePlan(){ const payload=btoa(encodeURIComponent(JSON.stringify(this.a))); const url=location.origin+location.pathname+'#plan='+payload; if(navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>this.showToast('🔗 Shareable link copied!')); } else this.showToast('Share link ready'); history.replaceState(null,'','#plan='+payload); },
     _loadFromHash(){ const m=location.hash.match(/plan=([^&]+)/); if(!m) return; try{ const o=JSON.parse(decodeURIComponent(atob(m[1]))); this.a=Object.assign(this.a,o); this.a.hub=this._normHub(this.a.hub); this.a.exit=this._normHub(this.a.exit); this.$nextTick(()=>this.generate()); }catch(e){} },
-    loadSample(s){ this.a.hub=s.hub; this.a.days=s.days; this.a.selected=[...s.sel]; Object.assign(this.a,s.prefs); this.generate(); },
     exportPDF(){ this.showToast('🖨️ Opening print dialog — choose “Save as PDF”.'); setTimeout(()=>window.print(),400); },
     async subscribe(){
       if(!this.newsletterEmail || this.subscribing) return;
