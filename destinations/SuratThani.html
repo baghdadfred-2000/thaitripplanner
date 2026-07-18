@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" x-data="destinationsPage()" x-init="init()" :class="{ 'dark': darkMode }" class="scroll-smooth">
+<head>
+<style class="xad-off">.xadr,.ad-rail,.side-rail,.rail-ad,.wz-rail{display:none!important}</style>
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f766e" />
+  <title>Surat Thani Thailand Travel Guide – Gateway to the Gulf Islands</title>
+  <meta name="description" content="Friendly Surat Thani travel guide: how to get there from Bangkok, ferries to Samui and Phangan, night markets, best time to visit, and honest pros and cons for this southern transport hub." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🪷%3C/text%3E%3C/svg%3E" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: {
+          teal:{50:'#effcf9',100:'#c8f4ea',200:'#96e8d9',300:'#5fd6c3',400:'#33bdac',500:'#17a394',600:'#0f8378',700:'#116961',800:'#12544f',900:'#134642'},
+          saffron:{50:'#fff8eb',100:'#fdeecb',400:'#f4b53c',500:'#e89a1c',600:'#c97c12'},
+          gold:{400:'#e2b857',500:'#d4a52e',600:'#b8891f'},
+          sand:{50:'#faf6ef',100:'#f3ebdd',200:'#e6d7bf'},
+          night:{900:'#0b1120',800:'#111a2e',700:'#1a2540'}
+        },
+        fontFamily:{ display:['"Playfair Display"','Georgia','serif'], sans:['"Plus Jakarta Sans"','ui-sans-serif','system-ui','sans-serif'] },
+        boxShadow:{ 'soft':'0 10px 40px -12px rgba(15,131,120,0.25)', 'card':'0 6px 24px -8px rgba(0,0,0,0.15)' }
+      }}
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <style>
+    body{font-family:'Plus Jakarta Sans',sans-serif}
+    h1,h2,h3,.font-display{font-family:'Playfair Display',serif}
+    ::selection{background:#33bdac;color:#fff}
+    html{scrollbar-color:#0f8378 transparent}
+    .thai-pattern{background-image:radial-gradient(circle at 1px 1px,rgba(212,165,46,.18) 1px,transparent 0);background-size:22px 22px}
+    .glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.72)}
+    .dark .glass{background:rgba(17,26,46,.72)}
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .floaty{animation:floaty 5s ease-in-out infinite}
+    [x-cloak]{display:none!important}
+    .focus-ring:focus-visible{outline:3px solid #33bdac;outline-offset:2px}
+    .btn-shine{position:relative;overflow:hidden}
+    .btn-shine::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .6s ease}
+    .btn-shine:hover::after{left:130%}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+    /* scoped article styles matching site palette */
+    .ttp-article h1{font-size:2.25rem;line-height:1.15;margin:0 0 .5rem;color:#134642}
+    .dark .ttp-article h1{color:#c8f4ea}
+    .ttp-article h2{font-size:1.5rem;margin:2.2rem 0 .9rem;color:#0f8378;border-bottom:2px solid rgba(15,131,120,.2);padding-bottom:.35rem}
+    .dark .ttp-article h2{color:#5fd6c3;border-bottom-color:rgba(95,214,195,.25)}
+    .ttp-article p{margin-bottom:1.1rem;font-size:1.05rem;line-height:1.75}
+    .ttp-article ul{margin:.8rem 0 1.3rem 1.4rem;list-style:disc}
+    .ttp-article li{margin-bottom:.45rem}
+    .ttp-article .meta{font-size:.95rem;color:#5a6a6a;margin-bottom:1.6rem}
+    .dark .ttp-article .meta{color:#9fb0b0}
+    .ttp-article .intro{font-size:1.14rem}
+    .ttp-article strong{font-weight:700}
+    .ttp-article figure{margin:2rem 0;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px -8px rgba(0,0,0,.15)}
+    .dark .ttp-article figure{background:#111a2e}
+    .ttp-article figure img{width:100%;height:auto;display:block}
+    .ttp-article figcaption{font-size:.92rem;color:#5a6a6a;padding:.85rem 1.1rem;line-height:1.45}
+    .dark .ttp-article figcaption{color:#9fb0b0}
+  </style>
+</head>
+
+<body class="bg-sand-50 dark:bg-night-900 text-night-800 dark:text-sand-100 antialiased">
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-teal-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">Skip to content</a>
+
+<!-- NAV -->
+<header class="sticky top-0 z-50 glass border-b border-black/5 dark:border-white/10 shadow-sm">
+  <nav class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16" aria-label="Primary">
+    <a href="../index.html" class="flex items-center gap-2"><span class="text-2xl floaty">🪷</span><span class="font-display text-xl font-bold tracking-tight">Thai<span class="text-teal-600 dark:text-teal-300">TripPlanner</span></span></a>
+    <ul class="hidden lg:flex items-center gap-1 text-sm font-medium">
+      <li><a href="../index.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Home</a></li>
+      <li><a href="../index.html#planner" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Plan Your Trip</a></li>
+      <li><a href="../destinations.html" class="px-3 py-2 rounded-lg bg-teal-500/10 text-teal-700 dark:text-teal-300 transition" aria-current="page">Destinations</a></li>
+      <li><a href="../index.html#itineraries" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Itineraries</a></li>
+      <li><a href="../about.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">About</a></li>
+      <li><a href="../contact.html" class="px-3 py-2 rounded-lg hover:bg-teal-500/10 hover:text-teal-700 dark:hover:text-teal-300 transition">Contact</a></li>
+    </ul>
+    <div class="flex items-center gap-2">
+      <button @click="toggleDark()" class="p-2 rounded-lg hover:bg-teal-500/10 focus-ring" :aria-label="darkMode?'Switch to light mode':'Switch to dark mode'"><span x-show="!darkMode">🌅</span><span x-show="darkMode" x-cloak>🌙</span></button>
+      <a href="../index.html#planner" class="hidden sm:inline-flex items-center gap-1.5 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-soft transition focus-ring">Start Planning</a>
+      <button @click="mobileNav=!mobileNav" class="lg:hidden p-2 rounded-lg hover:bg-teal-500/10 focus-ring" aria-label="Menu" :aria-expanded="mobileNav">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path x-show="!mobileNav" d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/><path x-show="mobileNav" x-cloak d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div x-show="mobileNav" x-cloak x-transition class="lg:hidden border-t border-black/5 dark:border-white/10 glass px-4 py-3 space-y-1 text-sm font-medium">
+    <template x-for="l in [['Home','../index.html'],['Plan Your Trip','../index.html#planner'],['Destinations','../destinations.html'],['Itineraries','../index.html#itineraries'],['About','../about.html'],['Contact','../contact.html']]">
+      <a :href="l[1]" @click="mobileNav=false" class="block px-3 py-2.5 rounded-lg hover:bg-teal-500/10" x-text="l[0]"></a>
+    </template>
+  </div>
+</header>
+
+<main id="main">
+<section class="py-10 sm:py-16">
+  <div class="max-w-3xl mx-auto px-4">
+    <nav aria-label="Breadcrumb" class="text-xs text-night-600/70 dark:text-sand-100/60 mb-6"><a href="../index.html" class="hover:underline">Home</a> / <a href="../destinations.html" class="hover:underline">Destinations</a> / <span>Surat Thani</span></nav>
+    <article class="ttp-article">
+<h1>Surat Thani Travel Guide</h1>
+<p class="meta">Southern Thailand · Main mainland gateway to Koh Samui, Koh Phangan and Koh Tao</p>
+
+<p class="intro">Surat Thani is the largest city in its province and the main transport hub for the Gulf islands. Most travellers pass through on the way to Koh Samui, Koh Phangan or Koh Tao, using the airport, train station or bus terminal before continuing by ferry from Don Sak or other piers. The city itself is a working Thai provincial centre rather than a tourist resort, with night markets, local temples and a riverside atmosphere. It is practical, authentic and useful — more a place to transit or pause than a primary holiday destination.</p>
+
+<figure>
+  <img src="images/11VjN.jpg" alt="Busy night market street in Surat Thani with food stalls and people">
+  <figcaption>Surat Thani’s night markets offer good southern Thai street food and a lively local atmosphere.</figcaption>
+</figure>
+
+<h2>How to Get There</h2>
+<p><strong>Flying in</strong><br>
+Surat Thani Airport (URT) has frequent flights from Bangkok (Don Mueang and Suvarnabhumi) with AirAsia, Nok Air, Thai Lion Air and others. Flight time is about 1 hour 15 minutes. Combined bus-and-ferry tickets to the islands are easy to arrange at the airport.</p>
+
+<p><strong>By train</strong><br>
+Overnight trains from Bangkok take 8–12 hours depending on the service. Phun Phin station is the main stop, a short songthaew or taxi ride from the city centre.</p>
+
+<p><strong>By bus</strong><br>
+Frequent buses leave from Bangkok’s Southern Bus Terminal. Journey time is roughly 9–11 hours.</p>
+
+<p>From the city or airport, most people continue to Don Sak pier (about 1 hour) for ferries to Samui, Phangan and Tao. Shared minibuses and private transfers are widely available.</p>
+
+<figure>
+  <img src="images/9xHzP.jpg" alt="Ferry pier and boats at Don Sak near Surat Thani">
+  <figcaption>Don Sak pier is the main departure point for ferries to the Gulf islands.</figcaption>
+</figure>
+
+<h2>Climate & Best Time to Visit</h2>
+<p>Surat Thani follows the Gulf of Thailand pattern.</p>
+
+<p><strong>Best time: December to April</strong><br>
+Drier weather and more reliable conditions for onward travel to the islands. January and February are particularly pleasant.</p>
+
+<p><strong>Shoulder and green season: May to September</strong><br>
+Still many usable days. The Gulf side is often drier than the Andaman coast during these months.</p>
+
+<p><strong>Wettest period: October to November</strong><br>
+Heavier rain from the northeast monsoon. Ferry schedules can occasionally be affected. December improves as the month progresses.</p>
+
+<figure>
+  <img src="images/aSkq5.jpg" alt="Tapi River in Surat Thani at dusk with soft colours">
+  <figcaption>The Tapi River runs through the city and offers a calm contrast to the transport hubs.</figcaption>
+</figure>
+
+<h2>What You’ll Love Doing Here</h2>
+<p>For most people Surat Thani is a transit point, but it has enough to fill an evening or a quiet day. The night markets are the strongest local attraction — good southern Thai street food, grilled seafood, satay and sweets at everyday prices. The riverside area along the Tapi is pleasant for a walk at sunset.</p>
+
+<p>There are a few temples and the city pillar shrine worth a short visit if you have time. Nearby, Khao Sok National Park (about 1.5–2 hours away) is a major nature destination with jungle, limestone cliffs and a large reservoir, and is often combined with a Surat Thani stop.</p>
+
+<figure>
+  <img src="images/K2XNu.jpg" alt="Traditional Thai temple building in Surat Thani">
+  <figcaption>Local temples add a quiet cultural note if you have a few hours in the city.</figcaption>
+</figure>
+
+<p>Evenings are low-key. Most travellers eat at the markets or a simple restaurant and rest before an early ferry. The city feels genuinely Thai rather than tourist-oriented, which many people appreciate after time on the islands.</p>
+
+<h2>Pros and Cons</h2>
+<p><strong>What people love</strong></p>
+<ul>
+<li>Convenient and well-connected gateway to the Gulf islands</li>
+<li>Good value food and night markets</li>
+<li>Authentic provincial Thai atmosphere</li>
+<li>Easy combined transport options (flight/train + ferry)</li>
+<li>Useful base for Khao Sok National Park</li>
+</ul>
+
+<p><strong>What can frustrate people</strong></p>
+<ul>
+<li>Limited major sightseeing attractions in the city itself</li>
+<li>Can feel purely functional if you are only passing through</li>
+<li>Hot and humid, especially outside the cooler months</li>
+<li>Ferry connections add an extra transfer step</li>
+<li>Less English and tourist infrastructure than the islands</li>
+</ul>
+
+<h2>Why Go</h2>
+<p>Surat Thani is the practical mainland hub for the popular Gulf islands. Use it as a transit stop when flying or taking the train from Bangkok, grab a good meal at the night market, and continue to Samui, Phangan or Tao the next day. If you have extra time, a side trip to Khao Sok is well worth considering. It is not a destination that demands days of exploration, but it is efficient, authentic and useful — exactly what a good gateway city should be.</p>
+    </article>
+    <div class="text-center mt-12"><a href="../index.html#planner" class="btn-shine inline-block bg-teal-600 hover:bg-teal-500 text-white font-bold px-8 py-4 rounded-full shadow-soft transition focus-ring">Plan a trip with Surat Thani →</a></div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<div class="xadc" aria-label="Advertisement"><iframe title="Advertisement" width="728" height="90" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" style="border:0;display:block;overflow:hidden" srcdoc='<body style="margin:0;overflow:hidden"><script type="text/javascript">atOptions = {"key":"dcdea4644a75d6d9234e9b6d2975a994","format":"iframe","height":90,"width":728,"params":{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/dcdea4644a75d6d9234e9b6d2975a994/invoke.js"></script><style class="xadr-fix">.xadr{position:absolute!important;top:auto!important;bottom:calc(100% + 100px)!important;width:160px!important;z-index:40;line-height:0}.xadr iframe{border:0;display:block;overflow:hidden}.xadr-l{left:calc(50% - 740px)!important;right:auto!important}.xadr-r{right:calc(50% - 740px)!important;left:auto!important}@media(max-width:1500px){.xadr{display:none!important}}[data-xadr-footer]{position:relative}</style>
+</body>'></iframe></div>
+<footer class="bg-night-900 text-sand-100/80 pt-14 pb-8 border-t border-white/10" data-xadr-footer><div class="xadr xadr-l" aria-label="Advertisement"><iframe title="Advertisement" width="160" height="300" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" style="border:0;display:block;overflow:hidden" srcdoc='<body style="margin:0;overflow:hidden"><script type="text/javascript">atOptions = {"key":"7be528efb15a1a634001e7dd3c11213d","format":"iframe","height":300,"width":160,"params":{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/7be528efb15a1a634001e7dd3c11213d/invoke.js"></script></body>'></iframe></div><div class="xadr xadr-r" aria-label="Advertisement"><iframe title="Advertisement" width="160" height="300" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" style="border:0;display:block;overflow:hidden" srcdoc='<body style="margin:0;overflow:hidden"><script type="text/javascript">atOptions = {"key":"7be528efb15a1a634001e7dd3c11213d","format":"iframe","height":300,"width":160,"params":{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/7be528efb15a1a634001e7dd3c11213d/invoke.js"></script></body>'></iframe></div>
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div>
+        <a href="../index.html" class="flex items-center gap-2"><span class="text-2xl">🪷</span><span class="font-display text-xl font-bold text-white">Thai<span class="text-teal-300">TripPlanner</span></span></a>
+        <p class="mt-3 text-sm">The #1 Thailand Trip Planner on the internet. Free, fast, and built by travelers who love the Kingdom.</p>
+        <div class="flex gap-3 mt-4 text-lg"><a href="#" aria-label="Instagram" class="hover:text-teal-300">📷</a><a href="#" aria-label="Facebook" class="hover:text-teal-300">👍</a><a href="#" aria-label="YouTube" class="hover:text-teal-300">▶️</a><a href="#" aria-label="X" class="hover:text-teal-300">✖️</a></div>
+      </div>
+      <div><h3 class="font-semibold text-white mb-3">Explore</h3><ul class="space-y-2 text-sm"><li><a href="../index.html#planner" class="hover:text-teal-300">Plan Your Trip</a></li><li><a href="../destinations.html" class="hover:text-teal-300">Destinations</a></li><li><a href="../index.html#itineraries" class="hover:text-teal-300">Itineraries</a></li></ul></div>
+      <div><h3 class="font-semibold text-white mb-3">Company</h3><ul class="space-y-2 text-sm"><li><a href="../about.html" class="hover:text-teal-300">About</a></li><li><a href="../contact.html" class="hover:text-teal-300">Contact</a></li></ul></div>
+      <div><h3 class="font-semibold text-white mb-3">Legal</h3><ul class="space-y-2 text-sm"><li><a href="../privacy.html" class="hover:text-teal-300">Privacy Policy</a></li><li><a href="../cookies.html" class="hover:text-teal-300">Cookie Policy</a></li><li><a href="../cookie-settings.html" class="hover:text-teal-300">Cookie Settings</a></li><li><a href="../terms.html" class="hover:text-teal-300">Terms &amp; Disclaimer</a></li><li><a href="../accessibility.html" class="hover:text-teal-300">Accessibility</a></li></ul></div>
+    </div>
+    <div class="mt-10 pt-6 border-t border-white/10 text-xs text-sand-100/60 space-y-2 text-center">
+      <p>© 2026 Genext Information Systems. All rights reserved. · <a href="../index.html" class="underline hover:text-teal-300">thaitripplanner.com</a> · V1.0</p>
+      <p>For entertainment purposes only — not affiliated with the Thai Ministry of Tourism. Please do your own research. 🌴</p>
+    </div>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div x-show="cookieBanner" x-cloak x-transition class="fixed inset-x-0 bottom-0 z-[80] p-4">
+  <div class="max-w-4xl mx-auto glass border border-black/10 dark:border-white/15 rounded-2xl shadow-soft p-5 sm:p-6">
+    <div class="sm:flex items-start gap-6">
+      <div class="flex-1">
+        <h3 class="font-bold text-lg">🍪 We value your privacy</h3>
+        <p class="text-sm mt-1 text-night-600/85 dark:text-sand-100/75">We use minimal cookies to remember your theme and saved trip plans. We don't sell your data or run invasive tracking. Read our <a href="../cookies.html" class="text-teal-600 dark:text-teal-300 underline">Cookie Policy</a>.</p>
+        <div x-show="cookieSettings" x-cloak class="mt-3 space-y-2 text-sm">
+          <label class="flex items-center gap-2"><input type="checkbox" checked disabled class="accent-teal-600"/> Essential (always on)</label>
+          <label class="flex items-center gap-2"><input type="checkbox" x-model="cookiePrefs.analytics" class="accent-teal-600"/> Analytics</label>
+          <label class="flex items-center gap-2"><input type="checkbox" x-model="cookiePrefs.marketing" class="accent-teal-600"/> Marketing</label>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-4 sm:mt-0">
+        <button @click="cookieSettings=!cookieSettings" class="px-4 py-2.5 rounded-full text-sm font-semibold border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5">Settings</button>
+        <button @click="acceptCookies('essential')" class="px-4 py-2.5 rounded-full text-sm font-semibold border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5">Reject non-essential</button>
+        <button @click="acceptCookies('all')" class="px-5 py-2.5 rounded-full text-sm font-bold bg-teal-600 hover:bg-teal-500 text-white">Accept all</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div x-show="toast" x-cloak x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[95] bg-night-900 text-white px-5 py-3 rounded-full shadow-soft text-sm" x-text="toast"></div>
+
+<script>
+function destinationsPage(){
+  return {
+    darkMode:false, mobileNav:false,
+    cookieBanner:false, cookieSettings:false, cookiePrefs:{analytics:true,marketing:false},
+    toast:'',
+    init(){
+      const savedTheme=this._get('tt_theme');
+      this.darkMode = savedTheme ? savedTheme==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if(!this._get('tt_cookie')) setTimeout(()=>this.cookieBanner=true,1200);
+      this.$watch('darkMode',v=>this._set('tt_theme',v?'dark':'light'));
+    },
+    _get(k){ try{return localStorage.getItem(k)}catch(e){return null} },
+    _set(k,v){ try{localStorage.setItem(k,v)}catch(e){} },
+    toggleDark(){ this.darkMode=!this.darkMode; },
+    showToast(m){ this.toast=m; clearTimeout(this._t); this._t=setTimeout(()=>this.toast='',2600); },
+    acceptCookies(mode){ this._set('tt_cookie',mode); if(mode==='essential') this.cookiePrefs={analytics:false,marketing:false}; this.cookieBanner=false; this.cookieSettings=false; }
+  }
+}
+</script>
+<style class="xad-css">.xadr{position:absolute;top:340px;width:160px;z-index:40;line-height:0}.xadr iframe{border:0;display:block;overflow:hidden}.xadr-l{left:calc(50% - 740px)}.xadr-r{right:calc(50% - 740px)}@media(max-width:1500px){.xadr{display:none}}.xadc{width:100%;display:flex;justify-content:center;margin:36px auto 12px;padding:0 12px;box-sizing:border-box}.xadc iframe{border:0;display:block;overflow:hidden;max-width:100%}@media(max-width:768px){.xadc{padding:0 8px}.xadc iframe{overflow-x:auto}}</style>
+</body></html>
