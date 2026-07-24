@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth" x-data="{ darkMode:false, mobileNav:false, _get(k){try{return localStorage.getItem(k)}catch(e){return null}}, _set(k,v){try{localStorage.setItem(k,v)}catch(e){}}, initTheme(){ const s=this._get('tt_theme'); this.darkMode = s ? s==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; this.$watch('darkMode',v=>this._set('tt_theme',v?'dark':'light')); }, toggleDark(){ this.darkMode=!this.darkMode; } }" x-init="initTheme()" :class="{ 'dark': darkMode }">
 <head>
-<style class="xad-off">.xadr,.ad-rail,.side-rail,.rail-ad,.wz-rail{display:none!important}</style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Accessibility Statement — ThaiTripPlanner | thaitripplanner.com</title>
@@ -85,57 +84,33 @@
   <div class="relative max-w-3xl mx-auto px-4 h-full flex flex-col justify-center">
     <nav aria-label="Breadcrumb" class="text-xs text-white/60 mb-2"><a href="index.html" class="hover:underline">Home</a> / <span>Legal</span></nav>
     <h1 class="text-3xl sm:text-4xl font-bold text-white">Accessibility Statement</h1>
-    <p class="text-xs text-white/60 mt-1">Effective date: 21 June 2026 · Applies to thaitripplanner.com</p>
+    <p class="text-xs text-white/60 mt-1">Last updated: 10 July 2026 · Applies to thaitripplanner.com</p>
   </div>
 </div>
 <main class="max-w-3xl mx-auto px-4 py-12">
   <div class="prose text-[15px] text-night-800/90 dark:text-sand-100/90">
 
-<p><b>Genext Information Systems</b> is committed to making thaitripplanner.com usable by as many people as possible, including people who rely on assistive technology. Accessibility is an ongoing effort, and we welcome feedback that helps us improve.</p>
+<p>We want everyone to be able to use and enjoy ThaiTripPlanner — whoever you are and however you browse. We aim to meet the spirit of the WCAG 2.1 AA guidelines and keep improving.</p>
 
-<h2>1. Conformance target</h2>
-<p>We aim to align with the Web Content Accessibility Guidelines (WCAG) 2.1 at Level AA. While we cannot guarantee full conformance at all times, these guidelines shape how we build and maintain the Service. This statement reflects our current status and is reviewed periodically.</p>
-
-<h2>2. Measures we take</h2>
+<h2>What we've built in</h2>
 <ul>
-  <li><b>Responsive, mobile-first layout</b> that adapts from small phones to large screens and supports browser zoom and text resizing.</li>
-  <li><b>Semantic HTML</b> with labelled form controls and a skip-to-content link, so screen readers can announce each field and jump past navigation.</li>
-  <li><b>Keyboard operability</b> for the step-by-step planner, buttons, sliders and links, with a visible focus indicator.</li>
-  <li><b>Light and dark themes</b> with color choices tested for contrast; key figures and itinerary details are presented as text, not images.</li>
-  <li><b>Reduced-motion support</b> — decorative animations are disabled automatically when your system requests reduced motion.</li>
-  <li><b>No flashing or strobing content</b> that could trigger photosensitive reactions.</li>
-  <li><b>Plain-language guidance</b> at each step of the planner, one question per screen.</li>
-  <li><b>Alternative text</b> on photographs and meaningful graphics; the route map is accompanied by a text itinerary that carries the same information.</li>
+  <li>Keyboard navigation throughout, with visible focus outlines.</li>
+  <li>Semantic headings and landmarks, plus ARIA labels on menus, the planner steps and forms.</li>
+  <li>Colour contrast aimed at WCAG AA for body text, and a light/dark theme you control.</li>
+  <li>Meaning never carried by colour alone — icons and text labels back it up.</li>
+  <li>Large touch targets and a responsive layout that reflows cleanly down to small phones.</li>
+  <li>Respect for your <em>prefers-reduced-motion</em> setting, so animations ease off if you've asked your device to reduce motion.</li>
+  <li>Descriptive alternative text on meaningful images, and a day-by-day text itinerary that carries the same information as the route map.</li>
 </ul>
 
-<h2>3. Known limitations</h2>
-<p>We are transparent about areas we are still improving:</p>
-<ul>
-  <li>Range sliders (trip length, preference scales) are easiest with a pointer; we continue to refine keyboard fine-control and provide on-screen values alongside them.</li>
-  <li>The drag-to-reorder itinerary is pointer-oriented; stops can also be removed with buttons, and a keyboard-friendly reorder control is on our roadmap.</li>
-  <li>The interactive route map (Leaflet/OpenStreetMap) has limited screen-reader support; the full day-by-day text itinerary conveys the same route.</li>
-  <li>Some emoji icons are decorative and may be announced by screen readers; we are improving their labelling.</li>
-</ul>
+<h2>Third-party content</h2>
+<p>Some content we don't fully control — most notably the advertising served by Google AdSense and the interactive map (Leaflet/OpenStreetMap) — may not always meet the same accessibility standards. You can review or change your ad-personalisation choices at any time in <a href="cookie-settings.html">Cookie Settings</a>, and the full text itinerary conveys the same route as the map.</p>
 
-<h2>4. Tips for a better experience</h2>
-<ul>
-  <li>Use your browser's zoom (Ctrl/Cmd and +) to enlarge text; the layout reflows cleanly.</li>
-  <li>Every slider shows its current value as text, and most selections can be made with simple button choices.</li>
-  <li>Your progress is saved on your device, so you can take breaks without losing work.</li>
-  <li>Prefer less movement? Enable "reduce motion" in your operating system and the site's animations will switch off.</li>
-</ul>
-
-<h2>5. Feedback and contact</h2>
-<p>If you encounter an accessibility barrier, we would like to know so we can address it. Please tell us via our <a href="contact.html">contact page</a>, describing the page, what you were trying to do, and the assistive technology you use. We aim to respond within a reasonable timeframe.</p>
-
-<h2>6. Updates</h2>
-<p>We review this statement periodically and update the effective date above when we make accessibility improvements.</p>
+<h2>Still not right for you?</h2>
+<p>Accessibility is never "done." If anything here is hard to use with assistive technology, please tell us and we'll fix it — use our <a href="contact.html">Contact page</a>, and let us know the page and what got in your way.</p>
   </div>
 </main>
 <!-- FOOTER -->
-<div class="xadc" aria-label="Advertisement"><iframe title="Advertisement" width="728" height="90" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" style="border:0;display:block;overflow:hidden" srcdoc='<body style="margin:0;overflow:hidden"><script type="text/javascript">atOptions = {"key":"dcdea4644a75d6d9234e9b6d2975a994","format":"iframe","height":90,"width":728,"params":{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/dcdea4644a75d6d9234e9b6d2975a994/invoke.js"></script><style class="xadr-fix">.xadr{position:absolute!important;top:auto!important;bottom:calc(100% + 100px)!important;width:160px!important;z-index:40;line-height:0}.xadr iframe{border:0;display:block;overflow:hidden}.xadr-l{left:calc(50% - 740px)!important;right:auto!important}.xadr-r{right:calc(50% - 740px)!important;left:auto!important}@media(max-width:1500px){.xadr{display:none!important}}[data-xadr-footer]{position:relative}</style>
-</body>'></iframe></div>
 <div id="site-footer"></div>
 <script src="/assets/site.js" defer></script>
-<style class="xad-css">.xadr{position:absolute;top:340px;width:160px;z-index:40;line-height:0}.xadr iframe{border:0;display:block;overflow:hidden}.xadr-l{left:calc(50% - 740px)}.xadr-r{right:calc(50% - 740px)}@media(max-width:1500px){.xadr{display:none}}.xadc{width:100%;display:flex;justify-content:center;margin:36px auto 12px;padding:0 12px;box-sizing:border-box}.xadc iframe{border:0;display:block;overflow:hidden;max-width:100%}@media(max-width:768px){.xadc{padding:0 8px}.xadc iframe{overflow-x:auto}}</style>
 </body></html>

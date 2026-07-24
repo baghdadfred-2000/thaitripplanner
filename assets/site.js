@@ -8,10 +8,6 @@
    Uses absolute paths so it works from / and /destinations/ alike.
    ========================================================= */
 
-/* One footer ad slot (160x300, highperformanceformat). */
-var TTP_AD =
-  '<iframe title="Advertisement" width="160" height="300" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" style="border:0;display:block;overflow:hidden" srcdoc=\'<body style="margin:0;overflow:hidden"><script type="text/javascript">atOptions = {"key":"7be528efb15a1a634001e7dd3c11213d","format":"iframe","height":300,"width":160,"params":{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/7be528efb15a1a634001e7dd3c11213d/invoke.js"></script></body>\'></iframe>';
-
 /* MailerLite subscribe block (same form/list as the other sites, tagged
    Company=ThaiTripPlanner so signups are traceable to this site). */
 function subscribeHTML() {
@@ -50,19 +46,43 @@ function subscribeHTML() {
 function footerHTML() {
   var showSignup = !(document.body && document.body.hasAttribute('data-no-signup'));
   return `
-  <footer class="bg-night-900 text-sand-100/80 pt-14 pb-8 border-t border-white/10" data-xadr-footer><div class="xadr xadr-l" aria-label="Advertisement">${TTP_AD}</div><div class="xadr xadr-r" aria-label="Advertisement">${TTP_AD}</div>
+  <footer class="bg-night-900 text-sand-100/80 pt-14 pb-8 border-t border-white/10">
     <div class="max-w-7xl mx-auto px-4">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div class="grid gap-10 md:grid-cols-3">
         <div>
           <a href="/index.html" class="flex items-center gap-2"><span class="text-2xl">🪷</span><span class="font-display text-xl font-bold text-white">Thai<span class="text-teal-300">TripPlanner</span></span></a>
           ${showSignup ? subscribeHTML() : ''}
         </div>
-        <div><h3 class="font-semibold text-white mb-3">Explore</h3><ul class="space-y-2 text-sm"><li><a href="/index.html#planner" class="hover:text-teal-300">Plan Your Trip</a></li><li><a href="/destinations.html" class="hover:text-teal-300">Destinations</a></li><li><a href="/index.html#itineraries" class="hover:text-teal-300">Itineraries</a></li></ul></div>
-        <div><h3 class="font-semibold text-white mb-3">Company</h3><ul class="space-y-2 text-sm"><li><a href="/about.html" class="hover:text-teal-300">About</a></li><li><a href="/contact.html" class="hover:text-teal-300">Contact</a></li></ul></div>
-        <div><h3 class="font-semibold text-white mb-3">Legal</h3><ul class="space-y-2 text-sm"><li><a href="/privacy.html" class="hover:text-teal-300">Privacy Policy</a></li><li><a href="/cookies.html" class="hover:text-teal-300">Cookie Policy</a></li><li><a href="/cookie-settings.html" class="hover:text-teal-300">Cookie Settings</a></li><li><a href="/terms.html" class="hover:text-teal-300">Terms &amp; Disclaimer</a></li><li><a href="/accessibility.html" class="hover:text-teal-300">Accessibility</a></li></ul></div>
+        <div>
+          <h3 class="font-semibold text-white mb-3 text-sm uppercase tracking-wider">Explore</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/about.html" class="hover:text-teal-300">About</a></li>
+            <li><a href="/index.html#planner" class="hover:text-teal-300">Start Planning</a></li>
+            <li><a href="/destinations.html" class="hover:text-teal-300">Destinations</a></li>
+            <li><a href="/contact.html" class="hover:text-teal-300">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold text-white mb-3 text-sm uppercase tracking-wider">Network Sites</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://thaithuk.com" target="_blank" rel="noopener" class="hover:text-teal-300">ThaiThuk</a></li>
+            <li><a href="https://thaivisafinder.com" target="_blank" rel="noopener" class="hover:text-teal-300">ThaiVisaFinder</a></li>
+            <li><a href="https://thaiholidaybudget.com" target="_blank" rel="noopener" class="hover:text-teal-300">ThaiHolidayBudget</a></li>
+            <li><a href="https://thailetters.com" target="_blank" rel="noopener" class="hover:text-teal-300">ThaiLetters</a></li>
+            <li><a href="https://thailotterynumbers.com" target="_blank" rel="noopener" class="hover:text-teal-300">ThaiLotteryNumbers</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="mt-10 pt-6 border-t border-white/10 text-xs text-sand-100/60 text-center">
+      <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-sand-100/60">
         <p>© 2026 Genext Information Systems. All rights reserved.</p>
+        <nav class="flex flex-wrap gap-4 justify-center" aria-label="Legal">
+          <a href="/privacy.html" class="hover:text-teal-300">Privacy</a>
+          <a href="/terms.html" class="hover:text-teal-300">Terms</a>
+          <a href="/disclaimer.html" class="hover:text-teal-300">Disclaimer</a>
+          <a href="/cookies.html" class="hover:text-teal-300">Cookies</a>
+          <a href="/accessibility.html" class="hover:text-teal-300">Accessibility</a>
+          <a href="/cookie-settings.html" class="hover:text-teal-300">Cookie Settings</a>
+        </nav>
       </div>
     </div>
   </footer>`;

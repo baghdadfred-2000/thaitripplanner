@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth" x-data="{ darkMode:false, mobileNav:false, _get(k){try{return localStorage.getItem(k)}catch(e){return null}}, _set(k,v){try{localStorage.setItem(k,v)}catch(e){}}, initTheme(){ const s=this._get('tt_theme'); this.darkMode = s ? s==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; this.$watch('darkMode',v=>this._set('tt_theme',v?'dark':'light')); }, toggleDark(){ this.darkMode=!this.darkMode; } }" x-init="initTheme()" :class="{ 'dark': darkMode }">
 <head>
-<style class="xad-off">.xadr,.ad-rail,.side-rail,.rail-ad,.wz-rail{display:none!important}</style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Privacy Policy — ThaiTripPlanner | thaitripplanner.com</title>
@@ -85,66 +84,39 @@
   <div class="relative max-w-3xl mx-auto px-4 h-full flex flex-col justify-center">
     <nav aria-label="Breadcrumb" class="text-xs text-white/60 mb-2"><a href="index.html" class="hover:underline">Home</a> / <span>Legal</span></nav>
     <h1 class="text-3xl sm:text-4xl font-bold text-white">Privacy Policy</h1>
-    <p class="text-xs text-white/60 mt-1">Effective date: 21 June 2026 · Applies to thaitripplanner.com</p>
+    <p class="text-xs text-white/60 mt-1">Last updated: 10 July 2026 · Applies to thaitripplanner.com</p>
   </div>
 </div>
 <main class="max-w-3xl mx-auto px-4 py-12">
   <div class="prose text-[15px] text-night-800/90 dark:text-sand-100/90">
 
-<p>This Privacy Policy explains how ThaiTripPlanner ("the Service", "we", "us", or "our"), available at thaitripplanner.com, handles information when you use it. The Service is operated by <b>Genext Information Systems</b>. We have built the Service to be private by design: it is a free, browser-based trip planner that runs on your device, and we do not operate a back-end database that collects your inputs.</p>
+<p>ThaiTripPlanner is an independent Thailand trip-planning site, published on thaitripplanner.com by <strong>Genext Information Systems</strong> ("we", "us", "ThaiTripPlanner"). We take a minimalist approach to data: we collect as little as possible, and we don't sell it.</p>
 
-<h2>1. Summary</h2>
+<h2>What we collect</h2>
+<p>We only collect information you choose to give us, plus a little that stays on your own device:</p>
 <ul>
-  <li>We do not require an account, and we do not ask for payment details.</li>
-  <li>The details you enter — your name, dates, chosen destinations and preferences — are stored only in your own browser (local storage) so your plan is preserved between visits. They are not transmitted to us.</li>
-  <li>We do not sell or rent personal data. The Service is free; if advertising is shown it is provided by Google AdSense, which may use cookies and similar technologies (see Section 4).</li>
-  <li>A small number of open-source assets and map tiles are loaded from third-party content-delivery networks to make the page work.</li>
+  <li><strong>Newsletter:</strong> if you subscribe, we store your email address for the sole purpose of sending the newsletter. Unsubscribe any time via the link in every email.</li>
+  <li><strong>Contact form:</strong> the name, email and message you send are used only to reply to you and handle your request.</li>
+  <li><strong>On-device storage:</strong> your theme choice (light/dark), your cookie preferences and your saved trip plan and preferences are stored in your own browser's local storage. They stay on your device and are not transmitted to us.</li>
 </ul>
 
-<h2>2. Information we process</h2>
-<h3>2.1 Information you enter</h3>
-<p>The planner lets you enter details such as a first name, travel companions, dates, trip length, destinations and preference answers. This information is saved in your browser's local storage on your device. It stays there until you clear it. We do not receive or store it on any server we control. If you use the "Share" feature, your answers are encoded into the link itself so the recipient's browser can rebuild the plan — the link is created on your device and it is up to you who you send it to.</p>
-<h3>2.2 Information collected automatically</h3>
-<p>We do not run our own analytics. However, third-party providers (see Section 4) process technical data — such as your IP address, device and browser type, and the time of the request — as a normal part of serving web content, map tiles and any advertising. This processing is governed by those providers' own privacy policies, which we do not control.</p>
-<h3>2.3 Information we do not collect</h3>
-<p>We do not knowingly collect financial account information, precise location data, or any special categories of personal data.</p>
+<h2>Advertising &amp; cookies</h2>
+<p>With your consent, ThaiTripPlanner displays advertising served by <strong>Google AdSense</strong>. Google is a third-party vendor that uses cookies — including the DoubleClick/DART cookie — to serve ads based on your prior visits to this and other websites. Google and its partners may collect and use data as described in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites that use its services</a>. If you are in the EEA or UK, Google's certified consent tool asks for your choice about ad personalisation before personalised ads are shown. You can also opt out of personalised advertising in <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a> — see our <a href="cookies.html">Cookie Policy</a>, and reopen your choices any time via <a href="cookie-settings.html">Cookie Settings</a>.</p>
 
-<h2>3. How we use information</h2>
-<p>Because the information you enter never leaves your device, we do not use it for any purpose. Its sole function is to power the on-screen itinerary and to remember your progress for your convenience. We do not profile, target or contact you. If you email us or subscribe to our newsletter, we use your email address solely to respond or to send the content you requested, and you may unsubscribe at any time.</p>
+<h2>Third-party services</h2>
+<p>We load web fonts from Google Fonts and styling from a Tailwind CDN, use Alpine.js for interactivity and Leaflet with OpenStreetMap tiles to draw maps, and we link out to official Thai sources and to our sister sites (ThaiThuk, ThaiVisaFinder, ThaiHolidayBudget, ThaiLetters and ThaiLotteryNumbers). These providers and sites have their own privacy policies. We don't share your personal data with them, because for the most part we don't hold any.</p>
 
-<h2>4. Third-party services</h2>
-<p>To keep the Service fast and lightweight, your browser loads a small number of open-source libraries, fonts and map assets from public content-delivery networks, currently:</p>
-<ul>
-  <li><b>Google AdSense</b> (Google LLC) — may serve the advertising that keeps the Service free. Google and its partners may use cookies, device identifiers and similar technologies to serve and measure ads and, where permitted, to personalise them based on your prior visits to this and other websites.</li>
-  <li><b>Tailwind CSS</b> and <b>Alpine.js</b> (via CDN / jsDelivr) — for layout and interactivity.</li>
-  <li><b>Leaflet</b> (via unpkg) and <b>OpenStreetMap</b> tile servers — to draw your route map. Requesting map tiles sends your IP address and the map area viewed to the OpenStreetMap Foundation under its own privacy policy.</li>
-  <li><b>Google Fonts</b> — for typography.</li>
-</ul>
-<p>When these assets are requested, the providers may process your IP address and request metadata under their own privacy policies, which we do not control. You can review how Google uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>. You can manage or opt out of personalised Google advertising at <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">myadcenter.google.com</a>, and opt out of personalised ads from many vendors at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info/choices</a> and <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">youronlinechoices.eu</a> (EU).</p>
+<h2>What we don't do</h2>
+<p>We do not sell personal data, we don't require an account to use the site, and we don't track you beyond the newsletter, contact form and consented advertising described above.</p>
 
-<h2>5. Cookies and local storage</h2>
-<p>We use your browser's local storage for strictly functional purposes — saving your trip plan, remembering your light/dark theme, and remembering your cookie-notice choice. In addition, Google AdSense may set advertising and measurement cookies when ads are served. Full details, and your controls, are in our <a href="cookies.html">Cookie Policy</a> and on the <a href="cookie-settings.html">Cookie Settings</a> page.</p>
+<h2>Your rights</h2>
+<p>You can ask to access, correct or delete any personal data we hold about you — typically just a newsletter email — via our <a href="contact.html">Contact page</a> (choose <strong>Privacy request</strong>). You can also clear on-device storage at any time through your browser settings or our Cookie Settings. We honour applicable rights under Thailand's PDPA, the EU/UK GDPR and similar laws.</p>
 
-<h2>6. Data retention</h2>
-<p>Because your data is stored locally, you control how long it is kept. It remains in your browser until you clear it from the <a href="cookie-settings.html">Cookie Settings</a> page, clear your browser's site data, or use a private/incognito window. We do not hold copies.</p>
-
-<h2>7. Your rights</h2>
-<p>Depending on your location, you may have rights under laws such as the EU/UK General Data Protection Regulation (GDPR) or the California Consumer Privacy Act (CCPA), including rights to access, correct, delete or port your personal data. Because we do not hold your personal data on any server, you can exercise these rights directly and immediately: view, edit, export (PDF) or delete your information from within the Service itself. If you believe we hold personal data about you and wish to make a request, contact us using the details in Section 10.</p>
-
-<h2>8. Children's privacy</h2>
-<p>The Service is intended for adults aged 18 and over and is not directed at children. We do not knowingly collect personal information from anyone under 18. If you believe a child has provided information through any contact channel, please contact us so we can address it.</p>
-
-<h2>9. Changes to this policy</h2>
-<p>We may update this Privacy Policy from time to time to reflect changes to the Service or applicable law. When we do, we will revise the "Effective date" above. Material changes will be reflected on this page.</p>
-
-<h2>10. Contact</h2>
-<p>Questions about this policy or your privacy? Send them via our <a href="contact.html">contact page</a> and choose <b>Privacy request</b> as the topic.</p>
+<h2>Changes &amp; contact</h2>
+<p>We may update this policy as the site evolves; the "last updated" date above will change accordingly. Questions? Reach us via our <a href="contact.html">Contact page</a>.</p>
   </div>
 </main>
 <!-- FOOTER -->
-<div class="xadc" aria-label="Advertisement"><iframe title="Advertisement" width="728" height="90" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" style="border:0;display:block;overflow:hidden" srcdoc='<body style="margin:0;overflow:hidden"><script type="text/javascript">atOptions = {"key":"dcdea4644a75d6d9234e9b6d2975a994","format":"iframe","height":90,"width":728,"params":{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/dcdea4644a75d6d9234e9b6d2975a994/invoke.js"></script><style class="xadr-fix">.xadr{position:absolute!important;top:auto!important;bottom:calc(100% + 100px)!important;width:160px!important;z-index:40;line-height:0}.xadr iframe{border:0;display:block;overflow:hidden}.xadr-l{left:calc(50% - 740px)!important;right:auto!important}.xadr-r{right:calc(50% - 740px)!important;left:auto!important}@media(max-width:1500px){.xadr{display:none!important}}[data-xadr-footer]{position:relative}</style>
-</body>'></iframe></div>
 <div id="site-footer"></div>
 <script src="/assets/site.js" defer></script>
-<style class="xad-css">.xadr{position:absolute;top:340px;width:160px;z-index:40;line-height:0}.xadr iframe{border:0;display:block;overflow:hidden}.xadr-l{left:calc(50% - 740px)}.xadr-r{right:calc(50% - 740px)}@media(max-width:1500px){.xadr{display:none}}.xadc{width:100%;display:flex;justify-content:center;margin:36px auto 12px;padding:0 12px;box-sizing:border-box}.xadc iframe{border:0;display:block;overflow:hidden;max-width:100%}@media(max-width:768px){.xadc{padding:0 8px}.xadc iframe{overflow-x:auto}}</style>
 </body></html>
